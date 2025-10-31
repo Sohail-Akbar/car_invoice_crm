@@ -1,0 +1,316 @@
+.form-control {
+    background: #fff;
+    padding: 8px 10px;
+    border: 1px solid #0002;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #0005;
+    background: #FFF;
+}
+
+/* -----------------------
+    SideBar Area Start
+------------------------ */
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    overflow: auto;
+    background: #fff;
+    -webkit-box-shadow: 2px 0 30px #0001;
+    box-shadow: 2px 0 30px #0001;
+}
+
+.sidebar .logo {
+    padding: 20px 0;
+    margin: 0 0px;
+    text-align: center;
+    display: block;
+    color: #666;
+    font-family: var(--fontFamily);
+    font-size: 24px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #0001;
+}
+
+.sidebar .user-info {
+    margin: 30px 0;
+}
+
+.sidebar .user-info .user-image-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    position: relative;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.sidebar .user-info .user-image-container .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background: #0005;
+    font-size: 50px;
+    color: #ddd;
+    display: none;
+    cursor: pointer;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.sidebar .user-info .user-image-container:hover .overlay {
+    display: flex;
+}
+
+.sidebar .user-info .user-img {
+    width: 100%;
+    height: 100%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.sidebar .user-info .user-image-container~.save-img {
+    margin-top: 10px;
+    display: none;
+}
+
+.sidebar .user-info .user-image-container.active~.save-img {
+    display: inline-block;
+}
+
+.sidebar .user-info .user-name {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0 5px;
+}
+
+.sidebar .user-info .headline {
+    font-size: 15px;
+    color: #888;
+}
+
+.sidebar .nav {
+    padding: 0;
+    margin: 0;
+    padding-top: 20px;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.sidebar .nav .nav-item {
+    padding: 0 0px;
+    list-style: none;
+    margin: 5px 0;
+    list-style: none;
+}
+
+.sidebar .nav .nav-item .nav-link {
+    font-size: 18px;
+    color: #3c4858;
+    padding: 15px 20px;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+    -ms-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.sidebar .nav .nav-item .nav-link i {
+    font-size: 20px;
+    color: #A9AFBB;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.sidebar .nav .nav-item .nav-link .text {
+    font-size: 14px;
+}
+
+.sidebar .nav .nav-item.active .nav-link {
+    background: var(--blueColor) !important;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px var(--blueColorLow);
+    color: #fff;
+}
+
+.sidebar .nav .nav-item.active .nav-link i {
+    color: #FFF;
+}
+
+.sidebar .nav .nav-item:hover .nav-link {
+    background: #DDD4;
+}
+
+/*----------------------
+    Top NavBar Start
+-----------------------*/
+.navbar {
+    background: #F5F5F5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 70px;
+    width: 100%;
+    z-index: 99;
+    padding: 10px 20px;
+    padding-left: 320px;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.navbar.full-width {
+    padding-left: 20px;
+}
+
+.navbar .page-name {
+    font-size: 20px;
+    color: #777;
+    font-family: var(--fontFamily);
+    font-weight: normal;
+}
+
+.navbar .menu {
+    flex: 1;
+    display: flex;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.navbar .menu-item {
+    background: none;
+    font-size: 16px;
+    color: #777;
+    border: none;
+    cursor: pointer;
+}
+
+.navbar .menu-item img {
+    width: 30px;
+    height: 30px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.dropdown-menu {
+    right: 0;
+    left: auto;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 2px 20px #0001;
+    -webkit-animation: fadeTop 0.2s linear;
+    -moz-animation: fadeTop 0.2s linear;
+    -o-animation: fadeTop 0.2s linear;
+    animation: fadeTop 0.2s linear;
+}
+
+@keyframes fadeTop {
+    from {
+        -webkit-transform: translateY(-10px);
+        -moz-transform: translateY(-10px);
+        -ms-transform: translateY(-10px);
+        -o-transform: translateY(-10px);
+        transform: translateY(-10px);
+    }
+
+    to {
+        -webkit-transform: translateY(0px);
+        -moz-transform: translateY(0px);
+        -ms-transform: translateY(0px);
+        -o-transform: translateY(0px);
+        transform: translateY(0px);
+    }
+}
+
+.dropdown-menu .dropdown-item {
+    display: flex;
+    padding: 8px 15px;
+}
+
+.dropdown-menu .dropdown-item i {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.dropdown-toggle.no-arrow-icon::after {
+    content: none !important;
+}
+
+/*----------------------
+    Top NavBar End
+-----------------------*/
+/*----------------------
+    All Content Start
+-----------------------*/
+.all-content {
+    margin-left: 300px !important;
+    margin-top: 70px !important;
+    padding: 20px;
+}
+
+/*----------------------
+    All Content End
+-----------------------*/
+.user-img {
+    object-fit: cover;
+}
+
+/* .sidebar .nav .nav-item.with-sub-menu .nav-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar .nav .nav-item:not(.with-sub-menu):hover>.nav-link {
+    background: var(--bgColorLow) !important;
+}
+
+
+
+.sidebar .nav .sub-menu .nav-item .nav-link i {
+    color: #0005;
+}
+
+.sidebar .nav .sub-menu {
+    padding: 0;
+    display: none;
+}
+
+.sidebar .nav .sub-menu .nav-item {
+    margin: 0;
+}
+
+.sidebar .nav .sub-menu .nav-item .nav-link {
+    font-size: 10px !important;
+    padding: 8px;
+    padding-left: 45px;
+}
+
+.sidebar .nav .sub-menu .nav-item.active .nav-link {
+    background: var(--bgColorLow) !important;
+    box-shadow: none;
+    color: var(--textColorFull);
+} */

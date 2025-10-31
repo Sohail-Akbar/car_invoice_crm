@@ -1,0 +1,25 @@
+.box-content .text-style {
+    font-size: 20px !important;
+    margin: 0 0 7px 0 !important;
+}
+
+.box-content .bottom-text {
+    color: #aab2bd;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 0;
+}
+
+.box-content {
+    box-shadow: 0 8px 16px 0 rgb(0 0 0 / 0%), 0 6px 20px 0 rgb(0 0 0 / 8%);
+    border-radius: 0;
+}
+
+.wickedpicker__controls__control-up:before {
+    content: "▲" !important;
+}
+
+.wickedpicker__controls__control-down:after {
+    content: '▼' !important;
+}

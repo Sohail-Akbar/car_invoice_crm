@@ -1,0 +1,42 @@
+.nx-header-con {
+    margin-top: 100px;
+}
+
+.nx-header-con .nx-header-content .nx-bg-image {
+    background-image: url(../../images/image/header-image.jpg);
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.nx-header-con h1.heading.name {
+    color: var(--info);
+}
+
+.nx-header-con h1.heading {
+    font-size: 30px;
+}
+
+.nx-header-con .nx-header-content .context-menu-con div.heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nx-header-con .nx-header-content .context-menu-con p.paragraph {
+    font-size: 14px;
+    font-family: sans-serif;
+    font-weight: normal;
+    align-items: center;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.nx-header-con .nx-header-content .context-menu-con {
+    height: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
