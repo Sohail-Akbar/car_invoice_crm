@@ -11,7 +11,7 @@ if (isset($_POST['saveService'])) {
 
     if ($id) {
         // Update existing service
-        $db->update("Services", [
+        $db->update("services", [
             "text" => ["encrypt" => $text],
             "amount" => ["encrypt" => $amount]
         ], [
@@ -23,7 +23,7 @@ if (isset($_POST['saveService'])) {
             "redirect" => "add-services"
         ]);
     } else {
-        $save = $db->insert("Services", [
+        $save = $db->insert("services", [
             "company_id" => LOGGED_IN_USER['company_id'],
             "agency_id" => LOGGED_IN_USER['agency_id'],
             "text" => ["encrypt" => $text],
