@@ -7,12 +7,16 @@ require_once(DIR . 'includes/db.php');
 if (isset($_POST['assign_staff'])) {
     $staff_id = intval($_POST['staff_id']);
     $customer_id = intval($_POST['customer_id']);
+    $invoice_id = intval($_POST['invoice_id']);
+
+    $callback = isset($_POST['callback']) ? true : false;
 
     // Check if staff is already assigned
     $existing = $db->select_one("customer_staff", "*", [
         "customer_id" => $customer_id,
         "staff_id" => $staff_id,
-        "is_active" => 1
+        "is_active" => 1,
+        "invoice_id" => $invoice_id
     ]);
 
     if (!$existing) {
@@ -21,14 +25,19 @@ if (isset($_POST['assign_staff'])) {
             "agency_id" => LOGGED_IN_USER['agency_id'],
             "customer_id" => $customer_id,
             "staff_id" => $staff_id,
-            "assigned_by" => LOGGED_IN_USER['id']
+            "assigned_by" => LOGGED_IN_USER['id'],
+            "is_active" => 1,
+            "invoice_id" => $invoice_id
         ]);
 
         if ($save) {
-            returnSuccess("Staff assigned successfully!", [
-                "redirect" => "customer-profile?id=" . $customer_id
-            ]);
-            exit;
+            if ($callback) {
+                returnSuccess("Staff assigned successfully!");
+            } else {
+                returnSuccess("Staff assigned successfully!", [
+                    "redirect" => "customer-profile?id=" . $customer_id
+                ]);
+            }
         } else {
             returnError("Failed to assign staff.");
         }

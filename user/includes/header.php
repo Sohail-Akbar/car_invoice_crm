@@ -19,45 +19,72 @@
                     <span class="text">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="add-staff" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span class="text">Add Staff</span>
+            <li class="nav-item with-sub-menu">
+                <a href="#" class="nav-link">
+                    <span>
+                        <i class="fas fa-user"></i>
+                        <span class="text">Staff</span>
+                    </span>
+                    <i class="fas fa-angle-down"></i>
                 </a>
+                <ul class="sub-menu">
+                    <li class="nav-item">
+                        <a href="add-staff" class="nav-link">
+                            <span class="text">Add Staff</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="view-staff" class="nav-link">
+                            <span class="text">View Staff</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a href="view-staff" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span class="text">View Staff</span>
+            <li class="nav-item with-sub-menu">
+                <a href="#" class="nav-link">
+                    <span>
+                        <i class="fas fa-user"></i>
+                        <span class="text">Customers</span>
+                    </span>
+                    <i class="fas fa-angle-down"></i>
                 </a>
+                <ul class="sub-menu">
+                    <li class="nav-item">
+                        <a href="add-customer" class="nav-link">
+                            <span class="text">Add Customer</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="view-customer" class="nav-link">
+                            <span class="text">View Customer</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a href="add-customer" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span class="text">Add Customer</span>
+            <li class="nav-item with-sub-menu">
+                <a href="#" class="nav-link">
+                    <span>
+                        <i class="fas fa-car"></i>
+                        <span class="text">Registration</span>
+                    </span>
+                    <i class="fas fa-angle-down"></i>
                 </a>
-            </li>
-            <li class="nav-item">
-                <a href="view-customer" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span class="text">View Customer</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="registration-car" class="nav-link">
-                    <i class="far fa-registered"></i>
-                    <span class="text">Registration Car</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="view-registration-car" class="nav-link">
-                    <i class="far fa-registered"></i>
-                    <span class="text">View Registration Car</span>
-                </a>
+                <ul class="sub-menu">
+                    <li class="nav-item">
+                        <a href="registration-car" class="nav-link">
+                            <span class="text">Registration Car</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="view-registration-car" class="nav-link">
+                            <span class="text">View Registration Car</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a href="invoice" class="nav-link">
-                    <i class="far fa-registered"></i>
+                    <i class="fas fa-file-invoice"></i>
                     <span class="text">Invoice</span>
                 </a>
             </li>

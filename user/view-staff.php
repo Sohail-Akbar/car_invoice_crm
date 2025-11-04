@@ -12,7 +12,7 @@ $CSS_FILES_ = [
 $staffs_data = $db->select("staffs", "*", [
     "company_id" => LOGGED_IN_USER['company_id'],
     "agency_id" => LOGGED_IN_USER['agency_id']
-]);
+], ["order_by" => "id desc"]);
 if (!$staffs_data) $staffs_data = [];
 ?>
 <!DOCTYPE html>

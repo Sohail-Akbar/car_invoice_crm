@@ -132,7 +132,7 @@ if (isset($_POST['saveInvoice'])) {
             "services_id" => implode(",", $_services_ids),
         ]);
 
-        returnSuccess("Invoice created successfully.");
+        returnSuccess("Invoice created successfully.", ["redirect" => ""]);
     } else {
         returnError("Failed to create invoice.");
     }
@@ -143,7 +143,7 @@ if (isset($_POST['saveInvoice'])) {
 if (isset($_POST['fetchCustomerMotHistory'])) {
     $customer_id = $_POST['customer_id'];
 
-    $mot_history = $db->select("mot_history", "*", [
+    $mot_history = $db->select("customer_car_history", "*", [
         "customer_id" => $customer_id,
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
@@ -389,7 +389,7 @@ function saveInvoicePDF($invoice_data = [])
                     <tr>
                         <td>' . ($index + 1) . '</td>
                         <td>' . htmlspecialchars($service['description']) . '</td>
-                        <td>$' . number_format($service['amount'], 2) . '</td>
+                        <td>' . CURRENCY_SYMBOL . number_format($service['amount'], 2) . '</td>
                     </tr>';
         $subtotal += $service['amount'];
     }
@@ -409,27 +409,27 @@ function saveInvoicePDF($invoice_data = [])
                 <table>
                     <tr>
                         <td>Subtotal:</td>
-                        <td class="amount">$' . number_format($subtotal, 2) . '</td>
+                        <td class="amount">' . CURRENCY_SYMBOL . number_format($subtotal, 2) . '</td>
                     </tr>
                     <tr>
                         <td>Tax (' . number_format($tax_rate, 2) . '%):</td>
-                        <td class="amount">$' . number_format($tax_amount, 2) . '</td>
+                        <td class="amount">' . CURRENCY_SYMBOL . number_format($tax_amount, 2) . '</td>
                     </tr>
                     <tr>
                         <td>Discount:</td>
-                        <td class="amount">$' . number_format($invoice_data['discount'] ?? 0.00, 2) . '</td>
+                        <td class="amount">' . CURRENCY_SYMBOL . number_format($invoice_data['discount'] ?? 0.00, 2) . '</td>
                     </tr>
                     <tr>
                         <td><strong>Total Amount:</strong></td>
-                        <td class="amount"><strong>$' . number_format($total_amount, 2) . '</strong></td>
+                        <td class="amount"><strong>' . CURRENCY_SYMBOL . number_format($total_amount, 2) . '</strong></td>
                     </tr>
                     <tr>
                         <td>Paid Amount:</td>
-                        <td class="amount">$' . number_format($paid_amount, 2) . '</td>
+                        <td class="amount">' . CURRENCY_SYMBOL . number_format($paid_amount, 2) . '</td>
                     </tr>
                     <tr>
                         <td><strong>Due Amount:</strong></td>
-                        <td class="amount"><strong>$' . number_format($due_amount, 2) . '</strong></td>
+                        <td class="amount"><strong>' . CURRENCY_SYMBOL . number_format($due_amount, 2) . '</strong></td>
                     </tr>
                 </table>
             </div>
@@ -484,4 +484,134 @@ function saveInvoicePDF($invoice_data = [])
             'error' => $e->getMessage()
         ];
     }
+}
+
+
+// Update invoice payment
+if (isset($_POST['updateInvoicePayment'])) {
+    $invoice_id     = $_POST['invoice_id'];
+    $customer_id    = $_POST['customer_id'];
+    $total_amount   = floatval($_POST['total_amount']);
+    $paid_old       = floatval($_POST['paid_amount_old']);
+    $new_payment    = floatval($_POST['new_payment']);
+    $status         = $_POST['status'];
+
+    // Calculate new totals
+    $paid_total = $paid_old + $new_payment;
+    $due_amount = $total_amount - $paid_total;
+
+    // Ensure due amount doesn’t go negative
+    if ($due_amount < 0) $due_amount = 0;
+
+    // Auto-adjust status if user didn't set manually
+    if (empty($status)) {
+        if ($paid_total >= $total_amount) {
+            $status = 'paid';
+        } elseif ($paid_total > 0 && $paid_total < $total_amount) {
+            $status = 'partial';
+        } else {
+            $status = 'unpaid';
+        }
+    }
+
+    // Update invoice
+    $updated = $db->update('invoices', [
+        'paid_amount' => $paid_total,
+        'due_amount'  => $due_amount,
+        'status'      => $status,
+    ], [
+        'id' => $invoice_id,
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "customer_id" => $customer_id
+    ]);
+
+    // select invoice
+    $invoice = $db->select_one("invoices", "*", [
+        'id' => $invoice_id,
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "customer_id" => $customer_id
+    ]);
+
+    // Company Detail
+    $company_data = $db->select_one("companies", "*", [
+        "id" => LOGGED_IN_USER['company_id']
+    ]);
+
+    // customer details
+    $customer_data = $db->select_one("customers", "*", [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "id" => $customer_id
+    ]);
+
+    // Fetch invoice items
+    $invoice_items = $db->select_one("invoice_items", "*", [
+        "invoice_id" => $invoice_id
+    ]);
+
+    $services_final = [];
+
+    if (!empty($invoice_items) && !empty($invoice_items['services_id'])) {
+        // Convert "6,12,10" → [6, 12, 10]
+        $service_ids = explode(",", $invoice_items['services_id']);
+        $service_ids = array_map('intval', $service_ids);
+
+        if (!empty($service_ids)) {
+            // Fetch all matching services
+            $placeholders = implode(',', $service_ids);
+            $services = $db->query("SELECT id, text, amount FROM services WHERE id IN ($placeholders)", ["select_query" => true]);
+            // Format result
+            foreach ($services as $srv) {
+                $services_final[] = [
+                    'description' => $srv['text'],
+                    'amount' => $srv['amount']
+                ];
+            }
+        }
+    }
+
+    $invoice_no = generateInvoiceNo($db);
+    $invoice_data = [
+        'company_name' => $company_data['company_name'],
+        'company_address' => $company_data['company_address'],
+        'company_phone' => $company_data['company_contact'],
+        'company_email' => $company_data['company_email'],
+        'invoice_no' => $invoice_no,
+        'invoice_date' => $invoice['invoice_date'],
+        'due_date' => $invoice['due_date'],
+        'status' => $invoice['status'],
+        'client_name' => $customer_data['title'] . " " . $customer_data['fname'] . " " . $customer_data['lname'], // get from customer_id
+        'client_contact' => $customer_data['contact'],
+        'client_address' => $customer_data['address'],
+        'client_city' => $customer_data["city"],
+        'client_email' => $customer_data['email'],
+        'tax_rate' => $invoice['tax_rate'],
+        'paid_amount' => $invoice['paid_amount'],
+        'services' => $services_final,
+        'notes' => $invoice['notes']
+    ];
+    $pdf = saveInvoicePDF($invoice_data);
+
+    if ($pdf['success']) {
+        $db->update("invoices", [
+            "pdf_file" => $pdf['filename']
+        ], [
+            'id' => $invoice_id,
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "customer_id" => $customer_id
+        ]);
+    }
+
+    if ($updated) {
+        returnSuccess("Invoice payment updated successfully.", [
+            "redirect" => ""
+        ]);
+    } else {
+        returnError("Failed to update invoice payment. Please try again.");
+    }
+} else {
+    returnError("Invalid request.");
 }

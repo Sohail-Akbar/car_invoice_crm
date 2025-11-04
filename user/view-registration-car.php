@@ -9,9 +9,11 @@ $CSS_FILES_ = [
     _DIR_ .  "css/jquery.dataTables.min.css"
 ];
 
-$mot_history = $db->select("mot_history", "*", [
+$mot_history = $db->select("customer_car_history", "*", [
     "company_id" => LOGGED_IN_USER['company_id'],
     "agency_id" => LOGGED_IN_USER['agency_id']
+], [
+    "order_by" => "id desc"
 ]);
 if (!$mot_history) $mot_history = [];
 ?>
@@ -94,7 +96,7 @@ if (!$mot_history) $mot_history = [];
                                         </td>
                                         <td>
                                             <div class="align-center child-el-margin-x">
-                                                <button class="no-btn-styles text-danger cp tc-delete-btn" title="Delete" data-target="<?= $mot_history['id']; ?>" data-action="mot_history"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="no-btn-styles text-danger cp tc-delete-btn" title="Delete" data-target="<?= $mot_history['id']; ?>" data-action="customer_car_history"><i class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>

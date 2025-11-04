@@ -12,7 +12,8 @@ $CSS_FILES_ = [
 $agency_data = "SELECT u.*, a.name as agency_name, a.contact as agency_contact, a.address as agency_address, a.agency_logo, a.email as agency_email
                         FROM users AS u
                         LEFT JOIN agencies AS a ON u.company_id = a.company_id
-                        WHERE u.company_id = a.company_id AND u.agency_id = a.id AND u.user_id = '" . LOGGED_IN_USER_ID . "'";
+                        WHERE u.company_id = a.company_id AND u.agency_id = a.id AND u.user_id = '" . LOGGED_IN_USER_ID . "'
+                        ORDER BY u.id DESC";
 $agency_data = $db->query($agency_data, ["select_query" => true]);
 ?>
 <!DOCTYPE html>

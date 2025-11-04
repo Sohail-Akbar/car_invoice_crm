@@ -13,13 +13,6 @@ $services = $db->select("services", "*", [
     "is_active" => 1
 ]);
 
-// Generate Invoice No
-function generateInvoiceNo($db)
-{
-    $last = $db->query("SELECT id FROM invoices ORDER BY id DESC LIMIT 1", ['select_query' => true]);
-    $nextId = $last ? ($last[0]['id'] + 1) : 1;
-    return "INV-" . str_pad($nextId, 5, "0", STR_PAD_LEFT);
-}
 
 $invoice_no = generateInvoiceNo($db);
 
@@ -91,7 +84,7 @@ $customers = $db->select("customers", "id,title,fname,lname", [
                             </select>
                         </div>
                         <div class="col-md-4 mt-3">
-                            <label>Tax Rate (%)</label>
+                            <label>VAT%</label>
                             <input type="number" step="0.01" name="tax_rate" id="tax_rate" class="form-control"
                                 value="10">
                         </div>

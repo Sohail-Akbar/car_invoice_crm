@@ -19,31 +19,49 @@
                 </a>
             </li>
             <?php if (LOGGED_IN_USER["type"] === "main_admin") { ?>
-                <li class="nav-item">
-                    <a href="add-company" class="nav-link">
-                        <i class="fas fa-building"></i>
-                        <span class="text">Add Company</span>
+                <li class="nav-item with-sub-menu">
+                    <a href="#" class="nav-link">
+                        <span>
+                            <i class="fas fa-building"></i>
+                            <span class="text">Companies</span>
+                        </span>
+                        <i class="fas fa-angle-down"></i>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="view-company" class="nav-link">
-                        <i class="fas fa-building"></i>
-                        <span class="text">View Company</span>
-                    </a>
+                    <ul class="sub-menu">
+                        <li class="nav-item">
+                            <a href="add-company" class="nav-link">
+                                <span class="text">Add Company</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="view-company" class="nav-link">
+                                <span class="text">View Company</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             <?php } ?>
             <?php if (LOGGED_IN_USER["type"] === "admin") { ?>
-                <li class="nav-item">
-                    <a href="add-agency" class="nav-link">
-                        <i class="fas fa-building"></i>
-                        <span class="text">Add Agency</span>
+                <li class="nav-item with-sub-menu">
+                    <a href="#" class="nav-link">
+                        <span>
+                            <i class="fas fa-building"></i>
+                            <span class="text">Agencies</span>
+                        </span>
+                        <i class="fas fa-angle-down"></i>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="view-agency" class="nav-link">
-                        <i class="fas fa-building"></i>
-                        <span class="text">View Agency</span>
-                    </a>
+                    <ul class="sub-menu">
+                        <li class="nav-item">
+                            <a href="add-agency" class="nav-link">
+                                <span class="text">Add Agency</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="view-agency" class="nav-link">
+                                <span class="text">View Agency</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             <?php } ?>
             <li class="nav-item">

@@ -143,11 +143,30 @@
     font-size: 14px;
 }
 
-.sidebar .nav .nav-item.active .nav-link {
+/* 🟦 Active simple nav item (no submenu) */
+.sidebar .nav .nav-item.active>.nav-link {
     background: var(--blueColor) !important;
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px var(--blueColorLow);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14),
+        0 7px 10px -5px var(--blueColorLow);
     color: #fff;
 }
+
+/* 🟦 Active parent item with sub-menu */
+.sidebar .nav .nav-item.with-sub-menu.active>.nav-link {
+    background: var(--blueColor) !important;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14),
+        0 7px 10px -5px var(--blueColorLow);
+    color: #fff;
+}
+
+/* 🟦 Active submenu item */
+.sidebar .nav .sub-menu .nav-item.active>.nav-link {
+    background: var(--blueColor) !important;
+    color: #fff;
+    opacity: 0.8;
+}
+
+
 
 .sidebar .nav .nav-item.active .nav-link i {
     color: #FFF;
@@ -278,16 +297,11 @@
     object-fit: cover;
 }
 
-/* .sidebar .nav .nav-item.with-sub-menu .nav-link {
+.sidebar .nav .nav-item.with-sub-menu .nav-link {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
-.sidebar .nav .nav-item:not(.with-sub-menu):hover>.nav-link {
-    background: var(--bgColorLow) !important;
-}
-
 
 
 .sidebar .nav .sub-menu .nav-item .nav-link i {
@@ -305,12 +319,22 @@
 
 .sidebar .nav .sub-menu .nav-item .nav-link {
     font-size: 10px !important;
-    padding: 8px;
-    padding-left: 45px;
+    padding: 14px;
+    padding-left: 56px;
 }
 
 .sidebar .nav .sub-menu .nav-item.active .nav-link {
-    background: var(--bgColorLow) !important;
+    background: var(--blueColor) !important;
     box-shadow: none;
-    color: var(--textColorFull);
-} */
+    color: white;
+    opacity: 0.8;
+}
+
+/* Arrow icon rotation when submenu is active */
+.sidebar .nav .nav-item.with-sub-menu>.nav-link .fa-angle-down {
+    transition: transform 0.3s ease;
+}
+
+.sidebar .nav .nav-item.with-sub-menu.active>.nav-link .fa-angle-down {
+    transform: rotate(180deg);
+}

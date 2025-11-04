@@ -495,65 +495,10 @@ function url(...$paths)
 }
 
 
-
-// $Aeskey = "uIf/9ETWDEpHsXJGfpUDqdpToyw5mQ4Dxcmk5sa9p40=";
-// function encrypt_aes256($plaintext)
-// {
-//     global $Aeskey;
-//     // Derive a fixed key automatically (you can change the secret phrase)
-//     $secret_phrase = $Aeskey; // change this to something unique
-//     $key = hash('sha256', $secret_phrase, true); // 32 bytes
-
-//     $iv_len = openssl_cipher_iv_length('aes-256-cbc');
-//     $iv = random_bytes($iv_len);
-
-//     $ciphertext = openssl_encrypt($plaintext, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
-//     if ($ciphertext === false) {
-//         throw new RuntimeException("Encryption failed.");
-//     }
-
-//     $hmac = hash_hmac('sha256', $iv . $ciphertext, $key, true);
-//     return trim(base64_encode($iv . $hmac . $ciphertext));
-// }
-
-// function decrypt_aes256($b64Payload)
-// {
-//     global $Aeskey;
-//     $secret_phrase = $Aeskey; // same as encrypt()
-//     $key = hash('sha256', $secret_phrase, true);
-
-//     $b64Payload = trim($b64Payload);
-
-//     // If empty or not base64, just return original
-//     if (empty($b64Payload) || base64_decode($b64Payload, true) === false) {
-//         return $b64Payload;
-//     }
-
-//     $data = base64_decode($b64Payload, true);
-//     $iv_len = openssl_cipher_iv_length('aes-256-cbc');
-//     $hmac_len = 32;
-
-//     // Check if data length is valid for encrypted payload
-//     if (strlen($data) < ($iv_len + $hmac_len + 1)) {
-//         return $b64Payload; // too short to be valid encrypted data
-//     }
-
-//     $iv = substr($data, 0, $iv_len);
-//     $hmac = substr($data, $iv_len, $hmac_len);
-//     $ciphertext = substr($data, $iv_len + $hmac_len);
-
-//     // Recalculate HMAC and verify
-//     $calc_hmac = hash_hmac('sha256', $iv . $ciphertext, $key, true);
-//     if (!hash_equals($calc_hmac, $hmac)) {
-//         return $b64Payload; // not valid encrypted data
-//     }
-
-//     // Try to decrypt; if fails, return original
-//     $plaintext = openssl_decrypt($ciphertext, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
-//     return $plaintext === false ? $b64Payload : $plaintext;
-// }
-
-
-// $plaintext = "My secret message";
-// $enc = encrypt_aes256($plaintext);
-// $dec = decrypt_aes256($enc);
+// Generate Invoice No
+function generateInvoiceNo($db)
+{
+    $last = $db->query("SELECT id FROM invoices ORDER BY id DESC LIMIT 1", ['select_query' => true]);
+    $nextId = $last ? ($last[0]['id'] + 1) : 1;
+    return "INV-" . str_pad($nextId, 5, "0", STR_PAD_LEFT);
+}

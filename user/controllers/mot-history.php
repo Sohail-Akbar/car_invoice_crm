@@ -123,7 +123,7 @@ if (isset($_POST['fetchRegistrationCar'])) {
         ];
 
         if ($customerId) {
-            $existingRecord = $db->select("mot_history", "*", [
+            $existingRecord = $db->select("customer_car_history", "*", [
                 'reg_number' => $regNumber,
                 "company_id" => LOGGED_IN_USER['company_id'],
                 "agency_id" => LOGGED_IN_USER['agency_id'],
@@ -149,9 +149,9 @@ if (isset($_POST['fetchRegistrationCar'])) {
 
             $save = null;
             if (!count($existingRecord)) {
-                $save = $db->insert("mot_history", $data);
+                $save = $db->insert("customer_car_history", $data);
             } else {
-                $save =  $db->update("mot_history", $data, [
+                $save =  $db->update("customer_car_history", $data, [
                     'reg_number' => $regNumber,
                     "company_id" => LOGGED_IN_USER['company_id'],
                     "agency_id" => LOGGED_IN_USER['agency_id'],
