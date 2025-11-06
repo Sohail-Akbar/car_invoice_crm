@@ -525,7 +525,8 @@ select:focus {
 }
 
 .card-header {
-    background: var(--blueColor);
+    /* background: var(--blueColor); */
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%) !important;
     color: #FFF;
     font-weight: 500;
     padding: 0.5rem;

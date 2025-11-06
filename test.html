@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Include Select2 CSS/JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <select id="brandSelect" class="form-control" style="width:300px;">
+        <option value="Toyota">Toyota</option>
+        <option value="Honda">Honda</option>
+        <option value="Suzuki">Suzuki</option>
+    </select>
+
+    <script>
+        $('#brandSelect').select2({
+            tags: true, // allow new items
+            placeholder: 'Select or add car brand',
+            allowClear: true
+        });
+
+        // When new option added
+        $('#brandSelect').on('select2:select', function (e) {
+            const data = e.params.data;
+
+            // Agar user ne naya likha (na ke existing option select kiya)
+            if (data && data.newTag) {
+                $.ajax({
+                    url: 'save_new_brand.php',
+                    type: 'POST',
+                    data: { brand_name: data.text },
+                    success: function (res) {
+                        console.log('Saved:', res);
+                    }
+                });
+            }
+        });
+
+        // Enable tagging detection
+        $.fn.select2.amd.require(['select2/utils', 'select2/tags'], function (Utils, Tags) {
+            Tags.prototype.createTag = function (params) {
+                var term = $.trim(params.term);
+                if (term === '') return null;
+                return {
+                    id: term,
+                    text: term,
+                    newTag: true // mark as new
+                };
+            };
+        });
+
+    </script>
+
+</body>
+
+</html>

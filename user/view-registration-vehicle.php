@@ -30,8 +30,8 @@ if (!$mot_history) $mot_history = [];
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
-                    <p>Customers</p>
-                    <a href="add-customer">Add New Customer</a>
+                    <p>View Registeration Vehicle</p>
+                    <a href="registration-vehicle">Add New Register Vehicle</a>
                 </div>
             </div>
             <div class="card-body">
@@ -47,7 +47,7 @@ if (!$mot_history) $mot_history = [];
                                     <th>Registration No</th>
                                     <th>Details</th>
                                     <th>Status</th>
-                                    <th></th>
+                                    <th class="d-none"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,12 +89,12 @@ if (!$mot_history) $mot_history = [];
                                                                                         if ($mot_history['is_active'] != '1') echo 'bg-warning text-dark';
                                                                                         else echo 'bg-success'; ?>">
                                                 <?php
-                                                if ($customer['is_active'] == '1') echo 'Active';
+                                                if ($mot_history['is_active'] == '1') echo 'Active';
                                                 else echo 'Inactive';
                                                 ?>
                                             </span>
                                         </td>
-                                        <td>
+                                        <td class="d-none">
                                             <div class="align-center child-el-margin-x">
                                                 <button class="no-btn-styles text-danger cp tc-delete-btn" title="Delete" data-target="<?= $mot_history['id']; ?>" data-action="customer_car_history"><i class="fas fa-trash-alt"></i></button>
                                             </div>

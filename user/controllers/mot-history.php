@@ -86,11 +86,99 @@ function getMotErrorMessage($errorCode)
 
 // Fetch Registeration Car Data
 if (isset($_POST['fetchRegistrationCar'])) {
+    if (isset($_POST['vehicle_id'])) {
+        $vehicle_id = intval(arr_val($_POST, 'vehicle_id', 0));
+        $customer_id = intval(arr_val($_POST, 'customer_id', 0));
+
+        if (!$vehicle_id || !$customer_id) {
+            returnError('Invalid request: missing vehicle_id or customer_id.');
+            exit;
+        }
+
+        $vehicle_data = $db->select_one("customer_car_history", "*", [
+            "id" => $vehicle_id,
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "is_active" => 1
+        ]);
+
+        if (!$vehicle_data) {
+            returnError('Vehicle not found or access denied.');
+            exit;
+        }
+
+        $data = [
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "customer_id" => $customer_id,
+            "reg_number" => $vehicle_data['reg_number'],
+            "make" => ["encrypt" => $vehicle_data['make'] ?? ''],
+            "model" => ["encrypt" => $vehicle_data['model'] ?? ''],
+            "firstUsedDate" => ["encrypt" => $vehicle_data['firstUsedDate'] ?? ''],
+            "primaryColour" => ["encrypt" => $vehicle_data['primaryColour'] ?? ''],
+            "registrationDate" => ["encrypt" => $vehicle_data['registrationDate'] ?? ''],
+            "fuelType" => ["encrypt" => $vehicle_data['fuelType'] ?? ''],
+            "manufactureDate" => ["encrypt" => $vehicle_data['manufactureDate'] ?? ''],
+            "engineSize" => ["encrypt" => $vehicle_data['engineSize'] ?? ''],
+            "hasOutstandingRecall" => ["encrypt" => $vehicle_data['hasOutstandingRecall'] ?? ''],
+            "expiryDate" => ["encrypt" => $vehicle_data['expiryDate'] ?? ''],
+            // preserve manual flag if present, otherwise mark as non-manual
+            "is_manual" => isset($vehicle_data['is_manual']) ? $vehicle_data['is_manual'] : 0
+        ];
+
+        $save = $db->insert("customer_car_history", $data);
+
+        if ($save) {
+            $db->update("customer_car_history", [
+                "is_active" => 0
+            ], [
+                "id" => $vehicle_id
+            ]);
+
+            returnSuccess("Vehicle data saved successfully.", [
+                "redirect" => "registration-vehicle",
+            ]);
+        } else {
+            returnError("Failed to save vehicle data.");
+        }
+
+        exit;
+    }
+
     $regNumber = arr_val($_POST, 'reg', '');
     if (!$regNumber) $regNumber = arr_val($_POST, 'reg_number', '');
     $customerId = arr_val($_POST, 'customer_id', '');
     $customerSave = arr_val($_POST, 'customerSave', '');
     $vehicleData = getVehicleData($regNumber); // Assuming your function returns the array you showed
+
+    // Existing customer vehicle information
+    $existingRecord = $db->select_one("customer_car_history", "*", [
+        'reg_number' => $regNumber,
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "is_active" => 1
+    ]);
+    if (empty($existingRecord)) $existingRecord = [];
+
+
+    if (count($existingRecord)) {
+        if ($vehicleData && isset($vehicleData['response'])) $vehicleInfo = $vehicleData['response'];
+
+        $customer = $db->select_one("customers", "*", [
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "id" => $existingRecord['customer_id']
+        ]);
+
+        $data = [
+            "vehicleInfo" => isset($vehicleData['response']['errorCode']) ? [] : $vehicleInfo,
+            "existingRecord" => $existingRecord,
+            "customer" => $customer,
+            "isExistingRecord" => true
+        ];
+        returnSuccess($data);
+    }
+
 
     // ✅ Check for API error response
     if (isset($vehicleData['response']['errorCode'])) {
@@ -103,6 +191,7 @@ if (isset($_POST['fetchRegistrationCar'])) {
         }
         exit;
     }
+
 
     if ($vehicleData && isset($vehicleData['response'])) {
         $vehicleInfo = $vehicleData['response'];
@@ -123,12 +212,6 @@ if (isset($_POST['fetchRegistrationCar'])) {
         ];
 
         if ($customerId) {
-            $existingRecord = $db->select("customer_car_history", "*", [
-                'reg_number' => $regNumber,
-                "company_id" => LOGGED_IN_USER['company_id'],
-                "agency_id" => LOGGED_IN_USER['agency_id'],
-                "customer_id" => $customerId
-            ]);
 
             $data = [
                 "company_id" => LOGGED_IN_USER['company_id'],
@@ -147,21 +230,12 @@ if (isset($_POST['fetchRegistrationCar'])) {
                 "ExpiryDate" => ["encrypt" => $mainDetails['expiryDate']]
             ];
 
-            $save = null;
-            if (!count($existingRecord)) {
-                $save = $db->insert("customer_car_history", $data);
-            } else {
-                $save =  $db->update("customer_car_history", $data, [
-                    'reg_number' => $regNumber,
-                    "company_id" => LOGGED_IN_USER['company_id'],
-                    "agency_id" => LOGGED_IN_USER['agency_id'],
-                    "customer_id" => $customerId
-                ]);
-            }
+            $save = $db->insert("customer_car_history", $data);
+
 
             if ($save) {
                 returnSuccess("Vehicle data saved successfully.", [
-                    "redirect" => "registration-car",
+                    "redirect" => "registration-vehicle",
                 ]);
             } else {
                 returnError('Failed to save vehicle data.');
@@ -171,5 +245,131 @@ if (isset($_POST['fetchRegistrationCar'])) {
         }
     } else {
         returnError('No data found for this registration.');
+    }
+}
+
+
+if (isset($_POST['manuallyRegistrationCar'])) {
+    $customerId = arr_val($_POST, 'customer_id', '');
+    $reg_number = arr_val($_POST, 'reg_number', '');
+    $make = arr_val($_POST, 'make', '');
+    $model = arr_val($_POST, 'model', '');
+    $firstUsedDate = arr_val($_POST, 'firstUsedDate', '');
+    $fuelType = arr_val($_POST, 'fuelType', '');
+    $primaryColour = arr_val($_POST, 'primaryColour', '');
+    $registrationDate = arr_val($_POST, 'registrationDate', '');
+    $manufactureDate = arr_val($_POST, 'manufactureDate', '');
+    $engineSize = arr_val($_POST, 'engineSize', '');
+    $hasOutstandingRecall = arr_val($_POST, 'hasOutstandingRecall', '');
+    $expiryDate = arr_val($_POST, 'expiryDate', '');
+
+    // Vehicle reg no validation
+    $existingRecordReg = $db->select_one("customer_car_history", "id", [
+        "reg_number" =>  $reg_number,
+        "is_active" => 1
+    ]);
+
+    if ($existingRecordReg) {
+        returnError("A record with this registration number already exists. Please check and try again.");
+        exit;
+    }
+
+    $data = [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "customer_id" => $customerId,
+        "reg_number" =>  $reg_number,
+        "make" => $make,
+        "model" => $model,
+        "firstUsedDate" => $firstUsedDate,
+        "primaryColour" => $primaryColour,
+        "registrationDate" => $registrationDate,
+        "fuelType" => $fuelType,
+        "manufactureDate" => $manufactureDate,
+        "engineSize" => $engineSize,
+        "hasOutstandingRecall" => $hasOutstandingRecall,
+        "expiryDate" => $expiryDate,
+        "is_manual" => 1
+    ];
+
+    $save = $db->insert("customer_car_history", $data);
+
+    if ($save) {
+        returnSuccess("Vehicle data saved successfully.", [
+            "redirect" => "view-registration-vehicle",
+        ]);
+    } else {
+        returnError('Failed to save vehicle data.');
+    }
+}
+
+
+// Vehicle Information Update
+if (isset($_POST['updateVehicleInformation'])) {
+    $id = arr_val($_POST, 'id', '');
+    if (!$id) {
+        returnError('Invalid request: missing id.');
+        exit;
+    }
+
+    // Collect POST values
+    $reg_number = arr_val($_POST, 'reg_number', '');
+    $make = arr_val($_POST, 'make', '');
+    $model = arr_val($_POST, 'model', '');
+    $firstUsedDate = arr_val($_POST, 'firstUsedDate', '');
+    $fuelType = arr_val($_POST, 'fuelType', '');
+    $primaryColour = arr_val($_POST, 'primaryColour', '');
+    $registrationDate = arr_val($_POST, 'registrationDate', '');
+    $manufactureDate = arr_val($_POST, 'manufactureDate', '');
+    $engineSize = arr_val($_POST, 'engineSize', '');
+    $hasOutstandingRecall = arr_val($_POST, 'hasOutstandingRecall', '');
+    $expiryDate = arr_val($_POST, 'expiryDate', '');
+
+    // Verify the record exists and belongs to the logged in company/agency
+    $existing = $db->select_one("customer_car_history", "*", [
+        "id" => $id,
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id']
+    ]);
+    if (!$existing) {
+        returnError('Record not found or access denied.');
+        exit;
+    }
+
+    // Check for duplicate registration number (exclude current record)
+    if ($reg_number !== '') {
+        $conflict = $db->select_one("customer_car_history", "*", [
+            "reg_number" => $reg_number,
+            "is_active" => 1
+        ]);
+        if ($conflict && $conflict['id'] != $id) {
+            returnError("A record with this registration number already exists. Please check and try again.");
+            exit;
+        }
+    }
+
+    // Prepare update data
+    $updateData = [
+        "reg_number" => $reg_number,
+        "make" => $make,
+        "model" => $model,
+        "firstUsedDate" => $firstUsedDate,
+        "primaryColour" => $primaryColour,
+        "registrationDate" => $registrationDate,
+        "fuelType" => $fuelType,
+        "manufactureDate" => $manufactureDate,
+        "engineSize" => $engineSize,
+        "hasOutstandingRecall" => $hasOutstandingRecall,
+        "expiryDate" => $expiryDate
+    ];
+
+    $updated = $db->update("customer_car_history", $updateData, ["id" => $id]);
+
+    if ($updated) {
+        returnSuccess("Vehicle information updated successfully.", [
+            "redirect" => "view-registration-vehicle",
+        ]);
+    } else {
+        returnError("Failed to update vehicle information.");
     }
 }

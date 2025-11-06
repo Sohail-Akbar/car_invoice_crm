@@ -130,7 +130,7 @@ if (isset($_POST['fetchCarInfo'])) {
 
                 <table class='table table-sm table-bordered mb-3'>
                     <thead class='table-secondary'>
-                        <tr><th>Service</th><th>Amount (" . CURRENCY_SYMBOL . ")</th></tr>
+                        <tr><th>Service</th><th>Amount (" . _CURRENCY_SYMBOL . ")</th></tr>
                     </thead>
                     <tbody>";
         foreach ($data["services"] as $srv) {
@@ -141,9 +141,9 @@ if (isset($_POST['fetchCarInfo'])) {
                 </table>
 
                 <div class='d-flex justify-content-between mb-3'>
-                    <span><strong>Total:</strong> " . CURRENCY_SYMBOL . "{$invoice['total_amount']}</span>
-                    <span><strong>Paid:</strong> " . CURRENCY_SYMBOL . "{$invoice['paid_amount']}</span>
-                    <span><strong>Due:</strong> " . CURRENCY_SYMBOL . "{$invoice['due_amount']}</span>
+                    <span><strong>Total:</strong> " . _CURRENCY_SYMBOL . "{$invoice['total_amount']}</span>
+                    <span><strong>Paid:</strong> " . _CURRENCY_SYMBOL . "{$invoice['paid_amount']}</span>
+                    <span><strong>Due:</strong> " . _CURRENCY_SYMBOL . "{$invoice['due_amount']}</span>
                 </div>";
 
         // 🔹 Show Invoice Note
@@ -233,12 +233,12 @@ if (isset($_POST['fetchCarInfo'])) {
                     <div class='modal-body bg-white'>
                          <form action='invoice' method='POST' class='ajax_form'>
                             <div class='form-group'>
-                                <label>Total Amount (" . CURRENCY_SYMBOL . ")</label>
+                                <label>Total Amount (" . _CURRENCY_SYMBOL . ")</label>
                                 <input type='number' name='total_amount' class='form-control' value='{$invoice['total_amount']}' readonly>
                             </div>
 
                             <div class='form-group'>
-                                <label>Already Paid (" . CURRENCY_SYMBOL . ")</label>
+                                <label>Already Paid (" . _CURRENCY_SYMBOL . ")</label>
                                 <input type='number' name='paid_amount_old' class='form-control' value='{$invoice['paid_amount']}' readonly>
                             </div>
 
@@ -252,7 +252,7 @@ if (isset($_POST['fetchCarInfo'])) {
                             </div>
 
                             <div class='form-group'>
-                                <label>Add Payment (" . CURRENCY_SYMBOL . ")</label>
+                                <label>Add Payment (" . _CURRENCY_SYMBOL . ")</label>
                                 <input type='number' name='new_payment' class='form-control' placeholder='Enter payment amount' min='0' required>
                             </div>
 
@@ -270,4 +270,41 @@ if (isset($_POST['fetchCarInfo'])) {
             </div>
         </div>";
     }
+}
+
+
+// Update Customer
+if (isset($_POST['updateCustomerInfo'])) {
+    $title = $_POST['title'];
+    $gender = $_POST['gender'];
+    $fname = $_POST['fname'];
+    $lname = $_POST['lname'];
+    $email = $_POST['email'];
+    $contact = $_POST['contact'];
+    $address = $_POST['address'];
+    $postcode = $_POST['postcode'];
+    $city = $_POST['city'];
+    $customer_id = $_POST['customer_id'];
+
+    $update = $db->update("customers", [
+        "title"    => $title,
+        "gender"   => $gender,
+        "fname"    => $fname,
+        "lname"    => $lname,
+        "email"    => $email,
+        "contact"  => $contact,
+        "address"  => $address,
+        "postcode" => $postcode,
+        "city"     => $city
+    ], [
+        "id" => $customer_id,
+        "is_active" => 1
+    ]);
+
+    if ($update) {
+        returnSuccess("Customer updated successfully");
+    } else {
+        returnError("Failed to update customer");
+    }
+    exit;
 }

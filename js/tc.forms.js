@@ -413,3 +413,28 @@ $(document).on('click', '.delete-td-data, .tc-delete-btn', function (e) {
         }
     })
 });
+
+
+function fillFormValues(formSelector, data) {
+    // Loop through all keys in the data object
+    $.each(data, function (key, value) {
+        let $field = $(formSelector).find('[name="' + key + '"]');
+
+        if ($field.length) {
+            let type = $field.attr('type');
+            let tag = $field.prop('tagName').toLowerCase();
+
+            if (tag === 'input') {
+                if (type === 'checkbox') {
+                    $field.prop('checked', value == 1 || value === true);
+                } else if (type === 'radio') {
+                    $(formSelector).find('[name="' + key + '"][value="' + value + '"]').prop('checked', true);
+                } else {
+                    $field.val(value);
+                }
+            } else if (tag === 'select' || tag === 'textarea') {
+                $field.val(value);
+            }
+        }
+    });
+}

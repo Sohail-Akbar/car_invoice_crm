@@ -389,7 +389,7 @@ function saveInvoicePDF($invoice_data = [])
                     <tr>
                         <td>' . ($index + 1) . '</td>
                         <td>' . htmlspecialchars($service['description']) . '</td>
-                        <td>' . CURRENCY_SYMBOL . number_format($service['amount'], 2) . '</td>
+                        <td>' . _CURRENCY_SYMBOL . number_format($service['amount'], 2) . '</td>
                     </tr>';
         $subtotal += $service['amount'];
     }
@@ -409,27 +409,27 @@ function saveInvoicePDF($invoice_data = [])
                 <table>
                     <tr>
                         <td>Subtotal:</td>
-                        <td class="amount">' . CURRENCY_SYMBOL . number_format($subtotal, 2) . '</td>
+                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($subtotal, 2) . '</td>
                     </tr>
                     <tr>
                         <td>Tax (' . number_format($tax_rate, 2) . '%):</td>
-                        <td class="amount">' . CURRENCY_SYMBOL . number_format($tax_amount, 2) . '</td>
+                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($tax_amount, 2) . '</td>
                     </tr>
                     <tr>
                         <td>Discount:</td>
-                        <td class="amount">' . CURRENCY_SYMBOL . number_format($invoice_data['discount'] ?? 0.00, 2) . '</td>
+                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($invoice_data['discount'] ?? 0.00, 2) . '</td>
                     </tr>
                     <tr>
                         <td><strong>Total Amount:</strong></td>
-                        <td class="amount"><strong>' . CURRENCY_SYMBOL . number_format($total_amount, 2) . '</strong></td>
+                        <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($total_amount, 2) . '</strong></td>
                     </tr>
                     <tr>
                         <td>Paid Amount:</td>
-                        <td class="amount">' . CURRENCY_SYMBOL . number_format($paid_amount, 2) . '</td>
+                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($paid_amount, 2) . '</td>
                     </tr>
                     <tr>
                         <td><strong>Due Amount:</strong></td>
-                        <td class="amount"><strong>' . CURRENCY_SYMBOL . number_format($due_amount, 2) . '</strong></td>
+                        <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($due_amount, 2) . '</strong></td>
                     </tr>
                 </table>
             </div>

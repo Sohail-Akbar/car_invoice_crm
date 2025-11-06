@@ -2,7 +2,14 @@
 require_once('includes/db.php');
 $page_name = 'Dashboard';
 
-$JS_FILES_ = [];
+$JS_FILES_ = [
+    "register-vehicle.js"
+];
+$CSS_FILES_ = [
+    "register-vehicle.css"
+];
+
+$custom_register = _get_param("type", "");
 
 $existing_customers = $db->select("customers", "*", [
     "company_id" => LOGGED_IN_USER['company_id'],
@@ -60,81 +67,36 @@ $existing_customers = $db->select("customers", "*", [
 <body>
     <?php require_once('./includes/header.php'); ?>
     <div class="all-content">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="heading">Search Registration Car</h3>
-                <form action="mot-history" method="POST" class="ajax_form" data-callback="motHistoryCB">
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <span class="label">Reg</span>
-                                <input type="text" class="form-control" name="reg" required data-length="[1,250]" placeholder="Reg No ...">
+        <?php if (!$custom_register) { ?>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="heading">Search Registration Vehicle</h3>
+                    <form action="mot-history" method="POST" class="ajax_form" data-callback="motHistoryCB">
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <span class="label">Reg</span>
+                                    <input type="text" class="form-control" name="reg" required data-length="[1,250]" placeholder="Reg No ...">
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <input type="hidden" name="fetchRegistrationCar" value="<?= bc_code(); ?>">
+                                <button class="btn" type="submit"><i class="fas fa-search"></i> Search</button>
                             </div>
                         </div>
-                        <div class="col-12 mt-2">
-                            <input type="hidden" name="fetchRegistrationCar" value="<?= bc_code(); ?>">
-                            <button class="btn" type="submit"><i class="fas fa-search"></i> Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="card mt-3" id="registrationCarContainer" style="display: none;">
-            <div class="card-body">
-                <div class="pull-away">
-                    <h3 class="heading">Registration Car</h3>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".mot-history-model">View MOT History</button>
+                    </form>
                 </div>
-                <form action="mot-history" method="POST" class="ajax_form reset" data-reset="reset">
-                    <div class="row mt-4">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <span class="label">Existing Customer</span>
-                                <select name="customer_id" id="customersContainer" class="form-control" required>
-                                    <option value="">Select Customer</option>
-                                    <?php foreach ($existing_customers as $customer) { ?>
-                                        <option value="<?= $customer['id'] ?>"><?= $customer['title'] . " " . $customer['fname'] . " " . $customer['lname'] ?></option>
-                                    <?php }; ?>
-                                </select>
-                            </div>
-                            <!-- Add new customer button -->
-                        </div>
-                        <div class="col-md-4">
-                            <label for=""></label><br>
-                            <button class="btn btn-secondary" type="button" data-toggle="modal" data-target=".add-new-customer-model">Add New Customer</button>
-                        </div>
-                        <div id="motFields">
-                            <div class="row m-0"></div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <input type="hidden" name="fetchRegistrationCar" value="<?= bc_code(); ?>">
-                            <input type="hidden" name="customerSave" value="<?= bc_code(); ?>">
-                            <button class="btn" type="submit"><i class="fas fa-save"></i> Save</button>
-                        </div>
-                    </div>
-                </form>
             </div>
-        </div>
+            <?php require_once "./components/registeration-vehicle/vehicle-registeration-form.php"; ?>
+        <?php } else { ?>
+            <?php require_once "./components/registeration-vehicle/manual-registeration-vehicle.php"; ?>
+        <?php } ?>
     </div>
 
-    <!-- view mot history -->
-    <div class="modal fade mot-history-model show" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
-            <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">MOT History Details</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body bg-white">
-                    <div id="modalMotContent">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade add-new-customer-model show" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <?php require_once "./components/registeration-vehicle/vehicle-history-modal.php"; ?>
+
+    <!-- Add Customer -->
+    <div class="modal fade add-new-customer-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
@@ -154,6 +116,9 @@ $existing_customers = $db->select("customers", "*", [
             </div>
         </div>
     </div>
+
+    <!-- Update Vehicle -->
+    <?php require_once "./components/registeration-vehicle/update-vehicle-modal.php"; ?>
 
     <script>
         var autocomplete;

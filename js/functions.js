@@ -170,3 +170,12 @@ function refreshFns() {
     tcResImage(); // TC Responsive Image
 }
 $(document).ready(refreshFns);
+
+
+function select2() {
+    $('.select2-list').select2({
+        tags: true,
+        placeholder: 'Select or add option',
+        allowClear: true
+    });
+}
