@@ -53,6 +53,7 @@ if (isset($_POST['fetchCarInfo'])) {
         if (!isset($grouped[$invoice_id])) {
             $grouped[$invoice_id] = [
                 "car" => [
+                    "id" => $row['car_id'],
                     "make" => $row["make"],
                     "model" => $row["model"],
                     "reg_number" => $row["reg_number"]
@@ -90,10 +91,12 @@ if (isset($_POST['fetchCarInfo'])) {
             INNER JOIN staffs st ON cs.staff_id = st.id
             WHERE cs.customer_id = '$customer_id' AND cs.invoice_id = '$invoice_id' AND cs.is_active = 1
         ", ["select_query" => true]);
+        $assigned_staff_ids = [];
+
 
         $pdf_html = "";
         if (!empty($invoice['pdf_file']) && file_exists(_DIR_ . "/uploads/invoices/{$invoice['pdf_file']}")) {
-            $pdf_html = "<a href='../uploads/invoices/{$invoice['pdf_file']}' target='_blank' class='btn btn-outline-primary btn-sm'><i class='fas fa-file-pdf mr-1'></i> View Invoice PDF</a>";
+            $pdf_html = "<a href='../uploads/invoices/{$invoice['pdf_file']}' target='_blank' class='btn btn-outline-primary btn-sm view-invoice-btn'><i class='fas fa-file-pdf mr-1'></i> View Invoice PDF</a>";
         } else {
             $pdf_html = "<span class='text-muted small'><i class='fas fa-exclamation-circle'></i> No PDF file available</span>";
         }
@@ -102,7 +105,7 @@ if (isset($_POST['fetchCarInfo'])) {
         <div class='card mb-3 shadow-sm mt-5'>
             <div class='card-header bg-info d-flex justify-content-between align-items-center'>
                 <div><strong>{$car['make']} {$car['model']}</strong> ({$car['reg_number']})</div>
-                <div>
+                <div class='action-btns'>
                     <a class='text-white add-staff' data-toggle='modal' data-target='#{$modal_id}' style='cursor:pointer;'>
                         <i class='fas fa-user-plus mr-1'></i> Add Staff
                     </a>
@@ -140,7 +143,7 @@ if (isset($_POST['fetchCarInfo'])) {
                     </tbody>
                 </table>
 
-                <div class='d-flex justify-content-between mb-3'>
+                <div class='d-flex justify-content-between mb-3 payment-details'>
                     <span><strong>Total:</strong> " . _CURRENCY_SYMBOL . "{$invoice['total_amount']}</span>
                     <span><strong>Paid:</strong> " . _CURRENCY_SYMBOL . "{$invoice['paid_amount']}</span>
                     <span><strong>Due:</strong> " . _CURRENCY_SYMBOL . "{$invoice['due_amount']}</span>
@@ -162,6 +165,7 @@ if (isset($_POST['fetchCarInfo'])) {
         if (!empty($assigned_staff)) {
             echo "<h6><i class='fas fa-users mr-1'></i> Assigned Staff:</h6><ul class='list-inline'>";
             foreach ($assigned_staff as $st) {
+                array_push($assigned_staff_ids, $st['cs_id']);
                 echo "
                 <li class='list-inline-item border rounded px-2 py-1 bg-light mb-1'>
                     {$st['title']} {$st['fname']} {$st['lname']}
@@ -195,10 +199,9 @@ if (isset($_POST['fetchCarInfo'])) {
                         <form action='assigned-staff' method='POST' class='ajax_form' data-callback='assignedStaffCB'>
                             <div class='form-group'>
                                 <label class='font-weight-bold'>Select Staff Member</label>
-                                <select name='staff_id' class='form-control' required>
-                                    <option value=''>-- Select Staff Member --</option>";
+                                <select name='staff_id[]' class='form-control select2' multiple='multiple' required>";
         foreach ($all_staff as $staff) {
-            echo "<option value='{$staff['id']}'>{$staff['title']} {$staff['fname']} {$staff['lname']} ({$staff['email']})</option>";
+            echo "<option  value='{$staff['id']}'>{$staff['title']} {$staff['fname']} {$staff['lname']} ({$staff['email']})</option>";
         }
         echo "
                                 </select>
@@ -206,6 +209,7 @@ if (isset($_POST['fetchCarInfo'])) {
 
                             <input type='hidden' name='customer_id' value='{$customer_id}'>
                             <input type='hidden' name='invoice_id' value='{$invoice_id}'>
+                            <input type='hidden' name='vehicle_id' value='{$car['id']}'>
                             <input type='hidden' name='assign_staff' value='true'>
 
                             <div class='text-right'>
@@ -252,7 +256,7 @@ if (isset($_POST['fetchCarInfo'])) {
                             </div>
 
                             <div class='form-group'>
-                                <label>Add Payment (" . _CURRENCY_SYMBOL . ")</label>
+                                <label>Add Payment (" . _CURRENCY_SYMBOL . ")</label> (Due: {$invoice['due_amount']})
                                 <input type='number' name='new_payment' class='form-control' placeholder='Enter payment amount' min='0' required>
                             </div>
 
@@ -305,6 +309,76 @@ if (isset($_POST['updateCustomerInfo'])) {
         returnSuccess("Customer updated successfully");
     } else {
         returnError("Failed to update customer");
+    }
+    exit;
+}
+
+if (isset($_POST['addCustomerNotes'])) {
+
+    $customer_id = intval($_POST['customer_id']);
+    $note        = trim($_POST['note']);
+
+    // Basic validation
+    if (empty($note)) {
+        returnError("Please enter a note before saving.");
+    }
+
+    // Insert note into DB
+    $save = $db->insert("customer_notes", [
+        "company_id"  => LOGGED_IN_USER['company_id'],
+        "agency_id"   => LOGGED_IN_USER['agency_id'],
+        "customer_id" => $customer_id,
+        "note"        => $note,
+    ]);
+
+    if ($save) {
+        returnSuccess("Customer note added successfully!", [
+            "redirect" => "customer-profile?id=" . $customer_id
+        ]);
+    } else {
+        returnError("Failed to save customer note. Please try again.");
+    }
+}
+
+
+
+if (isset($_POST['fetchCustomerNotes'])) {
+    $customer_id = intval($_POST['customer_id']);
+    $offset      = intval($_POST['offset']);
+    $limit       = 10;
+
+    $from_date = !empty($_POST['from_date']) ? $_POST['from_date'] : null;
+    $to_date   = !empty($_POST['to_date']) ? $_POST['to_date'] : null;
+
+    $where = [
+        "customer_id" => $customer_id,
+        "company_id"  => LOGGED_IN_USER['company_id'],
+        "agency_id"   => LOGGED_IN_USER['agency_id'],
+    ];
+
+    $sql = "SELECT * FROM customer_notes 
+            WHERE customer_id = {$customer_id}
+            AND company_id = {$where['company_id']}
+            AND agency_id = {$where['agency_id']}";
+
+    if ($from_date && $to_date) {
+        $sql .= " AND DATE(created_at) BETWEEN '{$from_date}' AND '{$to_date}'";
+    }
+
+    $sql .= " ORDER BY created_at DESC LIMIT {$limit} OFFSET {$offset}";
+
+    $notes = $db->query($sql, ['select_query' => true]);
+
+    if ($notes) {
+        echo json_encode([
+            'status' => 'success',
+            'notes'  => $notes
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'notes'  => []
+        ]);
     }
     exit;
 }

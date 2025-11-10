@@ -37,7 +37,32 @@
                                <td>$<?= number_format($inv['total_amount'], 2) ?></td>
                                <td>$<?= number_format($inv['paid_amount'], 2) ?></td>
                                <td>$<?= number_format($inv['due_amount'], 2) ?></td>
-                               <td><span class="status <?= $status_class ?>"><?= ucfirst($inv['status']) ?></span></td>
+                               <!-- <td><span class="status <?= $status_class ?>"><?= ucfirst($inv['status']) ?></span></td> -->
+                               <?php
+                                // Sample status
+                                $status = $inv['status']; // 'paid', 'unpaid', 'partial'
+
+                                // Status ke hisaab se class
+                                switch ($status) {
+                                    case 'paid':
+                                        $status_class = 'bg-success'; // green
+                                        break;
+                                    case 'unpaid':
+                                        $status_class = 'bg-danger'; // red
+                                        break;
+                                    case 'partial':
+                                        $status_class = 'bg-warning text-dark'; // yellow
+                                        break;
+                                    default:
+                                        $status_class = 'bg-secondary'; // gray
+                                        break;
+                                }
+                                ?>
+
+                               <td>
+                                   <span class="badge <?= $status_class ?>"><?= ucfirst($status) ?></span>
+                               </td>
+
                                <td>
                                    <a class="btn text-white"
                                        href="<?= _DIR_ ?>/uploads/invoices/<?= htmlspecialchars($inv['pdf_file']) ?>"

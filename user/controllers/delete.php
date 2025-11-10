@@ -7,7 +7,8 @@ $_delete->set([
     "staff" => "staffs",
     "customer" => "customers",
     "customer_car_history" => "customer_car_history",
-    "customer_staff" => "customer_staff"
+    "customer_staff" => "customer_staff",
+    "customer_notes" => "customer_notes"
 ]);
 
 

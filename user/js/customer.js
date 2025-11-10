@@ -32,9 +32,15 @@ $(document).on('click', '#carTabs .nav-link', function (e) {
     let $container = $(".cars-info-container");
     $container.html('<div class="text-center py-4 text-muted">Loading...</div>');
 
+    showVehicleDetails(carId, customerId, $container);
+});
+
+
+// Vehicle invoices
+function showVehicleDetails(vehicle_id, customer_id, container) {
     let data = {
-        car_id: carId,
-        customer_id: customerId,
+        car_id: vehicle_id,
+        customer_id: customer_id,
         fetchCarInfo: true
     };
 
@@ -44,14 +50,18 @@ $(document).on('click', '#carTabs .nav-link', function (e) {
         data: data,
         success: function (res) {
             // show HTML directly in container
-            $container.html(res);
+            container.html(res);
+            $('.select2').select2({
+                placeholder: "Select one or more options",
+                allowClear: true
+            });
         },
         error: function (xhr) {
             console.error(xhr.responseText);
-            $container.html('<div class="alert alert-danger">Error loading car details.</div>');
+            container.html('<div class="alert alert-danger">Error loading car details.</div>');
         }
     });
-});
+}
 
 
 
@@ -65,7 +75,91 @@ tc.fn.cb.assignedStaffCB = async (form, data) => {
         // popup close
         $('.modal').modal('hide');
         setTimeout(() => {
-            $("#cars").find(".nav-link.active").first().click();
+            console.log(data.invoice_id);
+            showVehicleDetails(data.invoice_id, _GET.id, $("#viewInvoicesContainer"));
         }, 200);
     }
 }
+
+// View Work Carried 
+$(document).on("click", ".view-work-carried-btn", function () {
+    let car_id = $(this).data("vehicle-id");
+    let $container = $("#carsInfoContainer");
+    showVehicleDetails(car_id, _GET.id, $container);
+    $(".view-work-carried-model").modal("show");
+});
+
+// View Invoices
+$(document).on("click", ".view-invoices-btn", function () {
+    let car_id = $(this).data("vehicle-id");
+    let $container = $("#viewInvoicesContainer");
+    showVehicleDetails(car_id, _GET.id, $container);
+    $(this).parents(".table-container").addClass("d-none");
+    $(".invoices-container").removeClass("d-none");
+});
+
+$(document).on("click", "#backButton", function () {
+    let showCon = $(this).data("show");
+    let hideCon = $(this).data("hide");
+    $(showCon).removeClass("d-none");
+    $(hideCon).addClass("d-none");
+});
+
+
+
+let offset = 0;
+const limit = 10;
+
+function loadNotes(reset = false) {
+    if (reset) {
+        offset = 0;
+        $('#notesContainer').html('');
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: 'controllers/customer',
+        data: {
+            fetchCustomerNotes: true,
+            customer_id: _GET.id,
+            offset: offset,
+            from_date: $('#from_date').val(),
+            to_date: $('#to_date').val()
+        },
+        dataType: 'json',
+        success: function (res) {
+            if (res.status === 'success' && res.notes.length > 0) {
+                res.notes.forEach(note => {
+                    $('#notesContainer').append(`
+                        <div class="notes-container mb-3 border rounded p-2">
+                            <div class="text-muted small mb-1">
+                                <span><i class="far fa-calendar-alt"></i> ${note.created_at}</span>
+                                <i class="fas fa-trash text-danger cp tc-delete-btn" title="Delete" data-target="${note.id}" data-action="customer_notes"></i>
+                            </div>
+                            <div>${note.note}</div>
+                        </div>
+                    `);
+                });
+                offset += limit;
+            } else {
+                if (offset === 0) {
+                    $('#notesContainer').html('<div class="text-center text-muted">No notes found.</div>');
+                }
+                $('#loadMoreNotes').hide();
+            }
+        }
+    });
+}
+
+// Initial load
+loadNotes();
+
+// Load more button
+$('#loadMoreNotes').on('click', function () {
+    loadNotes();
+});
+
+// Filter notes
+$('#filterNotes').on('click', function () {
+    loadNotes(true);
+});

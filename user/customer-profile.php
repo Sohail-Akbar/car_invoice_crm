@@ -3,10 +3,12 @@ require_once('includes/db.php');
 $page_name = 'Dashboard';
 
 $JS_FILES_ = [
-    "customer.js"
+    "customer.js",
+    _DIR_ . "js/select2.min.js"
 ];
 $CSS_FILES_ = [
-    "customer-profile.css"
+    "customer-profile.css",
+    _DIR_ . "css/select2.min.css"
 ];
 
 
@@ -88,14 +90,61 @@ $cars = $db->select("customer_car_history", "*", [
             // tabs
             require_once "./components/customer-profile/tabs.php";
             // Overview
-            require_once "./components/customer-profile/overview.php";
+            require_once "./components/customer-profile/vehicles.php";
             // Invoice
             require_once "./components/customer-profile/invoices.php";
             // Notes
             require_once "./components/customer-profile/notes.php";
-            // Cars
-            require_once "./components/customer-profile/cars.php";
             ?>
+        </div>
+    </div>
+
+    <!-- View Work Carried -->
+
+    <div class="modal fade view-work-carried-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">View Work Carried</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <div id="carsInfoContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Invoices -->
+    <div class="modal fade add-customer-notes-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 60%; box-shadow: 0 0 10px #5555;">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">View Work Carried</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <form action="customer" method="POST" class="ajax_form reset" data-reset="reset">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <span class="label">Note</span>
+                                    <textarea name="note" rows="5" class="form-control w-100" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <input type="hidden" name="addCustomerNotes" value="<?= bc_code(); ?>">
+                                <input type="hidden" name="customer_id" value="<?= $get_id; ?>">
+                                <button class="btn" type="submit"><i class="fas fa-save"></i> Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <script>

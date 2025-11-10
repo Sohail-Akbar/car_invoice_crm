@@ -297,9 +297,9 @@ tr:hover {
 
 .notes-container {
     background: #f8fafc;
-    padding: 20px;
-    border-radius: 8px;
-    border-left: 4px solid #3498db;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    border-left: 4px solid #3498db !important;
 }
 
 .activity-timeline {
@@ -425,4 +425,163 @@ tr:hover {
 .staff-actions {
     display: flex;
     gap: 10px;
+}
+
+#viewInvoicesContainer .card,
+#carsInfoContainer .card {
+    margin-top: 10px !important;
+}
+
+
+.view-work-carried-model #carsInfoContainer .card .action-btns,
+.view-work-carried-model #carsInfoContainer .card .view-invoice-btn,
+.view-work-carried-model #carsInfoContainer .card .payment-details,
+.view-work-carried-model #carsInfoContainer .card .assigned-staff-box,
+.view-work-carried-model #carsInfoContainer .card .invoice-note {
+    display: none !important;
+}
+
+
+.custom-header {
+    background: linear-gradient(to right, #2c3e50, #4a6491);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.custom-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.custom-header .back-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-header .back-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(-3px);
+}
+
+.custom-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+
+@media (max-width: 768px) {
+    .custom-header {
+        padding: 15px 20px;
+    }
+}
+
+
+
+.select2-container--default .select2-selection--single {
+    height: calc(2.25rem + 2px);
+    padding: .375rem .75rem;
+    border: 1px solid #ced4da;
+    border-radius: .375rem;
+    background-color: #fff;
+    box-shadow: none;
+    line-height: 1.2;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #212529;
+    margin-top: -1px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem + 2px);
+    right: .5rem;
+    top: 0;
+    width: 2.25rem;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #212529 transparent transparent transparent;
+}
+
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default .select2-selection--single.select2-selection--focus {
+    outline: 0;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+}
+
+.select2-container--default .select2-selection--multiple {
+    min-height: calc(2.25rem + 2px);
+    padding: .25rem .5rem;
+    border: 1px solid #ced4da;
+    border-radius: .375rem;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: var(--teal);
+    border: 1px solid var(--blueColor);
+    border: none;
+    padding: .25rem .5rem;
+    margin-top: .2rem;
+    margin-right: .25rem;
+    border-radius: .375rem;
+    font-size: .85em;
+}
+
+.select2-container .select2-dropdown {
+    border-radius: .375rem;
+    border: 1px solid rgba(0, 0, 0, .15);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    padding: .375rem .75rem;
+    height: auto;
+}
+
+.select2-container--default.select2-container--disabled .select2-selection--single {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+.select2-container--default.select2-container--small .select2-selection--single {
+    height: calc(1.5rem + 2px);
+    padding: .125rem .5rem;
+    border-radius: .25rem;
+}
+
+.select2-container--default.select2-container--large .select2-selection--single {
+    height: calc(2.75rem + 2px);
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+    margin-top: 0px !important;
+    margin-bottom: 3px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: white;
 }

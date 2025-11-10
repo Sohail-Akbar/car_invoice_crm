@@ -316,8 +316,6 @@ function saveInvoicePDF($invoice_data = [])
     <body>
         <div class="invoice-container">
             <!-- Watermark -->
-            <div class="watermark">INVOICE</div>
-
 <div class="header">
                 <table style="width:100%; border-collapse: collapse;">
                         <tr>
@@ -496,6 +494,15 @@ if (isset($_POST['updateInvoicePayment'])) {
     $new_payment    = floatval($_POST['new_payment']);
     $status         = $_POST['status'];
 
+    // Calculate remaining due before applying new payment
+    $due_before = $total_amount - $paid_old;
+
+    // 🧠 Validation: Prevent overpayment
+    if ($new_payment > $due_before) {
+        returnError("Payment exceeds the remaining due amount! You can only pay up to " . number_format($due_before, 2) . ".");
+        exit;
+    }
+
     // Calculate new totals
     $paid_total = $paid_old + $new_payment;
     $due_amount = $total_amount - $paid_total;
@@ -526,7 +533,7 @@ if (isset($_POST['updateInvoicePayment'])) {
         "customer_id" => $customer_id
     ]);
 
-    // select invoice
+    // Select invoice
     $invoice = $db->select_one("invoices", "*", [
         'id' => $invoice_id,
         "company_id" => LOGGED_IN_USER['company_id'],
@@ -539,7 +546,7 @@ if (isset($_POST['updateInvoicePayment'])) {
         "id" => LOGGED_IN_USER['company_id']
     ]);
 
-    // customer details
+    // Customer details
     $customer_data = $db->select_one("customers", "*", [
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
@@ -554,15 +561,13 @@ if (isset($_POST['updateInvoicePayment'])) {
     $services_final = [];
 
     if (!empty($invoice_items) && !empty($invoice_items['services_id'])) {
-        // Convert "6,12,10" → [6, 12, 10]
         $service_ids = explode(",", $invoice_items['services_id']);
         $service_ids = array_map('intval', $service_ids);
 
         if (!empty($service_ids)) {
-            // Fetch all matching services
             $placeholders = implode(',', $service_ids);
             $services = $db->query("SELECT id, text, amount FROM services WHERE id IN ($placeholders)", ["select_query" => true]);
-            // Format result
+
             foreach ($services as $srv) {
                 $services_final[] = [
                     'description' => $srv['text'],
@@ -582,7 +587,7 @@ if (isset($_POST['updateInvoicePayment'])) {
         'invoice_date' => $invoice['invoice_date'],
         'due_date' => $invoice['due_date'],
         'status' => $invoice['status'],
-        'client_name' => $customer_data['title'] . " " . $customer_data['fname'] . " " . $customer_data['lname'], // get from customer_id
+        'client_name' => $customer_data['title'] . " " . $customer_data['fname'] . " " . $customer_data['lname'],
         'client_contact' => $customer_data['contact'],
         'client_address' => $customer_data['address'],
         'client_city' => $customer_data["city"],
@@ -592,6 +597,7 @@ if (isset($_POST['updateInvoicePayment'])) {
         'services' => $services_final,
         'notes' => $invoice['notes']
     ];
+
     $pdf = saveInvoicePDF($invoice_data);
 
     if ($pdf['success']) {

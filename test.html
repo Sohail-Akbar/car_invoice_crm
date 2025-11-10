@@ -5,57 +5,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 </head>
 
 <body>
-    <!-- Include Select2 CSS/JS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <div class="container mt-4">
+        <label for="exampleSelect" class="form-label fw-bold">Select Multiple Items:</label>
+        <select id="exampleSelect" name="items[]" class="form-select select2" multiple="multiple" style="width: 100%;">
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="javascript">JavaScript</option>
+            <option value="php">PHP</option>
+            <option value="mysql">MySQL</option>
+        </select>
+    </div>
 
-    <select id="brandSelect" class="form-control" style="width:300px;">
-        <option value="Toyota">Toyota</option>
-        <option value="Honda">Honda</option>
-        <option value="Suzuki">Suzuki</option>
-    </select>
 
     <script>
-        $('#brandSelect').select2({
-            tags: true, // allow new items
-            placeholder: 'Select or add car brand',
-            allowClear: true
+        $(document).ready(function () {
+            $('.select2').select2({
+                placeholder: "Select one or more options",
+                allowClear: true
+            });
         });
-
-        // When new option added
-        $('#brandSelect').on('select2:select', function (e) {
-            const data = e.params.data;
-
-            // Agar user ne naya likha (na ke existing option select kiya)
-            if (data && data.newTag) {
-                $.ajax({
-                    url: 'save_new_brand.php',
-                    type: 'POST',
-                    data: { brand_name: data.text },
-                    success: function (res) {
-                        console.log('Saved:', res);
-                    }
-                });
-            }
-        });
-
-        // Enable tagging detection
-        $.fn.select2.amd.require(['select2/utils', 'select2/tags'], function (Utils, Tags) {
-            Tags.prototype.createTag = function (params) {
-                var term = $.trim(params.term);
-                if (term === '') return null;
-                return {
-                    id: term,
-                    text: term,
-                    newTag: true // mark as new
-                };
-            };
-        });
-
     </script>
 
 </body>
