@@ -17,3 +17,5 @@ composer.phar
 *.zip
 
 /uploads
+
+test.html

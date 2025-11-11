@@ -7,7 +7,6 @@ require_once("functions.php");
 class Database
 {
 	public $conn;
-	private $Aeskey = "uIf/9ETWDEpHsXJGfpUDqdpToyw5mQ4Dxcmk5sa9p40=";
 
 	public function __construct()
 	{
@@ -67,85 +66,6 @@ class Database
 		}
 		return "$char" . $data . "$char";
 	}
-	public function encrypt_aes256($plaintext)
-	{
-		// Derive a fixed key automatically (you can change the secret phrase)
-		$secret_phrase = $this->Aeskey; // change this to something unique
-		$key = hash('sha256', $secret_phrase, true); // 32 bytes
-
-		$iv_len = openssl_cipher_iv_length('aes-256-cbc');
-		$iv = random_bytes($iv_len);
-
-		$ciphertext = openssl_encrypt($plaintext, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
-		if ($ciphertext === false) {
-			throw new RuntimeException("Encryption failed.");
-		}
-
-		$hmac = hash_hmac('sha256', $iv . $ciphertext, $key, true);
-		return trim(base64_encode($iv . $hmac . $ciphertext));
-	}
-
-	public function decrypt_aes256($b64Payload)
-	{
-		$secret_phrase = $this->Aeskey; // same as encrypt()
-		$key = hash('sha256', $secret_phrase, true);
-
-		// $b64Payload = trim($b64Payload);
-
-		// If empty or not base64, just return original
-		if (empty($b64Payload) || base64_decode($b64Payload, true) === false) {
-			return $b64Payload;
-		}
-
-		$data = base64_decode($b64Payload, true);
-		$iv_len = openssl_cipher_iv_length('aes-256-cbc');
-		$hmac_len = 32;
-
-		// Check if data length is valid for encrypted payload
-		if (strlen($data) < ($iv_len + $hmac_len + 1)) {
-			return $b64Payload; // too short to be valid encrypted data
-		}
-
-		$iv = substr($data, 0, $iv_len);
-		$hmac = substr($data, $iv_len, $hmac_len);
-		$ciphertext = substr($data, $iv_len + $hmac_len);
-
-		// Recalculate HMAC and verify
-		$calc_hmac = hash_hmac('sha256', $iv . $ciphertext, $key, true);
-		if (!hash_equals($calc_hmac, $hmac)) {
-			return $b64Payload; // not valid encrypted data
-		}
-
-		// Try to decrypt; if fails, return original
-		$plaintext = openssl_decrypt($ciphertext, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
-		return $plaintext === false ? $b64Payload : $plaintext;
-	}
-	// Encrypt sensitive data before saving
-	private function encryptData($data)
-	{
-		foreach ($data as $key => $value) {
-			// Agar value array hai aur 'encrypt' key exist karti hai
-			if (is_array($value) && isset($value['encrypt'])) {
-				$data[$key] = $this->encrypt_aes256($value['encrypt']);
-			}
-			// Agar value array hai magar 'encrypt' key nahi hai, ya simple scalar value
-			else {
-				$data[$key] = is_array($value) && isset($value['value']) ? $value['value'] : $value;
-			}
-		}
-		return $data;
-	}
-
-
-	// Decrypt sensitive data after fetching
-	private function decryptData($record)
-	{
-		foreach ($record as $key => $value) {
-			$record[$key] = $this->decrypt_aes256($value);
-		}
-		return $record;
-	}
-
 	// Get Fn
 	public function get($type, $data = [])
 	{
@@ -273,24 +193,15 @@ class Database
 		}
 	}
 	// Execute Select Query
-	// Execute Select Query
 	public function query($query, $options = [])
 	{
 		$select_query = arr_val($options, 'select_query');
-		$auto_decrypt = arr_val($options, 'auto_decrypt', true); // New option
-
 		$data = $this->conn->query($query);
-
 		if (!$select_query) return $data;
-
 		$records = [];
 		if ($data) {
 			if ($data->num_rows > 0) {
 				while ($row = $data->fetch_assoc()) {
-					// Auto decrypt if enabled
-					if ($auto_decrypt) {
-						$row = $this->decryptData($row);
-					}
 					$records[] = $row;
 				}
 			}
@@ -327,10 +238,6 @@ class Database
 		$query = "SELECT $columns FROM $table $where_condition";
 		if ($return_query) return $query;
 		$records = $this->query($query, ['select_query' => true]);
-		// Decrypt each record
-		foreach ($records as &$record) {
-			$record = $this->decryptData($record);
-		}
 		if (!$single_record) return $records;
 		if (count($records)) return $records[0];
 		return false;
@@ -340,7 +247,6 @@ class Database
 	{
 		$options['single_record'] = true;
 		$record = $this->select($table, $data, $condition, $options);
-		if ($record) $record = $this->decryptData($record);
 		if (array_key_exists("default", $options)) {
 			if ($record) return $record[$options['data']];
 			return $options['default'];
@@ -364,7 +270,6 @@ class Database
 	// Update data
 	public function update($table, $data = [], $condition = [], $options = [])
 	{
-		$data = $this->encryptData($data);
 		$return_query = arr_val($options, "query");
 		$where_condition = $this->get("whereQuery", ['condition' => $condition]);
 		$options['data'] = $data;
@@ -397,7 +302,6 @@ class Database
 	// Insert Data
 	public function insert($table, $data = [], $options = [])
 	{
-		$data = $this->encryptData($data);
 		$return_query = arr_val($options, "query");
 		$multiple_data = arr_val($options, "multiple");
 		if (!$multiple_data) $data = [$data];

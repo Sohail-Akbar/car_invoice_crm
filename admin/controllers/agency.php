@@ -42,15 +42,15 @@ if (isset($_POST['addAgency'])) {
 
     // Company data array
     $company_data = [
-        "name" => ["encrypt" => $agency_name],
-        "address" => ['encrypt' => $agency_address],
-        "contact" => ["encrypt" => $agency_contact],
+        "name" =>  $agency_name,
+        "address" =>  $agency_address,
+        "contact" =>  $agency_contact,
         "email" =>  $agency_email,
         "company_id" => $company_login_id
     ];
 
     if ($company_logo !== "") {
-        $company_data["agency_logo"] = ["encrypt" => $company_logo];
+        $company_data["agency_logo"] =  $company_logo;
     }
 
     $agency_id = "";
@@ -68,18 +68,18 @@ if (isset($_POST['addAgency'])) {
     $user_data = [
         "company_id" => $company_login_id,
         "agency_id" => $agency_id,
-        "title" => ["encrypt" => $title],
-        "gender" => ["encrypt" => $gender],
-        "fname" => ["encrypt" => $first_name],
-        "lname" => ["encrypt" => $last_name],
-        "name" => ["encrypt" => $first_name . " " . $last_name],
+        "title" =>  $title,
+        "gender" =>  $gender,
+        "fname" =>  $first_name,
+        "lname" =>  $last_name,
+        "name" =>  $first_name . " " . $last_name,
         "email" => $email,
-        "address" => ["encrypt" => $address],
-        "city" => ["encrypt" => $city],
-        "lat" => ["encrypt" => $lat],
-        "lng" => ["encrypt" => $lng],
-        "postcode" => ["encrypt" => $postcode],
-        "contact" => ["encrypt" => $contact],
+        "address" =>  $address,
+        "city" =>  $city,
+        "lat" =>  $lat,
+        "lng" =>  $lng,
+        "postcode" =>  $postcode,
+        "contact" =>  $contact,
         "type" => "agency",
         "image" => "avatar.png",
         "verify_status" => "1",
@@ -89,7 +89,7 @@ if (isset($_POST['addAgency'])) {
 
     // Password hash only if provided
     if (!empty($password)) {
-        $user_data["password"] = ["encrypt" => password_hash($password, PASSWORD_BCRYPT)];
+        $user_data["password"] =  password_hash($password, PASSWORD_BCRYPT);
     }
 
     // User insert/update

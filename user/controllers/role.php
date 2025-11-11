@@ -11,7 +11,7 @@ if (isset($_POST['saveRole'])) {
     if ($id) {
         // Update existing role
         $db->update("roles", [
-            "text" => ["encrypt" => $text]
+            "text" =>  $text
         ], [
             "id" => $id,
             "company_id" => LOGGED_IN_USER['company_id'],
@@ -24,7 +24,7 @@ if (isset($_POST['saveRole'])) {
         $save = $db->insert("roles", [
             "company_id" => LOGGED_IN_USER['company_id'],
             "agency_id" => LOGGED_IN_USER['agency_id'],
-            "text" => ["encrypt" => $text]
+            "text" =>  $text
         ]);
 
         returnSuccess("Role created successfully", [

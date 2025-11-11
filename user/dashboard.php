@@ -70,7 +70,7 @@ $JS_FILES_ = [];
                 <h4>Create Invoice</h4>
             </div>
 
-            <div class="tab-card" onclick="location.href='view-customer'">
+            <div class="tab-card" onclick="location.href='invoice-search'">
                 <i class="fas fa-file-invoice"></i>
                 <h4>View Invoices</h4>
             </div>

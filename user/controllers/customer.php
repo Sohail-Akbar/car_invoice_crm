@@ -382,3 +382,129 @@ if (isset($_POST['fetchCustomerNotes'])) {
     }
     exit;
 }
+
+
+
+// Fetch Invoice Data
+if (isset($_GET['fetchInvoiceData'])) {
+
+    $columns = ['invoice_no', 'invoice_date', 'due_date', 'total_amount', 'paid_amount', 'due_amount', 'status', 'pdf_file'];
+
+    $draw = intval($_POST['draw']);
+    $start = intval($_POST['start']);
+    $length = intval($_POST['length']);
+    $searchValue = $_POST['search']['value'];
+    $customer_id = intval($_POST['customer_id']); // 👈 receive customer_id
+
+    // ✅ Base query with customer condition
+    $sql = "SELECT * FROM invoices WHERE customer_id = '$customer_id' ";
+
+    if (!empty($searchValue)) {
+        $sql .= " AND (invoice_no LIKE '%$searchValue%' OR status LIKE '%$searchValue%') ";
+    }
+
+    // ✅ Total records (without search)
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' ", ["select_query" => true]);
+    $totalRecords = $totalQuery[0]['total'];
+
+    // ✅ Filtered records
+    $filteredQuery = $db->query(
+        "SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' " .
+            (!empty($searchValue) ? " AND (invoice_no LIKE '%$searchValue%' OR status LIKE '%$searchValue%')" : ""),
+        ["select_query" => true]
+    );
+    $filteredRecords = $filteredQuery[0]['total'];
+
+    // ✅ Pagination
+    $sql .= " ORDER BY id DESC LIMIT $start, $length";
+    $invoiceData = $db->query($sql, ["select_query" => true]);
+
+    $data = [];
+    foreach ($invoiceData as $row) {
+        $data[] = $row;
+    }
+
+    $response = [
+        "draw" => $draw,
+        "recordsTotal" => $totalRecords,
+        "recordsFiltered" => $filteredRecords,
+        "data" => $data
+    ];
+
+    echo json_encode($response);
+    exit;
+}
+
+
+
+
+// Fetch Customers Data
+if (isset($_GET['fetchCustomers'])) {
+
+    $columns = ['id', 'fname', 'lname', 'email', 'contact', 'address', 'postcode', 'city', 'is_active'];
+
+    $draw = intval($_POST['draw']);
+    $start = intval($_POST['start']);
+    $length = intval($_POST['length']);
+    $searchValue = $_POST['search']['value'];
+
+    $company_id = LOGGED_IN_USER['company_id'];
+    $agency_id = LOGGED_IN_USER['agency_id'];
+
+    // Base query
+    $sql = "SELECT * FROM customers WHERE company_id = '$company_id' AND agency_id = '$agency_id' ";
+
+    if (!empty($searchValue)) {
+        $sql .= " AND (fname LIKE '%$searchValue%' 
+                    OR lname LIKE '%$searchValue%'
+                    OR email LIKE '%$searchValue%'
+                    OR contact LIKE '%$searchValue%'
+                    OR city LIKE '%$searchValue%')";
+    }
+
+    // Total records
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM customers WHERE company_id = '$company_id' AND agency_id = '$agency_id' ", ["select_query" => true]);
+    $totalRecords = $totalQuery[0]['total'];
+
+    // Filtered records
+    $filteredQuery = $db->query(
+        "SELECT COUNT(*) as total FROM customers WHERE company_id = '$company_id' AND agency_id = '$agency_id' " .
+            (!empty($searchValue) ? " AND (fname LIKE '%$searchValue%' 
+            OR lname LIKE '%$searchValue%' 
+            OR email LIKE '%$searchValue%' 
+            OR contact LIKE '%$searchValue%' 
+            OR city LIKE '%$searchValue%')" : ""),
+        ["select_query" => true]
+    );
+    $filteredRecords = $filteredQuery[0]['total'];
+
+    // Add LIMIT for pagination
+    $sql .= " ORDER BY id DESC LIMIT $start, $length";
+    $customersData = $db->query($sql, ["select_query" => true]);
+
+    $data = [];
+    foreach ($customersData as $row) {
+        $data[] = [
+            "id" => $row['id'],
+            "title" => $row['title'],
+            "fname" => $row['fname'],
+            "lname" => $row['lname'],
+            "email" => $row['email'],
+            "contact" => $row['contact'],
+            "address" => $row['address'],
+            "postcode" => $row['postcode'],
+            "city" => $row['city'],
+            "is_active" => $row['is_active'],
+        ];
+    }
+
+    $response = [
+        "draw" => $draw,
+        "recordsTotal" => $totalRecords,
+        "recordsFiltered" => $filteredRecords,
+        "data" => $data
+    ];
+
+    echo json_encode($response);
+    exit;
+}

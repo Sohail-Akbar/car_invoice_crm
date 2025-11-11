@@ -12,8 +12,8 @@ if (isset($_POST['saveService'])) {
     if ($id) {
         // Update existing service
         $db->update("services", [
-            "text" => ["encrypt" => $text],
-            "amount" => ["encrypt" => $amount]
+            "text" =>  $text,
+            "amount" =>  $amount
         ], [
             "id" => $id,
             "company_id" => LOGGED_IN_USER['company_id'],
@@ -26,8 +26,8 @@ if (isset($_POST['saveService'])) {
         $save = $db->insert("services", [
             "company_id" => LOGGED_IN_USER['company_id'],
             "agency_id" => LOGGED_IN_USER['agency_id'],
-            "text" => ["encrypt" => $text],
-            "amount" => ["encrypt" => $amount]
+            "text" =>  $text,
+            "amount" =>  $amount
         ]);
 
         returnSuccess("Role created successfully", [

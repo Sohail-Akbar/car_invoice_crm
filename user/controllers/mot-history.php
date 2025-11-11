@@ -112,16 +112,16 @@ if (isset($_POST['fetchRegistrationCar'])) {
             "agency_id" => LOGGED_IN_USER['agency_id'],
             "customer_id" => $customer_id,
             "reg_number" => $vehicle_data['reg_number'],
-            "make" => ["encrypt" => $vehicle_data['make'] ?? ''],
-            "model" => ["encrypt" => $vehicle_data['model'] ?? ''],
-            "firstUsedDate" => ["encrypt" => $vehicle_data['firstUsedDate'] ?? ''],
-            "primaryColour" => ["encrypt" => $vehicle_data['primaryColour'] ?? ''],
-            "registrationDate" => ["encrypt" => $vehicle_data['registrationDate'] ?? ''],
-            "fuelType" => ["encrypt" => $vehicle_data['fuelType'] ?? ''],
-            "manufactureDate" => ["encrypt" => $vehicle_data['manufactureDate'] ?? ''],
-            "engineSize" => ["encrypt" => $vehicle_data['engineSize'] ?? ''],
-            "hasOutstandingRecall" => ["encrypt" => $vehicle_data['hasOutstandingRecall'] ?? ''],
-            "expiryDate" => ["encrypt" => $vehicle_data['expiryDate'] ?? ''],
+            "make" =>  $vehicle_data['make'] ?? '',
+            "model" =>  $vehicle_data['model'] ?? '',
+            "firstUsedDate" =>  $vehicle_data['firstUsedDate'] ?? '',
+            "primaryColour" =>  $vehicle_data['primaryColour'] ?? '',
+            "registrationDate" =>  $vehicle_data['registrationDate'] ?? '',
+            "fuelType" =>  $vehicle_data['fuelType'] ?? '',
+            "manufactureDate" =>  $vehicle_data['manufactureDate'] ?? '',
+            "engineSize" =>  $vehicle_data['engineSize'] ?? '',
+            "hasOutstandingRecall" =>  $vehicle_data['hasOutstandingRecall'] ?? '',
+            "expiryDate" =>  $vehicle_data['expiryDate'] ?? '',
             // preserve manual flag if present, otherwise mark as non-manual
             "is_manual" => isset($vehicle_data['is_manual']) ? $vehicle_data['is_manual'] : 0
         ];
@@ -218,16 +218,16 @@ if (isset($_POST['fetchRegistrationCar'])) {
                 "agency_id" => LOGGED_IN_USER['agency_id'],
                 "customer_id" => $customerId,
                 "reg_number" =>  $mainDetails['reg_number'],
-                "make" => ["encrypt" => $mainDetails['make']],
-                "model" => ["encrypt" => $mainDetails['model']],
-                "firstUsedDate" => ["encrypt" => $mainDetails['firstUsedDate']],
-                "primaryColour" => ["encrypt" => $mainDetails['primaryColour']],
-                "registrationDate" => ["encrypt" => $mainDetails['registrationDate']],
-                "fuelType" => ["encrypt" => $mainDetails['fuelType']],
-                "manufactureDate" => ["encrypt" => $mainDetails['manufactureDate']],
-                "engineSize" => ["encrypt" => $mainDetails['engineSize']],
-                "hasOutstandingRecall" => ["encrypt" => $mainDetails['hasOutstandingRecall']],
-                "ExpiryDate" => ["encrypt" => $mainDetails['expiryDate']]
+                "make" =>  $mainDetails['make'],
+                "model" =>  $mainDetails['model'],
+                "firstUsedDate" =>  $mainDetails['firstUsedDate'],
+                "primaryColour" =>  $mainDetails['primaryColour'],
+                "registrationDate" =>  $mainDetails['registrationDate'],
+                "fuelType" =>  $mainDetails['fuelType'],
+                "manufactureDate" =>  $mainDetails['manufactureDate'],
+                "engineSize" =>  $mainDetails['engineSize'],
+                "hasOutstandingRecall" =>  $mainDetails['hasOutstandingRecall'],
+                "ExpiryDate" =>  $mainDetails['expiryDate']
             ];
 
             $save = $db->insert("customer_car_history", $data);
@@ -372,4 +372,95 @@ if (isset($_POST['updateVehicleInformation'])) {
     } else {
         returnError("Failed to update vehicle information.");
     }
+}
+
+
+
+if (isset($_GET['fetchVehicleData'])) {
+
+    $draw = intval($_POST['draw']);
+    $start = intval($_POST['start']);
+    $length = intval($_POST['length']);
+    $searchValue = $_POST['search']['value'];
+
+    $company_id = LOGGED_IN_USER['company_id'];
+    $agency_id = LOGGED_IN_USER['agency_id'];
+
+    // Base query
+    $sql = "SELECT * FROM customer_car_history WHERE company_id = '$company_id' AND agency_id = '$agency_id' ";
+
+    // Search filter
+    if (!empty($searchValue)) {
+        $sql .= " AND (reg_number LIKE '%$searchValue%' 
+                    OR make LIKE '%$searchValue%' 
+                    OR model LIKE '%$searchValue%' 
+                    OR engineSize LIKE '%$searchValue%' 
+                    OR expiryDate LIKE '%$searchValue%')";
+    }
+
+    // Total records (without filter)
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM customer_car_history WHERE company_id = '$company_id' AND agency_id = '$agency_id' ", ["select_query" => true]);
+    $totalRecords = $totalQuery[0]['total'];
+
+    // Filtered records (with search)
+    $filteredQuery = $db->query(
+        "SELECT COUNT(*) as total FROM customer_car_history WHERE company_id = '$company_id' AND agency_id = '$agency_id' " .
+            (!empty($searchValue)
+                ? " AND (reg_number LIKE '%$searchValue%' 
+                    OR make LIKE '%$searchValue%' 
+                    OR model LIKE '%$searchValue%' 
+                    OR engineSize LIKE '%$searchValue%' 
+                    OR expiryDate LIKE '%$searchValue%')"
+                : ""),
+        ["select_query" => true]
+    );
+    $filteredRecords = $filteredQuery[0]['total'];
+
+    // Add order & limit
+    $sql .= " ORDER BY id DESC LIMIT $start, $length";
+    $mot_history = $db->query($sql, ["select_query" => true]);
+
+    $data = [];
+    $count = $start + 1;
+
+    foreach ($mot_history as $row) {
+        // Fetch customer details
+        $customer = $db->select_one("customers", "*", [
+            "id" => $row['customer_id'],
+            "company_id" => $company_id,
+            "agency_id" => $agency_id
+        ]);
+
+        $customerHTML = "<strong>Name:</strong> {$customer['title']} {$customer['fname']} {$customer['lname']}<br>
+                         <strong>Email:</strong> {$customer['email']}<br>
+                         <strong>Contact:</strong> {$customer['contact']}";
+
+        $detailsHTML = "<strong>Make:</strong> {$row['make']}<br>
+                        <strong>Model:</strong> {$row['model']}<br>
+                        <strong>Engine Size:</strong> {$row['engineSize']}<br>
+                        <strong>Expiry Date:</strong> {$row['expiryDate']}";
+
+        $statusClass = ($row['is_active'] == '1') ? 'bg-success' : 'bg-warning text-dark';
+        $statusText = ($row['is_active'] == '1') ? 'Active' : 'Inactive';
+        $statusHTML = "<span class='text-white p-1 bold small-font $statusClass'>$statusText</span>";
+
+        $data[] = [
+            "index" => $count++,
+            "customer_details" => $customerHTML,
+            "reg_number" => $row['reg_number'],
+            "details" => $detailsHTML,
+            "status" => $statusHTML,
+            "id" => $row['id']
+        ];
+    }
+
+    $response = [
+        "draw" => $draw,
+        "recordsTotal" => $totalRecords,
+        "recordsFiltered" => $filteredRecords,
+        "data" => $data
+    ];
+
+    echo json_encode($response);
+    exit;
 }

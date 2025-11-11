@@ -949,3 +949,59 @@ a:hover {
 }
 
 /* #endregion TC Checkbox */
+
+
+
+.dataTable-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Fix for header alignment */
+.dataTable-container thead th {
+    position: relative;
+}
+
+/* Ensure consistent styling for all table cells */
+.dataTable-container th,
+.dataTable-container td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+/* Badge styling improvements */
+.dataTable-container .badge {
+    font-size: 0.75em;
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+/* Button styling improvements */
+.dataTable-container .btn-view {
+    background-color: #3498db;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.dataTable-container .btn-view:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Make sure the table is properly responsive */
+.dataTable-container .table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Fix for horizontal scroll */
+.dataTable-container .dataTables_scrollHeadInner {
+    width: 100% !important;
+}
+
+.dataTable-container .dataTables_scrollHeadInner table {
+    width: 100% !important;
+}

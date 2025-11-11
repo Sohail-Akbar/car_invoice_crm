@@ -3,12 +3,14 @@ require_once('includes/db.php');
 $page_name = 'Dashboard';
 
 $JS_FILES_ = [
-    "customer.js",
-    _DIR_ . "js/select2.min.js"
+    "customer-profile.js",
+    _DIR_ . "js/select2.min.js",
+    _DIR_ . "js/jquery.dataTables.min.js"
 ];
 $CSS_FILES_ = [
     "customer-profile.css",
-    _DIR_ . "css/select2.min.css"
+    _DIR_ . "css/select2.min.css",
+    _DIR_ . "css/jquery.dataTables.min.css"
 ];
 
 
@@ -149,6 +151,7 @@ $cars = $db->select("customer_car_history", "*", [
     </div>
     <script>
         const _GET = <?= json_encode($_GET); ?>;
+        const SITE_URL = '<?= SITE_URL ?>';
     </script>
     <?php require_once('./includes/js.php'); ?>
 </body>

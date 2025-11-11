@@ -32,7 +32,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
         <div class="col-md-12 px-0">
             <div class="box-content px-4 py-3">
                 <h4 class="box-title text-style">Add Agency</h4>
-                <span class="bottom-text">Please Enter Company and user details</span>
+                <span class="bottom-text">Please Enter Agency and user details</span>
             </div>
         </div>
         <div class="col-lg-12 mb-0 mt-4">
@@ -43,31 +43,31 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                 <form action="agency" method="POST" class="mt-4 ajax_form reset" data-reset="reset">
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputName" class="control-label">Company Name</label>
+                            <label for="inputName" class="control-label">Agency's Name</label>
                             <input type="text" class="form-control" id="inputName" name="agency_name" value="<?= arr_val($agency_data, "agency_name", "") ?>" placeholder="Enter New Company" required="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Company Address</label>
+                            <label class="control-label">Agency's Address</label>
                             <input type="text" class="form-control" name="agency_address" value="<?= arr_val($agency_data, "agency_address", "") ?>" placeholder="Enter Company Address" required="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputPhone" class="control-label">Company Contact</label>
+                            <label for="inputPhone" class="control-label">Agency's Contact</label>
                             <input type="text" class="form-control" id="inputPhone" name="agency_contact" value="<?= arr_val($agency_data, "agency_contact", "") ?>" placeholder="Enter Company Contact" required="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputPhone" class="control-label">Company Email</label>
+                            <label for="inputPhone" class="control-label">Agency's Email</label>
                             <input type="text" class="form-control" id="inputEmail" name="agency_email" value="<?= arr_val($agency_data, "agency_email", "") ?>" placeholder="Enter Company Email" required="">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Agency Logo</label>
+                            <label class="control-label">Agency's Logo</label>
                             <input type="file" name="agency_logo" class="form-control">
                         </div>
                     </div>

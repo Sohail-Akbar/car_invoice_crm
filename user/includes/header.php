@@ -73,6 +73,12 @@ $company = $db->select_one("companies", "*", [
                 <span class="text">Invoice</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="invoice-search" class="nav-link">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <span class="text">Invoice Search</span>
+            </a>
+        </li>
     </ul>
 </div>
 <nav class="navbar">
