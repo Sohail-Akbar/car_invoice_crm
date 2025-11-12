@@ -81,13 +81,16 @@ $cars = $db->select("customer_car_history", "*", [
     <?php require_once('./includes/head.php'); ?>
     <style>
         <?php
-        if (LOGGED_IN_USER['type']  === "customer") { ?>.sidebar,
-        .navbar {
+        if (LOGGED_IN_USER['type']  === "customer") { ?>.sidebar {
             display: none;
         }
 
         .all-content {
-            margin: 0 !important;
+            margin-left: 0 !important;
+        }
+
+        .navbar {
+            padding-left: 20px;
         }
 
         <?php   }
