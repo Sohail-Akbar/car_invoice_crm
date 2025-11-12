@@ -1,4 +1,4 @@
-<form action="staff" method="POST" class="mt-4 ajax_form reset" data-reset="reset" <?= $callback ?>>
+<form action="customer" method="POST" class="mt-4 ajax_form reset" data-reset="reset" <?= $callback ?>>
     <div class="form-group has-error has-danger">
         <div class="row m-0">
             <div class="col-md-6">

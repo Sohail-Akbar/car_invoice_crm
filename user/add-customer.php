@@ -7,10 +7,11 @@ $JS_FILES_ = [];
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 
-$customer_data = $db->select_one("customers", "*", [
+$customer_data = $db->select_one("users", "*", [
     "id" => $id,
     "company_id" => LOGGED_IN_USER['company_id'],
-    "agency_id" => LOGGED_IN_USER['agency_id']
+    "agency_id" => LOGGED_IN_USER['agency_id'],
+    "type" => "customer"
 ]);
 ?>
 <!DOCTYPE html>

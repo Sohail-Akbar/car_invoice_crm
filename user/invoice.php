@@ -10,6 +10,9 @@ $CSS_FILES_ = [
     _DIR_ . "css/select2.min.css"
 ];
 
+$get_invoice_id = _get_param("id", null);
+$get_customer_id = _get_param("customer_id", null);
+
 // Fetch all active services
 $services = $db->select("services", "*", [
     "company_id" => LOGGED_IN_USER['company_id'],
@@ -20,16 +23,37 @@ $services = $db->select("services", "*", [
 
 $invoice_no = generateInvoiceNo($db);
 
-$customers = $db->select("customers", "id,title,fname,lname", [
+$customers = $db->select("users", "id,title,fname,lname", [
     "company_id" => LOGGED_IN_USER['company_id'],
     "agency_id" => LOGGED_IN_USER['agency_id'],
-    "is_active" => 1
+    "is_active" => 1,
+    "type" => "customer"
 ], ["select_query" => true]);
 
 $agency = $db->select_one("agencies", "*", [
     "id" => LOGGED_IN_USER['agency_id'],
     "company_id" => LOGGED_IN_USER['company_id']
 ]);
+
+// invoice Service
+$invoiceItems = [];
+$invoiceData = [];
+if ($get_invoice_id) {
+    // Services Item
+    $invoiceItems = $db->query("SELECT s.id, s.text, s.amount 
+    FROM invoice_items i
+    INNER JOIN services s ON i.services_id = s.id
+    WHERE i.invoice_id = '$get_invoice_id'", ["select_query" => true]);
+    if (!$invoiceItems) $invoiceItems = [];
+
+    // $invoiceData
+    $invoiceData = $db->select_one("invoices", "id,notes", [
+        "id" => $get_invoice_id,
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+    ]);
+    if (!$invoiceData) $invoiceData = [];
+}
 
 ?>
 <!DOCTYPE html>
@@ -135,7 +159,6 @@ $agency = $db->select_one("agencies", "*", [
                     <h4 class="mb-0">Create New Invoice</h4>
                 </div>
                 <div class="card-body">
-
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label>Invoice No</label>
@@ -154,23 +177,24 @@ $agency = $db->select_one("agencies", "*", [
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label>Customer</label>
-                            <select name="customer_id" class="form-control" id="customerSelectBox">
-                                <option value="">-- Select Customer --</option>
-                                <?php foreach ($customers as $customer): ?>
-                                    <option value="<?= $customer['id'] ?>">
-                                        <?= htmlspecialchars($customer['title'] . ' ' . $customer['fname'] . ' ' . $customer['lname']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-md-4 d-none" id="motHistoryDiv">
-                            <label>Mot History (Reg No.)</label>
-                            <select name="mot_id" class="form-control" id="motHistorySelectBox">
-                            </select>
-                        </div>
-
+                        <?php if (!$get_invoice_id) { ?>
+                            <div class="col-md-4">
+                                <label>Customer</label>
+                                <select name="customer_id" class="form-control" id="customerSelectBox">
+                                    <option value="">-- Select Customer --</option>
+                                    <?php foreach ($customers as $customer): ?>
+                                        <option value="<?= $customer['id'] ?>">
+                                            <?= htmlspecialchars($customer['title'] . ' ' . $customer['fname'] . ' ' . $customer['lname']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-none" id="motHistoryDiv">
+                                <label>Mot History (Reg No.)</label>
+                                <select name="mot_id" class="form-control" id="motHistorySelectBox">
+                                </select>
+                            </div>
+                        <?php } ?>
                         <div class="col-md-4">
                             <label>Status</label>
                             <select name="status" class="form-control">
@@ -179,7 +203,7 @@ $agency = $db->select_one("agencies", "*", [
                                 <option value="partial">Partial</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mt-3">
+                        <div class="col-md-4">
                             <label>VAT%</label>
                             <input type="number" step="0.01" name="tax_rate" id="tax_rate" class="form-control"
                                 value="<?= $agency['vat_percentage'] ?>" readonly>
@@ -231,10 +255,23 @@ $agency = $db->select_one("agencies", "*", [
 
                     <div class="form-group">
                         <label>Notes</label>
-                        <textarea name="notes" class="form-control" rows="3" placeholder="Optional notes"></textarea>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Optional notes"><?= arr_val($invoiceData, "notes", ""); ?></textarea>
                     </div>
+                    <label>
+                        <input type="radio" name="proforma" value="0" checked>
+                        Invoice
+                    </label>
+                    <br>
+                    <label>
+                        <input type="radio" name="proforma" value="1" required>
+                        Proforma
+                    </label>
 
                     <div class="text-right">
+                        <?php if ($get_invoice_id) { ?>
+                            <input type="hidden" name="invoice_id" value="<?= $get_invoice_id ?>">
+                            <input type="hidden" name="customer_id" value="<?= $get_customer_id ?>">
+                        <?php } ?>
                         <input type="hidden" name="saveInvoice" value="<?= bc_code(); ?>">
                         <button type="submit" class="btn btn-success">Save Invoice</button>
                     </div>
@@ -245,7 +282,8 @@ $agency = $db->select_one("agencies", "*", [
     </div>
 
     <script>
-        const SERVICES = <?= json_encode($services); ?>;
+        let SERVICES = <?= json_encode($services); ?>;
+        let INVOICE_ITEMS = <?= json_encode($invoiceItems) ?>;
     </script>
     <?php require_once('./includes/js.php'); ?>
 </body>

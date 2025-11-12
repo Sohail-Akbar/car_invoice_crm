@@ -496,9 +496,9 @@ function url(...$paths)
 
 
 // Generate Invoice No
-function generateInvoiceNo($db)
+function generateInvoiceNo()
 {
-    $last = $db->query("SELECT id FROM invoices ORDER BY id DESC LIMIT 1", ['select_query' => true]);
-    $nextId = $last ? ($last[0]['id'] + 1) : 1;
-    return "INV-" . str_pad($nextId, 5, "0", STR_PAD_LEFT);
+    // Generate a random 5-digit number
+    $randomNumber = mt_rand(10000, 99999);
+    return "INV-" . $randomNumber;
 }

@@ -134,7 +134,7 @@ function loadNotes(reset = false) {
                         <div class="notes-container mb-3 border rounded p-2">
                             <div class="text-muted small mb-1">
                                 <span><i class="far fa-calendar-alt"></i> ${note.created_at}</span>
-                                <i class="fas fa-trash text-danger cp tc-delete-btn" title="Delete" data-target="${note.id}" data-action="customer_notes"></i>
+                                <i class="fas fa-trash text-danger cp tc-delete-btn" title="Delete" data-parent=".notes-container" data-target="${note.id}" data-action="customer_notes"></i>
                             </div>
                             <div>${note.note}</div>
                         </div>
@@ -164,7 +164,7 @@ $('#filterNotes').on('click', function () {
     loadNotes(true);
 });
 
-
+// Invoice
 $(document).ready(function () {
     if ($("#invoiceTable").length) {
 
@@ -221,6 +221,67 @@ $(document).ready(function () {
                         return `<a class="btn btn-view text-white" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
                                     <i class="fas fa-eye"></i> View
                                 </a>`;
+                    },
+                    "orderable": false
+                }
+            ],
+            "scrollX": true,
+            "initComplete": function () { this.api().columns.adjust().draw(); },
+            "drawCallback": function () { this.api().columns.adjust(); }
+        });
+    }
+});
+
+// Proforma (invoice)
+$(document).ready(function () {
+    if ($("#proformaInvoiceTable").length) {
+
+        const customerId = _GET.id; // table attribute se id lo
+
+        $('#proformaInvoiceTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "controllers/customer.php?fetchPorformaInvoiceData=true",
+                "type": "POST",
+                "data": function (d) {
+                    d.customer_id = customerId; // 👈 send customer id to PHP
+                }
+            },
+            "pageLength": 10,
+            "lengthChange": true,
+            "scrollY": "400px",
+            "scrollCollapse": true,
+            "autoWidth": false,
+            "columns": [
+                { "data": "invoice_no", "width": "30%" },
+                { "data": "invoice_date", "width": "30%" },
+                { "data": "due_date", "width": "30%" },
+                {
+                    "data": "total_amount",
+                    "render": data => '$' + parseFloat(data).toFixed(2)
+                },
+                {
+                    "data": "paid_amount",
+                    "render": data => '$' + parseFloat(data).toFixed(2)
+                },
+                {
+                    "data": "due_amount",
+                    "render": data => '$' + parseFloat(data).toFixed(2)
+                },
+                {
+                    "data": "pdf_file",
+                    "render": function (data, type, row) {
+                        if (!data) return '<span class="text-muted">No file</span>';
+                        let editBtn = '';
+                        if (LOGIN_TYPE !== "customer") {
+                            editBtn = `<a class="btn btn-view text-white" href="invoice?id=${row.id}&customer_id=${_GET.id}" style="padding:5px 10px;font-size:12px;">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>`;
+                        }
+                        return `<a class="btn btn-view text-white" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
+                                    <i class="fas fa-eye"></i> View
+                                </a>${editBtn}`;
                     },
                     "orderable": false
                 }

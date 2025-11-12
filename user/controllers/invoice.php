@@ -7,20 +7,27 @@ use Dompdf\Options;
 
 
 if (isset($_POST['saveInvoice'])) {
+    $invoice_id = arr_val($_POST, "invoice_id", null);
+
+    $invoice_no = trim($_POST['invoice_no']);
+    $invoice_date = $_POST['invoice_date'];
+    $status = $_POST['status'];
+    $tax_rate = floatval($_POST['tax_rate']);
+    $services_ids = $_POST['services_id'] ?? [];
+    $service_amounts = $_POST['service_amount'] ?? [];
+    $paid_amount = floatval($_POST['paid_amount']);
+    $notes = trim($_POST['notes']);
+    $proforma  = trim($_POST['proforma']); // this value is 1 or 0
+    $invoiceTitle = $proforma ? "Proforma Invoice" : "Invoice";
+    $due_date = $_POST['due_date'];
     $company_id = LOGGED_IN_USER['company_id'];
     $agency_id = LOGGED_IN_USER['agency_id'];
     $customer_id = intval($_POST['customer_id']);
-    $mot_id = intval($_POST['mot_id'] ?? 0);
-    $invoice_no = trim($_POST['invoice_no']);
-    $invoice_date = $_POST['invoice_date'];
-    $due_date = $_POST['due_date'];
-    $status = $_POST['status'];
-    $tax_rate = floatval($_POST['tax_rate']);
-    $paid_amount = floatval($_POST['paid_amount']);
-    $notes = trim($_POST['notes']);
 
-    $services_ids = $_POST['services_id'] ?? [];
-    $service_amounts = $_POST['service_amount'] ?? [];
+    if (empty($customer_id)) {
+        returnError("Please select a customer before saving the invoice.");
+        exit;
+    }
 
     // Filter out empty service rows
     $valid_services = [];
@@ -39,44 +46,6 @@ if (isset($_POST['saveInvoice'])) {
         exit;
     }
 
-    // Calculate totals
-    $subtotal = array_sum(array_column($valid_services, 'amount'));
-    $tax_amount = $subtotal * ($tax_rate / 100);
-    $total_amount = $subtotal + $tax_amount;
-    $due_amount = $total_amount - $paid_amount;
-
-    $data = [
-        "company_id" => $company_id,
-        "agency_id" => $agency_id,
-        "customer_id" => $customer_id,
-        "mot_id" => $mot_id,
-        "invoice_no" => $invoice_no,
-        "invoice_date" => $invoice_date,
-        "due_date" => $due_date,
-        "status" => $status,
-        "subtotal" => $subtotal,
-        "tax_rate" => $tax_rate,
-        "tax_amount" => $tax_amount,
-        "discount" => 0,
-        "total_amount" => $total_amount,
-        "paid_amount" => $paid_amount,
-        "due_amount" => $due_amount,
-        "notes" => $notes
-    ];
-    // PDF Part -------------------------------------
-    // customer details
-    $customer_data = $db->select_one("customers", "*", [
-        "company_id" => LOGGED_IN_USER['company_id'],
-        "agency_id" => LOGGED_IN_USER['agency_id'],
-        "id" => $customer_id
-    ]);
-    if (empty($customer)) $customer = [];
-
-    // Company Detail
-    $company_data = $db->select_one("companies", "*", [
-        "id" => LOGGED_IN_USER['company_id']
-    ]);
-
     $services_final = [];
 
     foreach ($valid_services as $srv) {
@@ -93,6 +62,22 @@ if (isset($_POST['saveInvoice'])) {
             ];
         }
     }
+
+    // PDF Part -------------------------------------
+    // customer details
+    $customer_data = $db->select_one("users", "*", [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "id" => $customer_id,
+        "is_active" => 1,
+        "type" => "customer"
+    ]);
+    if (empty($customer_data)) $customer_data = [];
+
+    // Company Detail
+    $company_data = $db->select_one("companies", "*", [
+        "id" => LOGGED_IN_USER['company_id']
+    ]);
 
     $invoice_data = [
         'company_name' => $company_data['company_name'],
@@ -111,15 +96,121 @@ if (isset($_POST['saveInvoice'])) {
         'tax_rate' => $tax_rate,
         'paid_amount' => $paid_amount,
         'services' => $services_final,
-        'notes' => $notes
+        'notes' => $notes,
+        "proforma" => $proforma
     ];
+
+    // Calculate totals
+    $subtotal = array_sum(array_column($valid_services, 'amount'));
+    $tax_amount = $subtotal * ($tax_rate / 100);
+    $total_amount = $subtotal + $tax_amount;
+    $due_amount = $total_amount - $paid_amount;
+
+    // Update Invoice 
+    if ($invoice_id) {
+        $data = [
+            "invoice_no" => $invoice_no,
+            "invoice_date" => $invoice_date,
+            "status" => $status,
+            "tax_rate" => $tax_rate,
+            "paid_amount" => $paid_amount,
+            "notes" => $notes,
+            "proforma" => $proforma,
+            "due_date" => $due_date,
+        ];
+
+        $pdf = saveInvoicePDF($invoice_data);
+
+        if ($pdf['success']) {
+            $data['pdf_file'] =  $pdf['filename'];
+
+            $invoiceType = $proforma ? "Proforma Invoice" : "Invoice";
+            $_tc_email->send([
+                'template' => 'invoice',
+                // 'to' => $invoice_data['client_email'],
+                'to' => "sohailakbar3324@gmail.com",
+                'to_name' => $invoice_data['client_name'],
+                'vars' => [
+                    'invoice_type' => $invoiceType,
+                    'invoice_no' => $invoice_no,
+                    'invoice_date' => $invoice_date,
+                    'client_name' => $invoice_data['client_name'],
+                    'total_amount' => $total_amount,
+                    'company_name' => $company_data['company_name']
+                ],
+                'attachments' => [_DIR_ . "/uploads/invoices/" . $pdf['filename']] // attach invoice PDF
+            ]);
+        }
+
+        $invoiceUpdate =  $db->update("invoices", $data, [
+            "id" => $invoice_id,
+            "company_id" => $company_id,
+            "agency_id" => $agency_id
+        ]);
+
+        if ($invoiceUpdate) {
+            $db->delete("invoice_items", ["invoice_id" => $invoice_id]);
+            foreach ($_services_ids as $service_id) {
+                $db->insert("invoice_items", [
+                    "invoice_id" => $invoice_id,
+                    "services_id" => intval($service_id),
+                ]);
+            }
+
+            returnSuccess("Invoice Update Successfully", [
+                "redirect" => "customer-profile?id=$customer_id"
+            ]);
+        }
+        die;
+    }
+
+
+    // First time insert
+    $mot_id = intval($_POST['mot_id'] ?? 0);
+
+
+
+    $data = [
+        "company_id" => $company_id,
+        "agency_id" => $agency_id,
+        "customer_id" => $customer_id,
+        "mot_id" => $mot_id,
+        "invoice_no" => $invoice_no,
+        "invoice_date" => $invoice_date,
+        "due_date" => $due_date,
+        "status" => $status,
+        "subtotal" => $subtotal,
+        "tax_rate" => $tax_rate,
+        "tax_amount" => $tax_amount,
+        "discount" => 0,
+        "total_amount" => $total_amount,
+        "paid_amount" => $paid_amount,
+        "due_amount" => $due_amount,
+        "notes" => $notes,
+        "proforma" => $proforma
+    ];
+
 
     $pdf = saveInvoicePDF($invoice_data);
     if ($pdf['success']) {
         $data['pdf_file'] =  $pdf['filename'];
-    }
 
-    // PDF Part -------------------------------------
+        $invoiceType = $proforma ? "Proforma Invoice" : "Invoice";
+        $_tc_email->send([
+            'template' => 'invoice',
+            'to' => $invoice_data['client_email'],
+            'to_name' => $invoice_data['client_name'],
+            'vars' => [
+                'invoice_type' => $invoiceType,
+                'invoice_no' => $invoice_no,
+                'invoice_date' => $invoice_date,
+                'client_name' => $invoice_data['client_name'],
+                'total_amount' => $total_amount,
+                'company_name' => $company_data['company_name']
+            ],
+            'attachments' => [_DIR_ . "/uploads/invoices/" . $pdf['filename']] // attach invoice PDF
+        ]);
+    }
 
 
     $invoice = $db->insert("invoices", $data);
@@ -127,10 +218,12 @@ if (isset($_POST['saveInvoice'])) {
 
     // Save invoice items
     if ($invoice) {
-        $db->insert("invoice_items", [
-            "invoice_id" => $invoice,
-            "services_id" => implode(",", $_services_ids),
-        ]);
+        foreach ($_services_ids as $service_id) {
+            $db->insert("invoice_items", [
+                "invoice_id" => $invoice,
+                "services_id" => intval($service_id),
+            ]);
+        }
 
         returnSuccess("Invoice created successfully.", ["redirect" => ""]);
     } else {
@@ -151,7 +244,7 @@ if (isset($_POST['fetchCustomerMotHistory'])) {
     ]);
 
     if (empty($mot_history)) {
-        returnError("No MOT history found for the selected customer.");
+        returnError("No Vehicle history found for the selected customer.");
         exit;
     }
 
@@ -170,6 +263,9 @@ function saveInvoicePDF($invoice_data = [])
     $options->set('isPhpEnabled', true);
 
     $dompdf = new Dompdf($options);
+
+    $is_proforma_div_hide = $invoice_data['proforma'] ? "d-none" : "";
+    $invoiceTitle = $invoice_data["proforma"] ? "Quotation" : "INVOICE";
 
     // HTML content for the invoice
     $html = '
@@ -311,6 +407,9 @@ function saveInvoicePDF($invoice_data = [])
                 color: #000;
                 pointer-events: none;
             }
+            .d-none{
+                display: none !important;
+            }
         </style>
     </head>
     <body>
@@ -329,11 +428,11 @@ function saveInvoicePDF($invoice_data = [])
                             </td>
                             <td style="width:30%; vertical-align: top; border:none;">
                                 <div class="invoice-info">
-                                    <h1>INVOICE</h1>
+                                    <h1>' . $invoiceTitle . '</h1>
                                     <p><strong>Invoice No:</strong> ' . ($invoice_data['invoice_no']) . '</p>
                                     <p><strong>Invoice Date:</strong> ' . ($invoice_data['invoice_date']) . '</p>
                                     <p><strong>Due Date:</strong> ' . ($invoice_data['due_date']) . '</p>
-                                    <span class="status status-paid">' . ucfirst($invoice_data['status']) . '</span>
+                                    <span class="status status-paid ' . $is_proforma_div_hide . '">' . ucfirst($invoice_data['status']) . '</span>
                                 </div>
                             </td>
                         </tr>
@@ -405,12 +504,12 @@ function saveInvoicePDF($invoice_data = [])
             <!-- Totals Section -->
             <div class="totals">
                 <table>
-                    <tr>
+                    <tr class="' . $is_proforma_div_hide . '">
                         <td>Subtotal:</td>
                         <td class="amount">' . _CURRENCY_SYMBOL . number_format($subtotal, 2) . '</td>
                     </tr>
                     <tr>
-                        <td>Tax (' . number_format($tax_rate, 2) . '%):</td>
+                        <td>VAT (' . number_format($tax_rate, 2) . '%):</td>
                         <td class="amount">' . _CURRENCY_SYMBOL . number_format($tax_amount, 2) . '</td>
                     </tr>
                     <tr>
@@ -421,11 +520,11 @@ function saveInvoicePDF($invoice_data = [])
                         <td><strong>Total Amount:</strong></td>
                         <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($total_amount, 2) . '</strong></td>
                     </tr>
-                    <tr>
+                    <tr class="' . $is_proforma_div_hide . '">
                         <td>Paid Amount:</td>
                         <td class="amount">' . _CURRENCY_SYMBOL . number_format($paid_amount, 2) . '</td>
                     </tr>
-                    <tr>
+                    <tr class="' . $is_proforma_div_hide . '">
                         <td><strong>Due Amount:</strong></td>
                         <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($due_amount, 2) . '</strong></td>
                     </tr>
@@ -547,10 +646,12 @@ if (isset($_POST['updateInvoicePayment'])) {
     ]);
 
     // Customer details
-    $customer_data = $db->select_one("customers", "*", [
+    $customer_data = $db->select_one("users", "*", [
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
-        "id" => $customer_id
+        "id" => $customer_id,
+        "is_active" => 1,
+        "type" => "customer"
     ]);
 
     // Fetch invoice items

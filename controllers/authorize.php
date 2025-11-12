@@ -1,7 +1,7 @@
 <?php
 define('DIR', '../');
 require_once(DIR . 'includes/db.php');
-require_once _DIR_ . "includes/Classes/TCEmails.php";
+require_once _DIR_ . "includes/Classes/SmtpMailer.php";
 // Sign Up
 if (isset($_POST['register_new_user'])) {
 	$fname      = $_POST['fname'];
@@ -90,7 +90,6 @@ if (isset($_POST['send_reset_password_link'])) {
 				'vars' => [
 					'token' => $forgot_token,
 					'to' => $email,
-
 				]
 			]);
 			echo success('Reset Password link sent to your email. You can reset the password with in 24 hours');

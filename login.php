@@ -84,7 +84,7 @@ $JS_FILES_ = [];
                 </button>
 
                 <div class="forgot-password">
-                    <a href="#">Forgot your password?</a>
+                    <a href="forgot">Forgot your password?</a>
                 </div>
             </form>
 

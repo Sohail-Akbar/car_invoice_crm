@@ -34,7 +34,7 @@
 }
 
 .content-grid .card-title {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0;
 }
@@ -51,6 +51,7 @@
     align-items: center;
     gap: 8px;
     transition: all 0.3s;
+    font-size: 14px;
 }
 
 .content-grid .edit-btn:hover {
@@ -107,7 +108,7 @@
 }
 
 .content-grid .detail-value {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: #2c3e50;
     font-weight: 500;
 }

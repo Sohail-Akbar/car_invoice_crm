@@ -74,6 +74,7 @@ if (isset($_POST['addNewServices'])) {
             "agency_id" => LOGGED_IN_USER['agency_id'],
             "is_active" => 1
         ]);
+
         returnSuccess([
             'id' => $insert_id,
             'text' => $value,

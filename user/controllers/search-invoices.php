@@ -30,7 +30,7 @@ if (isset($_GET['fetchFilteredInvoices'])) {
             CONCAT(c.fname, ' ', c.lname) AS customer_name,
             ch.reg_number
         FROM invoices i
-        INNER JOIN customers c ON i.customer_id = c.id
+        INNER JOIN users c ON i.customer_id = c.id AND c.type = 'customer'
         INNER JOIN customer_car_history ch ON i.customer_id = ch.customer_id
         WHERE i.company_id = '$company_id' AND i.agency_id = '$agency_id'
     ";

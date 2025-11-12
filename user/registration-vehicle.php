@@ -11,9 +11,11 @@ $CSS_FILES_ = [
 
 $custom_register = _get_param("type", "");
 
-$existing_customers = $db->select("customers", "*", [
+$existing_customers = $db->select("users", "*", [
     "company_id" => LOGGED_IN_USER['company_id'],
-    "agency_id" => LOGGED_IN_USER['agency_id']
+    "agency_id" => LOGGED_IN_USER['agency_id'],
+    "type" => "customer",
+    "is_active" => 1
 ]);
 ?>
 <!DOCTYPE html>

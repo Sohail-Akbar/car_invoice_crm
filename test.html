@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Media Viewer with Real Video Crop</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css">
+    <title>Vehicle Garage - Password Reset</title>
     <style>
         * {
             margin: 0;
@@ -16,408 +14,324 @@
         }
 
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .upload-container {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            animation: slideUp 0.6s ease-out 0.2s both;
-        }
-
-        .upload-container:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-5px);
-        }
-
-        .upload-label {
-            display: block;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        #file-input {
-            display: none;
-        }
-
-        .upload-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .upload-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .preview-container {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            display: none;
-            animation: slideUp 0.5s ease-out;
-        }
-
-        .preview-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .media-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .media-item {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .media-item:hover {
-            transform: scale(1.05);
-        }
-
-        .media-item img, .media-item video {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .media-name {
-            padding: 8px;
-            font-size: 0.9rem;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.5);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .media-controls {
-            position: absolute;
-            top: 5px;
-            right: 5px;
             display: flex;
-            gap: 5px;
-        }
-
-        .control-btn {
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .control-btn:hover {
-            background: rgba(0, 0, 0, 0.9);
-            transform: scale(1.1);
-        }
-
-        .file-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            text-align: left;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .file-info p {
-            margin: 8px 0;
-        }
-
-        .instructions {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.6s ease-out 0.4s both;
-        }
-
-        .instructions h2 {
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-
-        .instructions ol {
-            margin-left: 20px;
-            line-height: 1.6;
-        }
-
-        .instructions li {
-            margin-bottom: 10px;
-        }
-
-        .clear-btn {
-            background: rgba(255, 100, 100, 0.3);
-            color: white;
-            border: 2px solid rgba(255, 100, 100, 0.5);
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .clear-btn:hover {
-            background: rgba(255, 100, 100, 0.5);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .error-message {
-            color: #ff9999;
-            background: rgba(255, 0, 0, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
-        }
-
-        .crop-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+            max-width: 1000px;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .crop-container {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 90%;
-            max-height: 90%;
-            color: #333;
-            text-align: center;
-        }
-
-        .crop-image-container, .crop-video-container {
-            max-width: 100%;
-            max-height: 70vh;
-            margin-bottom: 15px;
+            border-radius: 15px;
             overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .crop-image-container img, .crop-video-container video {
-            max-width: 100%;
-            max-height: 60vh;
-        }
-
-        .crop-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .video-crop-controls {
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
+            justify-content: center;
         }
 
-        .time-controls {
+        .logo {
             display: flex;
-            justify-content: center;
-            gap: 10px;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .panel-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .panel-description {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            list-style-type: none;
+        }
+
+        .features li {
+            margin-bottom: 15px;
+            display: flex;
             align-items: center;
         }
 
-        .crop-btn, .time-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
+        .feature-icon {
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .crop-confirm, .set-start-btn, .set-end-btn {
-            background: #4CAF50;
-            color: white;
+        .right-panel {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .crop-cancel, .reset-btn {
-            background: #f44336;
-            color: white;
-        }
-
-        .preview-btn {
-            background: #2196F3;
-            color: white;
-        }
-
-        .crop-btn:hover, .time-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .time-display {
-            font-weight: bold;
-            margin: 0 10px;
-            background: #f5f5f5;
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: #333;
-        }
-
-        .progress-container {
+        .form-container {
+            max-width: 400px;
             width: 100%;
-            background: #f0f0f0;
-            border-radius: 5px;
-            margin: 10px 0;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .form-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .step-indicator {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+        }
+
+        .step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .step.active:not(:last-child):after {
+            background: #3498db;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step.active .step-circle {
+            background: #3498db;
+            color: white;
+        }
+
+        .step.completed .step-circle {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .step-text {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+
+        .step.active .step-text {
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .form-step {
             display: none;
         }
 
-        .progress-bar {
-            width: 0%;
-            height: 20px;
-            background: #4CAF50;
+        .form-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .resend-otp {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .resend-otp a {
+            color: #3498db;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .resend-otp a:hover {
+            text-decoration: underline;
+        }
+
+        .otp-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .password-strength {
+            margin-top: 10px;
+            height: 5px;
+            background: #ecf0f1;
             border-radius: 5px;
-            transition: width 0.3s ease;
+            overflow: hidden;
         }
 
-        .processing-message {
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s;
+        }
+
+        .password-weak .password-strength-bar {
+            width: 30%;
+            background: #e74c3c;
+        }
+
+        .password-medium .password-strength-bar {
+            width: 60%;
+            background: #f39c12;
+        }
+
+        .password-strong .password-strength-bar {
+            width: 100%;
+            background: #2ecc71;
+        }
+
+        .password-requirements {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: none;
-            color: #2196F3;
-            margin: 10px 0;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .back-to-login {
+            text-align: center;
+            margin-top: 20px;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .back-to-login a {
+            color: #3498db;
+            text-decoration: none;
         }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .back-to-login a:hover {
+            text-decoration: underline;
         }
 
-        .pulse {
-            animation: pulse 1.5s infinite;
-        }
-
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                flex-direction: column;
             }
 
-            h1 {
-                font-size: 2rem;
+            .left-panel {
+                padding: 30px 20px;
             }
 
-            .upload-container,
-            .preview-container,
-            .instructions {
-                padding: 20px;
-            }
-            
-            .media-gallery {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            .right-panel {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -425,645 +339,284 @@
 
 <body>
     <div class="container">
-        <header>
-            <h1>Advanced Media Viewer</h1>
-            <p>Upload, view, and crop multiple images/videos directly in your browser - no server storage required!</p>
-        </header>
-
-        <div class="upload-container">
-            <label class="upload-label">Select multiple images or videos to view</label>
-            <label for="file-input" class="upload-btn pulse">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                Choose Files
-            </label>
-            <input type="file" id="file-input" accept="image/*, video/*" multiple>
-            <div class="error-message" id="error-message"></div>
-        </div>
-
-        <div class="preview-container" id="preview-container">
-            <h2 class="preview-title">Media Gallery</h2>
-            <div class="media-gallery" id="media-gallery"></div>
-            <div class="file-info" id="file-info"></div>
-            <button class="clear-btn" id="clear-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-                Clear All
-            </button>
-        </div>
-
-        <div class="instructions">
-            <h2>How It Works</h2>
-            <ol>
-                <li>Click the "Choose Files" button to select multiple images or videos from your device</li>
-                <li>Files will be displayed in a gallery view - click on any item to view it larger</li>
-                <li>For images, use the crop button to crop the image as needed</li>
-                <li>For videos, use the trim button to trim the video duration</li>
-                <li>Your files remain completely private - they are never saved to any server</li>
-                <li>Use the "Clear All" button to remove all files and start over</li>
-            </ol>
-        </div>
-    </div>
-
-    <!-- Crop Modal -->
-    <div class="crop-modal" id="crop-modal">
-        <div class="crop-container">
-            <h3 id="crop-title">Crop Image</h3>
-            <div class="crop-image-container" id="image-crop-container">
-                <img id="crop-image" src="">
+        <div class="left-panel">
+            <div class="logo">
+                <div class="logo-icon">🚗</div>
+                <div class="logo-text">Vehicle Garage</div>
             </div>
-            <div class="crop-video-container" id="video-crop-container" style="display: none;">
-                <video id="crop-video" controls></video>
-                <div class="video-crop-controls">
-                    <div class="time-controls">
-                        <button class="time-btn set-start-btn" id="set-start">Set Start</button>
-                        <span class="time-display" id="start-time">00:00</span>
-                        <button class="time-btn set-end-btn" id="set-end">Set End</button>
-                        <span class="time-display" id="end-time">00:00</span>
-                    </div>
-                    <div class="time-controls">
-                        <button class="time-btn preview-btn" id="preview-trim">Preview</button>
-                        <button class="time-btn reset-btn" id="reset-trim">Reset</button>
-                    </div>
+            <h2 class="panel-title">Reset Your Password</h2>
+            <p class="panel-description">Follow the simple steps to securely reset your password and regain access to
+                your vehicle garage account.</p>
+            <ul class="features">
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Secure OTP verification</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Real-time password strength check</span>
+                </li>
+                <li>
+                    <div class="feature-icon">✓</div>
+                    <span>Instant access after reset</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="right-panel">
+            <div class="form-container">
+                <h2 class="form-title">Forgot Password?</h2>
+                <p class="form-subtitle">Enter your details to reset your password</p>
+                <div class="success-message" id="successMessage">
+                    <h3>Password Reset Successful!</h3>
+                    <p>Your password has been changed successfully. You can now login with your new password.</p>
                 </div>
-            </div>
-            <div class="progress-container" id="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <div class="processing-message" id="processing-message">Processing video... Please wait</div>
-            <div class="crop-controls">
-                <button class="crop-btn crop-confirm" id="crop-confirm">Apply</button>
-                <button class="crop-btn crop-cancel" id="crop-cancel">Cancel</button>
+
+                <form id="passwordResetForm">
+                    <div class="form-step active" id="step1">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="Enter your registered email" required>
+                        </div>
+                        <button type="button" class="btn" id="sendOtpBtn">Send OTP</button>
+                    </div>
+
+                    <div class="form-step" id="step2">
+                        <div class="form-group">
+                            <label for="otp">Enter OTP</label>
+                            <div class="otp-container">
+                                <input type="text" class="otp-input" maxlength="1" required>
+                                <input type="text" class="otp-input" maxlength="1" required>
+                                <input type="text" class="otp-input" maxlength="1" required>
+                                <input type="text" class="otp-input" maxlength="1" required>
+                                <input type="text" class="otp-input" maxlength="1" required>
+                                <input type="text" class="otp-input" maxlength="1" required>
+                            </div>
+                            <div class="resend-otp">
+                                Didn't receive OTP? <a id="resendOtp">Resend in <span id="countdown">60</span>s</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="verifyOtpBtn">Verify OTP</button>
+                    </div>
+
+                    <div class="form-step" id="step3">
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" placeholder="Enter new password" required>
+                            <div class="password-strength">
+                                <div class="password-strength-bar"></div>
+                            </div>
+                            <div class="password-requirements">
+                                Password must be at least 8 characters with uppercase, lowercase, number and special
+                                character.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+                        </div>
+                        <button type="button" class="btn" id="resetPasswordBtn">Reset Password</button>
+                    </div>
+                </form>
+
+                <div class="back-to-login">
+                    <a href="#">← Back to Login</a>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        $(document).ready(function () {
-            let mediaFiles = [];
-            let currentCropper = null;
-            let currentCropIndex = null;
-            let videoStartTime = 0;
-            let videoEndTime = 0;
-            let originalVideoDuration = 0;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elements
+            const steps = document.querySelectorAll('.step');
+            const formSteps = document.querySelectorAll('.form-step');
+            const sendOtpBtn = document.getElementById('sendOtpBtn');
+            const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+            const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+            const resendOtp = document.getElementById('resendOtp');
+            const countdownEl = document.getElementById('countdown');
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const newPasswordInput = document.getElementById('newPassword');
+            const passwordStrength = document.querySelector('.password-strength');
+            const successMessage = document.getElementById('successMessage');
 
-            // File input change event
-            $('#file-input').on('change', function (event) {
-                const files = event.target.files;
-                if (!files || files.length === 0) return;
+            let currentStep = 1;
+            let countdown = 60;
+            let countdownInterval;
 
-                const $previewContainer = $('#preview-container');
-                const $mediaGallery = $('#media-gallery');
-                const $fileInfo = $('#file-info');
-                const $errorMessage = $('#error-message');
-
-                // Hide error message
-                $errorMessage.hide();
-
-                // Process each file
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    
-                    // Validate file type
-                    if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-                        $errorMessage.text('Please select only image or video files.').fadeIn(300);
-                        continue;
+            // OTP Input handling
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    if (input.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
                     }
+                });
 
-                    // Validate file size (max 50MB)
-                    if (file.size > 50 * 1024 * 1024) {
-                        $errorMessage.text('One or more files are too large. Please select files smaller than 50MB.').fadeIn(300);
-                        continue;
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+                        otpInputs[index - 1].focus();
                     }
-
-                    // Add file to our collection
-                    mediaFiles.push({
-                        file: file,
-                        url: URL.createObjectURL(file),
-                        type: file.type.startsWith('image/') ? 'image' : 'video',
-                        videoStart: 0,
-                        videoEnd: null,
-                        croppedUrl: null
-                    });
-                }
-
-                // Update the gallery
-                updateMediaGallery();
-                
-                // Update file info
-                updateFileInfo();
-
-                // Show the preview container with animation
-                $previewContainer.slideDown(500);
-
-                // Remove pulse animation from upload button
-                $('.upload-btn').removeClass('pulse');
+                });
             });
 
-            // Update media gallery display
-            function updateMediaGallery() {
-                const $mediaGallery = $('#media-gallery');
-                $mediaGallery.empty();
+            // Password strength indicator
+            newPasswordInput.addEventListener('input', function () {
+                const password = this.value;
+                let strength = 0;
 
-                mediaFiles.forEach((media, index) => {
-                    const mediaItem = $('<div>', {
-                        class: 'media-item'
-                    });
+                // Check password length
+                if (password.length >= 8) strength += 25;
 
-                    if (media.type === 'image') {
-                        const img = $('<img>', {
-                            src: media.croppedUrl || media.url,
-                            alt: media.file.name
-                        });
-                        mediaItem.append(img);
+                // Check for uppercase letters
+                if (/[A-Z]/.test(password)) strength += 25;
+
+                // Check for lowercase letters
+                if (/[a-z]/.test(password)) strength += 25;
+
+                // Check for numbers and special characters
+                if (/[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) strength += 25;
+
+                // Update strength bar
+                passwordStrength.className = 'password-strength';
+                if (strength > 0) {
+                    if (strength <= 50) {
+                        passwordStrength.classList.add('password-weak');
+                    } else if (strength <= 75) {
+                        passwordStrength.classList.add('password-medium');
                     } else {
-                        const video = $('<video>', {
-                            src: media.croppedUrl || media.url,
-                            controls: true
-                        });
-                        mediaItem.append(video);
+                        passwordStrength.classList.add('password-strong');
                     }
+                }
+            });
 
-                    // Media name
-                    const mediaName = $('<div>', {
-                        class: 'media-name',
-                        text: media.file.name + (media.croppedUrl ? ' (trimmed)' : '')
-                    });
-                    mediaItem.append(mediaName);
+            // Send OTP button
+            sendOtpBtn.addEventListener('click', function () {
+                const email = document.getElementById('email').value;
 
-                    // Media controls
-                    const mediaControls = $('<div>', {
-                        class: 'media-controls'
-                    });
-
-                    // View button
-                    const viewBtn = $('<button>', {
-                        class: 'control-btn',
-                        html: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
-                        title: 'View'
-                    }).on('click', function() {
-                        viewMedia(index);
-                    });
-                    mediaControls.append(viewBtn);
-
-                    // Crop/Trim button
-                    const cropBtn = $('<button>', {
-                        class: 'control-btn',
-                        html: media.type === 'image' ? 
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 6H2a2 2 0 0 0-2 2v14"></path></svg>' :
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>',
-                        title: media.type === 'image' ? 'Crop' : 'Trim'
-                    }).on('click', function() {
-                        openCropModal(index);
-                    });
-                    mediaControls.append(cropBtn);
-
-                    // Remove button
-                    const removeBtn = $('<button>', {
-                        class: 'control-btn',
-                        html: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
-                        title: 'Remove'
-                    }).on('click', function() {
-                        removeMedia(index);
-                    });
-                    mediaControls.append(removeBtn);
-
-                    mediaItem.append(mediaControls);
-                    $mediaGallery.append(mediaItem);
-                });
-            }
-
-            // Update file information display
-            function updateFileInfo() {
-                const $fileInfo = $('#file-info');
-                
-                if (mediaFiles.length === 0) {
-                    $fileInfo.empty();
+                if (!email) {
+                    alert('Please enter your email address');
                     return;
                 }
-                
-                let totalSize = 0;
-                let imageCount = 0;
-                let videoCount = 0;
-                
-                mediaFiles.forEach(media => {
-                    totalSize += media.file.size;
-                    if (media.type === 'image') {
-                        imageCount++;
-                    } else {
-                        videoCount++;
-                    }
+
+                // In a real app, you would send a request to your backend here
+                console.log('Sending OTP to:', email);
+
+                // Start countdown for resend OTP
+                startCountdown();
+
+                // Move to next step
+                goToStep(2);
+            });
+
+            // Verify OTP button
+            verifyOtpBtn.addEventListener('click', function () {
+                let otp = '';
+                otpInputs.forEach(input => {
+                    otp += input.value;
                 });
-                
-                const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
-                
-                $fileInfo.html(`
-                    <p><strong>Total Files:</strong> ${mediaFiles.length}</p>
-                    <p><strong>Images:</strong> ${imageCount}</p>
-                    <p><strong>Videos:</strong> ${videoCount}</p>
-                    <p><strong>Total Size:</strong> ${totalSizeMB} MB</p>
-                `);
-            }
 
-            // View media in larger view
-            function viewMedia(index) {
-                const media = mediaFiles[index];
-                const mediaUrl = media.croppedUrl || media.url;
-                
-                if (media.type === 'image') {
-                    // Open image in new tab/window
-                    window.open(mediaUrl, '_blank');
-                } else {
-                    // Create a modal for video playback
-                    const videoModal = $('<div>', {
-                        class: 'crop-modal',
-                        css: { display: 'flex' }
-                    });
-                    
-                    const videoContainer = $('<div>', {
-                        class: 'crop-container',
-                        css: { maxWidth: '80%' }
-                    });
-                    
-                    const videoTitle = $('<h3>', {
-                        text: media.file.name + (media.croppedUrl ? ' (trimmed)' : '')
-                    });
-                    
-                    const videoElement = $('<video>', {
-                        src: mediaUrl,
-                        controls: true,
-                        autoplay: true,
-                        css: { maxWidth: '100%', maxHeight: '70vh' }
-                    });
-                    
-                    const closeBtn = $('<button>', {
-                        class: 'crop-btn crop-cancel',
-                        text: 'Close',
-                        css: { marginTop: '15px' }
-                    }).on('click', function() {
-                        videoModal.remove();
-                    });
-                    
-                    videoContainer.append(videoTitle, videoElement, closeBtn);
-                    videoModal.append(videoContainer);
-                    $('body').append(videoModal);
+                if (otp.length !== 6) {
+                    alert('Please enter the complete 6-digit OTP');
+                    return;
                 }
-            }
 
-            // Open crop modal
-            function openCropModal(index) {
-                const media = mediaFiles[index];
-                currentCropIndex = index;
-                const $cropModal = $('#crop-modal');
-                const $cropTitle = $('#crop-title');
-                const $imageContainer = $('#image-crop-container');
-                const $videoContainer = $('#video-crop-container');
-                const $cropImage = $('#crop-image');
-                const $cropVideo = $('#crop-video');
-                
-                if (media.type === 'image') {
-                    $cropTitle.text('Crop Image');
-                    $imageContainer.show();
-                    $videoContainer.hide();
-                    
-                    $cropImage.attr('src', media.url);
-                    $cropModal.fadeIn(300);
-                    
-                    // Initialize cropper
-                    if (currentCropper) {
-                        currentCropper.destroy();
-                    }
-                    
-                    currentCropper = new Cropper($cropImage[0], {
-                        aspectRatio: NaN, // Free ratio
-                        viewMode: 1,
-                        autoCropArea: 0.8,
-                        responsive: true,
-                        restore: true,
-                        guides: true,
-                        center: true,
-                        highlight: true,
-                        cropBoxMovable: true,
-                        cropBoxResizable: true,
-                        toggleDragModeOnDblclick: true
-                    });
-                } else {
-                    $cropTitle.text('Trim Video');
-                    $imageContainer.hide();
-                    $videoContainer.show();
-                    
-                    $cropVideo.attr('src', media.url);
-                    $cropModal.fadeIn(300);
-                    
-                    // Initialize video trim settings
-                    videoStartTime = media.videoStart || 0;
-                    videoEndTime = media.videoEnd || (media.videoDuration || 0);
-                    
-                    // Get video duration when loaded
-                    $cropVideo.on('loadedmetadata', function() {
-                        originalVideoDuration = this.duration;
-                        if (!media.videoEnd) {
-                            videoEndTime = originalVideoDuration;
-                            media.videoEnd = originalVideoDuration;
-                        }
-                        updateTimeDisplays();
-                    });
-                    
-                    // Reset any previous cropper
-                    if (currentCropper) {
-                        currentCropper.destroy();
-                        currentCropper = null;
-                    }
-                }
-            }
+                // In a real app, you would verify the OTP with your backend here
+                console.log('Verifying OTP:', otp);
 
-            // Update video time displays
-            function updateTimeDisplays() {
-                $('#start-time').text(formatTime(videoStartTime));
-                $('#end-time').text(formatTime(videoEndTime));
-            }
-
-            // Format time in MM:SS format
-            function formatTime(seconds) {
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-
-            // Trim video using MediaRecorder API
-            async function trimVideo(media, startTime, endTime) {
-                return new Promise((resolve, reject) => {
-                    const video = document.createElement('video');
-                    video.src = media.url;
-                    
-                    video.onloadedmetadata = function() {
-                        // Create a canvas to draw video frames
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        
-                        // Set canvas dimensions
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
-                        
-                        // Create MediaRecorder
-                        const stream = canvas.captureStream();
-                        const mediaRecorder = new MediaRecorder(stream, {
-                            mimeType: 'video/webm;codecs=vp9'
-                        });
-                        
-                        const chunks = [];
-                        
-                        mediaRecorder.ondataavailable = function(e) {
-                            if (e.data.size > 0) {
-                                chunks.push(e.data);
-                                updateProgress(chunks.length);
-                            }
-                        };
-                        
-                        mediaRecorder.onstop = function() {
-                            const blob = new Blob(chunks, { type: 'video/webm' });
-                            const url = URL.createObjectURL(blob);
-                            resolve(url);
-                        };
-                        
-                        // Start recording
-                        mediaRecorder.start();
-                        
-                        // Seek to start time and play
-                        video.currentTime = startTime;
-                        
-                        let currentTime = startTime;
-                        const frameRate = 30;
-                        const frameInterval = 1000 / frameRate;
-                        
-                        function captureFrame() {
-                            if (currentTime >= endTime) {
-                                mediaRecorder.stop();
-                                return;
-                            }
-                            
-                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                            currentTime += 1 / frameRate;
-                            video.currentTime = currentTime;
-                            
-                            setTimeout(captureFrame, frameInterval);
-                        }
-                        
-                        video.oncanplay = function() {
-                            captureFrame();
-                        };
-                    };
-                    
-                    video.onerror = reject;
-                });
-            }
-
-            // Update progress bar
-            function updateProgress(progress) {
-                const totalFrames = Math.ceil((videoEndTime - videoStartTime) * 30);
-                const percentage = (progress / totalFrames) * 100;
-                $('#progress-bar').css('width', percentage + '%');
-            }
-
-            // Apply crop/trim
-            $('#crop-confirm').on('click', async function() {
-                if (currentCropIndex === null) return;
-                
-                const media = mediaFiles[currentCropIndex];
-                const $confirmBtn = $('#crop-confirm');
-                const $progressContainer = $('#progress-container');
-                const $processingMessage = $('#processing-message');
-                
-                if (media.type === 'image' && currentCropper) {
-                    // Apply image crop
-                    const canvas = currentCropper.getCroppedCanvas();
-                    const croppedUrl = canvas.toDataURL('image/jpeg');
-                    
-                    // Update the media file with cropped version
-                    media.croppedUrl = croppedUrl;
-                    
-                    // Update the gallery
-                    updateMediaGallery();
-                    
-                    // Close modal
-                    $('#crop-modal').fadeOut(300);
-                } else if (media.type === 'video') {
-                    // Show processing UI
-                    $confirmBtn.prop('disabled', true);
-                    $progressContainer.show();
-                    $processingMessage.show();
-                    
-                    try {
-                        // Trim the video
-                        const trimmedUrl = await trimVideo(media, videoStartTime, videoEndTime);
-                        
-                        // Update the media file with trimmed version
-                        media.croppedUrl = trimmedUrl;
-                        media.videoStart = videoStartTime;
-                        media.videoEnd = videoEndTime;
-                        
-                        // Update the gallery
-                        updateMediaGallery();
-                        
-                        // Close modal
-                        $('#crop-modal').fadeOut(300);
-                    } catch (error) {
-                        console.error('Error trimming video:', error);
-                        alert('Error trimming video. Please try again.');
-                    } finally {
-                        // Reset UI
-                        $confirmBtn.prop('disabled', false);
-                        $progressContainer.hide();
-                        $processingMessage.hide();
-                        $('#progress-bar').css('width', '0%');
-                    }
-                }
-                
-                // Clean up
-                if (currentCropper) {
-                    currentCropper.destroy();
-                    currentCropper = null;
-                }
-                currentCropIndex = null;
+                // Move to next step
+                goToStep(3);
             });
 
-            // Cancel crop
-            $('#crop-cancel').on('click', function() {
-                $('#crop-modal').fadeOut(300);
-                if (currentCropper) {
-                    currentCropper.destroy();
-                    currentCropper = null;
+            // Reset Password button
+            resetPasswordBtn.addEventListener('click', function () {
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (!newPassword || !confirmPassword) {
+                    alert('Please fill in both password fields');
+                    return;
                 }
-                currentCropIndex = null;
-            });
 
-            // Set start time for video
-            $('#set-start').on('click', function() {
-                videoStartTime = $('#crop-video')[0].currentTime;
-                updateTimeDisplays();
-            });
-
-            // Set end time for video
-            $('#set-end').on('click', function() {
-                videoEndTime = $('#crop-video')[0].currentTime;
-                updateTimeDisplays();
-            });
-
-            // Preview video trim
-            $('#preview-trim').on('click', function() {
-                const video = $('#crop-video')[0];
-                video.currentTime = videoStartTime;
-                video.play();
-                
-                // Pause at end time
-                const checkTime = setInterval(() => {
-                    if (video.currentTime >= videoEndTime) {
-                        video.pause();
-                        clearInterval(checkTime);
-                    }
-                }, 100);
-            });
-
-            // Reset video trim
-            $('#reset-trim').on('click', function() {
-                videoStartTime = 0;
-                videoEndTime = originalVideoDuration;
-                updateTimeDisplays();
-                
-                const video = $('#crop-video')[0];
-                video.currentTime = 0;
-            });
-
-            // Remove a media file
-            function removeMedia(index) {
-                // Revoke object URL to free memory
-                URL.revokeObjectURL(mediaFiles[index].url);
-                if (mediaFiles[index].croppedUrl && mediaFiles[index].croppedUrl !== mediaFiles[index].url) {
-                    URL.revokeObjectURL(mediaFiles[index].croppedUrl);
+                if (newPassword !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
                 }
-                
-                // Remove from array
-                mediaFiles.splice(index, 1);
-                
-                // Update display
-                updateMediaGallery();
-                updateFileInfo();
-                
-                // Hide preview container if no files left
-                if (mediaFiles.length === 0) {
-                    $('#preview-container').slideUp(400);
-                    $('.upload-btn').addClass('pulse');
-                }
-            }
 
-            // Clear preview button event
-            $('#clear-btn').on('click', function () {
-                // Revoke all object URLs to free memory
-                mediaFiles.forEach(media => {
-                    URL.revokeObjectURL(media.url);
-                    if (media.croppedUrl && media.croppedUrl !== media.url) {
-                        URL.revokeObjectURL(media.croppedUrl);
-                    }
-                });
-                
-                // Clear array
-                mediaFiles = [];
-                
-                // Clear file input
-                $('#file-input').val('');
-                
-                // Update display
-                updateMediaGallery();
-                updateFileInfo();
-                
-                // Hide preview container
-                $('#preview-container').slideUp(400);
-                
-                // Add pulse animation back to upload button
-                $('.upload-btn').addClass('pulse');
-            });
+                // In a real app, you would send the new password to your backend here
+                console.log('Resetting password to:', newPassword);
 
-            // Drag and drop functionality
-            $('.upload-container').on('dragover', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).css({
-                    'background': 'rgba(255, 255, 255, 0.25)',
-                    'border-color': 'rgba(255, 255, 255, 0.7)'
+                // Show success message
+                successMessage.style.display = 'block';
+
+                // Hide the form
+                document.getElementById('passwordResetForm').style.display = 'none';
+
+                // Update step indicator
+                steps.forEach(step => {
+                    step.classList.remove('active');
+                    step.classList.add('completed');
                 });
             });
 
-            $('.upload-container').on('dragleave', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).css({
-                    'background': 'rgba(255, 255, 255, 0.15)',
-                    'border-color': 'rgba(255, 255, 255, 0.3)'
-                });
+            // Resend OTP
+            resendOtp.addEventListener('click', function () {
+                if (countdown > 0) return;
+
+                const email = document.getElementById('email').value;
+
+                // In a real app, you would resend OTP to your backend here
+                console.log('Resending OTP to:', email);
+
+                // Restart countdown
+                startCountdown();
             });
 
-            $('.upload-container').on('drop', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).css({
-                    'background': 'rgba(255, 255, 255, 0.15)',
-                    'border-color': 'rgba(255, 255, 255, 0.3)'
+            // Function to navigate between steps
+            function goToStep(step) {
+                // Update current step
+                currentStep = step;
+
+                // Update step indicator
+                steps.forEach(s => {
+                    const stepNum = parseInt(s.getAttribute('data-step'));
+                    s.classList.remove('active');
+                    if (stepNum === step) {
+                        s.classList.add('active');
+                    } else if (stepNum < step) {
+                        s.classList.add('completed');
+                    }
                 });
 
-                const files = e.originalEvent.dataTransfer.files;
-                if (files.length > 0) {
-                    $('#file-input').prop('files', files);
-                    $('#file-input').trigger('change');
-                }
-            });
+                // Update form steps
+                formSteps.forEach(formStep => {
+                    formStep.classList.remove('active');
+                });
+                document.getElementById(`step${step}`).classList.add('active');
+            }
+
+            // Countdown function for resend OTP
+            function startCountdown() {
+                countdown = 60;
+                countdownEl.textContent = countdown;
+                resendOtp.style.pointerEvents = 'none';
+                resendOtp.style.color = '#95a5a6';
+
+                clearInterval(countdownInterval);
+                countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownEl.textContent = countdown;
+
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        resendOtp.style.pointerEvents = 'auto';
+                        resendOtp.style.color = '#3498db';
+                        countdownEl.textContent = '0';
+                    }
+                }, 1000);
+            }
         });
     </script>
 </body>
+
 </html>

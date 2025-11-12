@@ -296,23 +296,29 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
 
 // Add new customer callback
 tc.fn.cb.addCustomerCB = async (form, data) => {
+    console.log(data);
+
     if (data.status === 'success') {
-        // Handle success
+        // Adjusted for correct structure
+        let customers = data.customer || data.data?.customer || [];
+
         let $customerContainerSelList = $("#customersContainer");
-        $customerContainerSelList.empty(); // Clear existing options
-        // loop customer
-        data.customer.forEach(customer => {
-            $customerContainerSelList.append(new Option(customer.title + " " + customer.fname + " " + customer.lname, customer.id));
+        $customerContainerSelList.empty();
+
+        customers.forEach(customer => {
+            $customerContainerSelList.append(
+                new Option(`${customer.title} ${customer.fname} ${customer.lname}`, customer.id)
+            );
         });
+
         sAlert("Customer created successfully", 'success');
-        // form reset 
         form[0].reset();
-        // popup close
         $('.add-new-customer-model').modal('hide');
     } else {
         sAlert(data.message, 'error');
     }
-}
+};
+
 
 // Edit Customer info
 $(document).on("click", ".customer-edit-btn", function () {
@@ -324,6 +330,7 @@ $(document).on("click", ".customer-edit-btn", function () {
     $modal.find(".modal-title").text("Update Customer Information");
     $form.attr("action", "customer");
     $form.attr("data-callback", "updateCustomerInfoCB");
+    $form.find(`[name="password"]`).removeAttr("required");
 
 
     let formData = {

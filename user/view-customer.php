@@ -10,11 +10,6 @@ $CSS_FILES_ = [
     _DIR_ .  "css/jquery.dataTables.min.css"
 ];
 
-$customers_data = $db->select("customers", "*", [
-    "company_id" => LOGGED_IN_USER['company_id'],
-    "agency_id" => LOGGED_IN_USER['agency_id']
-], ["order_by" => "id desc"]);
-if (!$customers_data) $customers_data = [];
 ?>
 <!DOCTYPE html>
 <html lang="en">

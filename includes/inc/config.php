@@ -5,9 +5,9 @@ error_reporting(E_ALL);
 
 require_once "env.php";
 
-define("SITE_NAME", "Login System");
-define("SITE_EMAIL", "info@naxotop.com");
-define("CONTACT_EMAIL", "info@naxotop.com");
+define("SITE_NAME", "Garage");
+define("SITE_EMAIL", "garagenoreply@devmedqon.com");
+define("CONTACT_EMAIL", "");
 
 
 define('EMAILS', [
@@ -22,9 +22,17 @@ define('EMAILS', [
     'contactEmail' => [
         'filename' => 'contactEmail.html',
         'subject' => 'You Recieved a New Message'
-    ]
+    ],
+    'invoice' => [
+        'filename' => 'invoice_template.html',
+        'subject' => 'Invoice'
+    ],
+    'set_password' => [
+        'filename' => 'set_password.html',
+        'subject' => 'Set Your Account Password'
+    ],
 ]);
 
-define('MAILJET_API_KEY', '8267603df732b3d3b1bab7eaa41e17d8');
-define('MAILJET_SECRET_KEY', 'ff1ddfa26987f3316926a4aece98277f');
-define('MAILJET_EMAIL', SITE_EMAIL);
+define('SMTP_HOST', 'smtp.hostinger.com');
+define('SMTP_PASSWORD', '_-bi!DX2TZGHv69');
+define('SMTP_EMAIL', "garagenoreply@devmedqon.com");

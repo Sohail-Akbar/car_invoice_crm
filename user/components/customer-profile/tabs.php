@@ -5,7 +5,12 @@
     <div class="tab" data-tab="invoices">
         <i class="fas fa-file-invoice"></i> Invoices
     </div>
-    <div class="tab" data-tab="notes">
-        <i class="fas fa-sticky-note"></i> Notes
+    <div class="tab" data-tab="proformaInvoices">
+        <i class="fas fa-file-invoice"></i> Proforma
     </div>
+    <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+        <div class="tab" data-tab="notes">
+            <i class="fas fa-sticky-note"></i> Notes
+        </div>
+    <?php  } ?>
 </div>

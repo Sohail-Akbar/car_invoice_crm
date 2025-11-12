@@ -5,8 +5,8 @@ session_start();
 if (!defined('DIR')) define('DIR', './');
 if (!defined('_DIR_')) define('_DIR_', DIR);
 require_once("inc/database.php");
-require_once "Classes/TCEmails.php";
 require_once _DIR_ . "vendor/autoload.php";
+require_once "Classes/SmtpMailer.php";
 $timestamp = date('Y-m-d h:i:s');
 
 $VERIFY_LOGIN = isset($VERIFY_LOGIN) ? $VERIFY_LOGIN : false;

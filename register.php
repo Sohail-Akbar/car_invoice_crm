@@ -4,7 +4,6 @@ require_once('includes/db.php');
 $page_name = 'Register';
 
 die;
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

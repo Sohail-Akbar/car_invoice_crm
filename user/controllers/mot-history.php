@@ -164,10 +164,12 @@ if (isset($_POST['fetchRegistrationCar'])) {
     if (count($existingRecord)) {
         if ($vehicleData && isset($vehicleData['response'])) $vehicleInfo = $vehicleData['response'];
 
-        $customer = $db->select_one("customers", "*", [
+        $customer = $db->select_one("users", "*", [
             "company_id" => LOGGED_IN_USER['company_id'],
             "agency_id" => LOGGED_IN_USER['agency_id'],
-            "id" => $existingRecord['customer_id']
+            "id" => $existingRecord['customer_id'],
+            "type" => "customer",
+            "is_active" => 1
         ]);
 
         $data = [
@@ -425,10 +427,12 @@ if (isset($_GET['fetchVehicleData'])) {
 
     foreach ($mot_history as $row) {
         // Fetch customer details
-        $customer = $db->select_one("customers", "*", [
+        $customer = $db->select_one("users", "*", [
             "id" => $row['customer_id'],
             "company_id" => $company_id,
-            "agency_id" => $agency_id
+            "agency_id" => $agency_id,
+            "type" => "customer",
+            "is_active" => 1
         ]);
 
         $customerHTML = "<strong>Name:</strong> {$customer['title']} {$customer['fname']} {$customer['lname']}<br>

@@ -20,11 +20,12 @@ if (isset($_POST['fetchCarInfo'])) {
         i.paid_amount,
         i.due_amount,
         i.pdf_file,
+        i.proforma,
         i.notes,
         s.text AS service_name,
         s.amount AS service_amount
     FROM customer_car_history AS c
-    LEFT JOIN invoices AS i ON c.id = i.mot_id
+    LEFT JOIN invoices AS i ON c.id = i.mot_id AND proforma = 0
     LEFT JOIN invoice_items AS it ON i.id = it.invoice_id
     LEFT JOIN services AS s ON FIND_IN_SET(s.id, it.services_id)
     WHERE c.customer_id = '$customer_id' AND c.id = '$car_id'
@@ -101,21 +102,39 @@ if (isset($_POST['fetchCarInfo'])) {
             $pdf_html = "<span class='text-muted small'><i class='fas fa-exclamation-circle'></i> No PDF file available</span>";
         }
 
+        $add_staff_btn_html = "";
+        if (LOGGED_IN_USER['type'] === "agency") {
+            $add_staff_btn_html = "<a class='text-white add-staff' data-toggle='modal' data-target='#{$modal_id}' style='cursor:pointer;'>
+                        <i class='fas fa-user-plus mr-1'></i> Add Staff
+                    </a>";
+        }
+
+        $update_payment_btn_html = "";
+
+        if (LOGGED_IN_USER['type'] === "agency") {
+            if ($invoice['due_amount'] > 0 && $invoice['status'] !== 'cancelled') {
+                $update_payment_btn_html = <<<HTML
+<a class="text-white update-payment ml-5" data-toggle="modal" data-target="#{$pay_modal_id}" style="cursor:pointer;">
+    <i class="fas fa-pound-sign mr-1"></i> Update Payment
+</a>
+HTML;
+            } else if (isset($invoice['proforma']) && $invoice['proforma'] == 0) {
+                $update_payment_btn_html = <<<HTML
+<span class="text-light ml-5 small">
+    <i class="fas fa-check-circle"></i> Payment Cleared
+</span>
+HTML;
+            }
+        }
+
+
         echo "
         <div class='card mb-3 shadow-sm mt-5'>
             <div class='card-header bg-info d-flex justify-content-between align-items-center'>
                 <div><strong>{$car['make']} {$car['model']}</strong> ({$car['reg_number']})</div>
                 <div class='action-btns'>
-                    <a class='text-white add-staff' data-toggle='modal' data-target='#{$modal_id}' style='cursor:pointer;'>
-                        <i class='fas fa-user-plus mr-1'></i> Add Staff
-                    </a>
-                    " . (
-            $invoice['due_amount'] > 0 && $invoice['status'] != 'cancelled'
-            ? "<a class='text-white update-payment ml-5' data-toggle='modal' data-target='#{$pay_modal_id}' style='cursor:pointer;'>
-                        <i class='fas fa-pound-sign mr-1'></i> Update Payment
-                    </a>"
-            : "<span class='text-light ml-5 small'><i class='fas fa-check-circle'></i> Payment Cleared</span>"
-        ) . "
+                    {$add_staff_btn_html}
+                    {$update_payment_btn_html}
                 </div>
             </div>
 
@@ -290,7 +309,7 @@ if (isset($_POST['updateCustomerInfo'])) {
     $city = $_POST['city'];
     $customer_id = $_POST['customer_id'];
 
-    $update = $db->update("customers", [
+    $update = $db->update("users", [
         "title"    => $title,
         "gender"   => $gender,
         "fname"    => $fname,
@@ -302,7 +321,8 @@ if (isset($_POST['updateCustomerInfo'])) {
         "city"     => $city
     ], [
         "id" => $customer_id,
-        "is_active" => 1
+        "is_active" => 1,
+        "type" => "customer"
     ]);
 
     if ($update) {
@@ -397,19 +417,69 @@ if (isset($_GET['fetchInvoiceData'])) {
     $customer_id = intval($_POST['customer_id']); // 👈 receive customer_id
 
     // ✅ Base query with customer condition
-    $sql = "SELECT * FROM invoices WHERE customer_id = '$customer_id' ";
+    $sql = "SELECT * FROM invoices WHERE customer_id = '$customer_id' AND proforma = 0 ";
 
     if (!empty($searchValue)) {
         $sql .= " AND (invoice_no LIKE '%$searchValue%' OR status LIKE '%$searchValue%') ";
     }
 
     // ✅ Total records (without search)
-    $totalQuery = $db->query("SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' ", ["select_query" => true]);
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' AND proforma = 0 ", ["select_query" => true]);
     $totalRecords = $totalQuery[0]['total'];
 
     // ✅ Filtered records
     $filteredQuery = $db->query(
-        "SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' " .
+        "SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' AND proforma = 0 " .
+            (!empty($searchValue) ? " AND (invoice_no LIKE '%$searchValue%' OR status LIKE '%$searchValue%')" : ""),
+        ["select_query" => true]
+    );
+    $filteredRecords = $filteredQuery[0]['total'];
+
+    // ✅ Pagination
+    $sql .= " ORDER BY id DESC LIMIT $start, $length";
+    $invoiceData = $db->query($sql, ["select_query" => true]);
+
+    $data = [];
+    foreach ($invoiceData as $row) {
+        $data[] = $row;
+    }
+
+    $response = [
+        "draw" => $draw,
+        "recordsTotal" => $totalRecords,
+        "recordsFiltered" => $filteredRecords,
+        "data" => $data
+    ];
+
+    echo json_encode($response);
+    exit;
+}
+
+// Fetch Proforma Invoice Data
+if (isset($_GET['fetchPorformaInvoiceData'])) {
+
+    $columns = ['invoice_no', 'invoice_date', 'due_date', 'total_amount', 'paid_amount', 'due_amount', 'status', 'pdf_file'];
+
+    $draw = intval($_POST['draw']);
+    $start = intval($_POST['start']);
+    $length = intval($_POST['length']);
+    $searchValue = $_POST['search']['value'];
+    $customer_id = intval($_POST['customer_id']); // 👈 receive customer_id
+
+    // ✅ Base query with customer condition
+    $sql = "SELECT * FROM invoices WHERE customer_id = '$customer_id' AND proforma = 1";
+
+    if (!empty($searchValue)) {
+        $sql .= " AND (invoice_no LIKE '%$searchValue%' OR status LIKE '%$searchValue%') ";
+    }
+
+    // ✅ Total records (without search)
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' AND proforma = 1 ", ["select_query" => true]);
+    $totalRecords = $totalQuery[0]['total'];
+
+    // ✅ Filtered records
+    $filteredQuery = $db->query(
+        "SELECT COUNT(*) as total FROM invoices WHERE customer_id = '$customer_id' AND proforma = 1 " .
             (!empty($searchValue) ? " AND (invoice_no LIKE '%$searchValue%' OR status LIKE '%$searchValue%')" : ""),
         ["select_query" => true]
     );
@@ -452,7 +522,7 @@ if (isset($_GET['fetchCustomers'])) {
     $agency_id = LOGGED_IN_USER['agency_id'];
 
     // Base query
-    $sql = "SELECT * FROM customers WHERE company_id = '$company_id' AND agency_id = '$agency_id' ";
+    $sql = "SELECT * FROM users WHERE company_id = '$company_id' AND agency_id = '$agency_id' AND type = 'customer'";
 
     if (!empty($searchValue)) {
         $sql .= " AND (fname LIKE '%$searchValue%' 
@@ -463,12 +533,12 @@ if (isset($_GET['fetchCustomers'])) {
     }
 
     // Total records
-    $totalQuery = $db->query("SELECT COUNT(*) as total FROM customers WHERE company_id = '$company_id' AND agency_id = '$agency_id' ", ["select_query" => true]);
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM users WHERE company_id = '$company_id' AND agency_id = '$agency_id' AND type = 'customer' ", ["select_query" => true]);
     $totalRecords = $totalQuery[0]['total'];
 
     // Filtered records
     $filteredQuery = $db->query(
-        "SELECT COUNT(*) as total FROM customers WHERE company_id = '$company_id' AND agency_id = '$agency_id' " .
+        "SELECT COUNT(*) as total FROM users WHERE company_id = '$company_id' AND agency_id = '$agency_id' AND type = 'customer' " .
             (!empty($searchValue) ? " AND (fname LIKE '%$searchValue%' 
             OR lname LIKE '%$searchValue%' 
             OR email LIKE '%$searchValue%' 
@@ -507,4 +577,93 @@ if (isset($_GET['fetchCustomers'])) {
 
     echo json_encode($response);
     exit;
+}
+
+
+
+// Add Customer
+if (isset($_POST['createCustomer'])) {
+    $id = isset($_POST['id']) ? intval($_POST['id']) : null;
+
+    // ✅ Collect form data
+    $data = [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id"  => LOGGED_IN_USER['agency_id'],
+        "user_id"    => LOGGED_IN_USER_ID,
+        "title"      => arr_val($_POST, 'title'),
+        "gender"     => arr_val($_POST, 'gender'),
+        "fname"      => arr_val($_POST, 'fname'),
+        "lname"      => arr_val($_POST, 'lname'),
+        "email"      => arr_val($_POST, 'email'),
+        "contact"    => arr_val($_POST, 'contact'),
+        "address"    => arr_val($_POST, 'address'),
+        "postcode"   => arr_val($_POST, 'postcode'),
+        "city"       => arr_val($_POST, 'city'),
+        "type" => "customer",
+        "verify_status" => 1,
+        "image" => "avatar.png"
+    ];
+
+    // ✅ Prevent duplicate email (for new records)
+    if (!$id && !empty($data['email'])) {
+        $exists = $db->select_one('users', 'id', [
+            'email' => arr_val($_POST, 'email'),
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id"  => LOGGED_IN_USER['agency_id']
+        ]);
+
+        if ($exists) {
+            returnError("Email already exists. Please use another one.");
+        }
+    }
+
+    // ✅ Insert or Update
+    if ($id) {
+        $save = $db->update("users", $data, [
+            "id" => $id,
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id" => LOGGED_IN_USER['agency_id']
+        ]);
+        $message = "Customer updated successfully";
+    } else {
+        // Generate a unique token
+        $token = bin2hex(random_bytes(16)); // 32-character token
+        $data['verify_token'] = $token;
+
+        $save = $db->insert("users", $data);
+
+        if ($save) {
+            // Send email to customer to set password
+            $_tc_email->send([
+                'template' => 'set_password', // create this email template
+                'to' => $data['email'],
+                'to_name' => $data['fname'] . " " . $data['lname'],
+                'subject' => 'Set Your Account Password',
+                'vars' => [
+                    'name' => $data['fname'],
+                    'set_password_link' => SITE_URL . "/set-password.php?token=" . $token
+                ]
+            ]);
+        }
+        $message = "Customer added successfully";
+    }
+
+    // ✅ Response
+    if ($save) {
+        $customers = $db->select("users", "*", [
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id"  => LOGGED_IN_USER['agency_id'],
+            "is_active" => 1,
+            "type" => "customer"
+        ]);
+
+        $token = bin2hex(random_bytes(16)); // 32-character token
+
+        returnSuccess($message, [
+            "redirect" => "view-customer",
+            "customer" => $customers
+        ]);
+    } else {
+        returnError("Error saving customer. Please try again.");
+    }
 }

@@ -16,10 +16,11 @@ $CSS_FILES_ = [
 
 $get_id = $_GET['id'];
 
-$customer = $db->select_one("customers", "*", [
+$customer = $db->select_one("users", "*", [
     "id" => $get_id,
     "company_id" => LOGGED_IN_USER['company_id'],
-    "agency_id" => LOGGED_IN_USER['agency_id']
+    "agency_id" => LOGGED_IN_USER['agency_id'],
+    "type" => "customer"
 ]);
 
 $invoice = $db->select("invoices", "*", [
@@ -78,6 +79,20 @@ $cars = $db->select("customer_car_history", "*", [
 
 <head>
     <?php require_once('./includes/head.php'); ?>
+    <style>
+        <?php
+        if (LOGGED_IN_USER['type']  === "customer") { ?>.sidebar,
+        .navbar {
+            display: none;
+        }
+
+        .all-content {
+            margin: 0 !important;
+        }
+
+        <?php   }
+        ?>
+    </style>
 </head>
 
 <body>
@@ -86,7 +101,9 @@ $cars = $db->select("customer_car_history", "*", [
         <div class="container">
             <?php
             // Header
-            require_once "./components/customer-profile/header.php";
+            if (LOGGED_IN_USER['type'] === "agency") {
+                require_once "./components/customer-profile/header.php";
+            }
             // Profile info
             require_once "./components/customer-profile/profile-info.php";
             // tabs
@@ -95,6 +112,8 @@ $cars = $db->select("customer_car_history", "*", [
             require_once "./components/customer-profile/vehicles.php";
             // Invoice
             require_once "./components/customer-profile/invoices.php";
+            // Proforma Invoice
+            require_once "./components/customer-profile/proforma-invoices.php";
             // Notes
             require_once "./components/customer-profile/notes.php";
             ?>
@@ -152,6 +171,7 @@ $cars = $db->select("customer_car_history", "*", [
     <script>
         const _GET = <?= json_encode($_GET); ?>;
         const SITE_URL = '<?= SITE_URL ?>';
+        const LOGIN_TYPE = '<?= LOGGED_IN_USER['type'] ?>';
     </script>
     <?php require_once('./includes/js.php'); ?>
 </body>

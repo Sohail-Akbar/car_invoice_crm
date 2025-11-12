@@ -3,7 +3,7 @@ require_once('includes/db.php');
 $page_name = 'Dashboard';
 
 $JS_FILES_ = [];
-
+if (LOGGED_IN_USER['type'] === "customer") redirectTo("customer-profile?id=" . LOGGED_IN_USER_ID);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,27 +59,29 @@ $JS_FILES_ = [];
 <body>
     <?php require_once('./includes/header.php'); ?>
     <div class="all-content">
-        <h2 style="text-align:center; margin-bottom:10px; color:#333;">Welcome to Your Dashboard</h2>
-        <p style="text-align:center; color:#666; margin-bottom:40px;">
-            Manage your invoices, payments, and clients easily from here.
-        </p>
+        <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+            <h2 style="text-align:center; margin-bottom:10px; color:#333;">Welcome to Your Dashboard</h2>
+            <p style="text-align:center; color:#666; margin-bottom:40px;">
+                Manage your invoices, payments, and clients easily from here.
+            </p>
 
-        <div class="tabs-container">
-            <div class="tab-card" onclick="location.href='invoice'">
-                <i class="fas fa-plus-circle"></i>
-                <h4>Create Invoice</h4>
-            </div>
+            <div class="tabs-container">
+                <div class="tab-card" onclick="location.href='invoice'">
+                    <i class="fas fa-plus-circle"></i>
+                    <h4>Create Invoice</h4>
+                </div>
 
-            <div class="tab-card" onclick="location.href='invoice-search'">
-                <i class="fas fa-file-invoice"></i>
-                <h4>View Invoices</h4>
-            </div>
+                <div class="tab-card" onclick="location.href='invoice-search'">
+                    <i class="fas fa-file-invoice"></i>
+                    <h4>View Invoices</h4>
+                </div>
 
-            <div class="tab-card" onclick="location.href='view-customer'">
-                <i class="fas fa-search"></i>
-                <h4>Search Clients</h4>
+                <div class="tab-card" onclick="location.href='view-customer'">
+                    <i class="fas fa-search"></i>
+                    <h4>Search Clients</h4>
+                </div>
             </div>
-        </div>
+        <?php } ?>
     </div>
 
     <?php require_once('./includes/js.php'); ?>

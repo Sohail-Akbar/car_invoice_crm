@@ -194,6 +194,7 @@ $JS_FILES_ = [];
             $('#resetBtn').on('click', function() {
                 $('#searchForm')[0].reset();
                 $('#resultsSection').hide();
+                location.href = "";
             });
 
             // Search invoices function

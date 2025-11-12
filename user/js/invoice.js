@@ -18,25 +18,20 @@ function calculateTotals() {
     $("#due_amount").text(due.toFixed(2));
 }
 
-
-$(document).ready(function () {
-
-
-
-    // Function to generate service options HTML from SERVICES array
-    function getServiceOptions() {
-        let options = `<option value="">-- Select Service --</option>`;
-        SERVICES.forEach(service => {
-            options += `<option value="${service.id}" data-amount="${service.amount}">
-                            ${service.text} (${service.amount})
+// Function to generate service options HTML from SERVICES array
+function getServiceOptions() {
+    let options = `<option value="">-- Select Service --</option>`;
+    SERVICES.forEach(service => {
+        options += `<option value="${service.id}" data-amount="${service.amount}">
+                            ${service.text}
                         </option>`;
-        });
-        return options;
-    }
+    });
+    return options;
+}
 
-    // Add a new row dynamically
-    function addInvoiceRow() {
-        const newRow = `
+// Add a new row dynamically
+function addInvoiceRow() {
+    const newRow = `
         <tr>
             <td>
                 <select class="form-control service_id select2-list" data-type="service" name="services_id[]">
@@ -46,37 +41,54 @@ $(document).ready(function () {
             <td><input type="number" class="form-control service_amount" step="any" name="service_amount[]" value="0"></td>
             <td><button type="button" class="btn btn-danger btn-sm remove-row">&times;</button></td>
         </tr>`;
-        $("#invoice_table tbody").append(newRow);
-        select2();
-    }
+    $("#invoice_table tbody").append(newRow);
+    select2();
+}
 
-    // Initialize first row
-    addInvoiceRow();
-
-    // Event: Service change updates amount
-    $(document).on("change", ".service_id", function () {
-        const amount = parseFloat($(this).find("option:selected").data("amount")) || 0;
-        $(this).closest("tr").find(".service_amount").val(amount);
-        calculateTotals();
-    });
-
-    // Event: Tax or Paid input changes
-    $(document).on("input", "#tax_rate, #paid_amount", calculateTotals);
-
-    // Event: Add new row button
-    $("#add_row").click(function () {
-        addInvoiceRow();
-    });
-
-    // Event: Remove row
-    $(document).on("click", ".remove-row", function () {
-        $(this).closest("tr").remove();
-        calculateTotals();
-    });
-
-    // Initial calculation
+// Event: Service change updates amount
+$(document).on("change", ".service_id", function () {
+    const amount = parseFloat($(this).find("option:selected").data("amount")) || 0;
+    $(this).closest("tr").find(".service_amount").val(amount);
     calculateTotals();
 });
+// Event: Tax or Paid input changes
+$(document).on("input", "#tax_rate, #paid_amount", calculateTotals);
+
+// Event: Add new row button
+$("#add_row").click(function () {
+    addInvoiceRow();
+});
+
+// Event: Remove row
+$(document).on("click", ".remove-row", function () {
+    $(this).closest("tr").remove();
+    calculateTotals();
+});
+
+$(document).ready(function () {
+    // Initialize Select2 for all selects
+    select2();
+
+    // ✅ Load invoice items automatically if available
+    if (typeof INVOICE_ITEMS !== "undefined" && INVOICE_ITEMS.length > 0) {
+        INVOICE_ITEMS.forEach(item => {
+            addInvoiceRow();
+
+            const $lastRow = $("#invoice_table tbody tr:last");
+
+            const $select = $lastRow.find(".service_id");
+
+            $select.find(`option[value="${item.id}"]`).prop("selected", true).trigger("change");
+        });
+    } else {
+        // Add one empty row if no invoice items exist
+        addInvoiceRow();
+    }
+
+    // Initial total calculation
+    calculateTotals();
+});
+
 
 
 // Customer's Mot History
@@ -91,8 +103,8 @@ $(document).on("change", "#customerSelectBox", function () {
             success: function (data) {
                 console.log(data);
 
+                let motHistorySelect = $("#motHistorySelectBox");
                 if (data.status === "success") {
-                    let motHistorySelect = $("#motHistorySelectBox");
                     motHistorySelect.empty();
                     motHistorySelect.append('<option value="">-- Select MOT History --</option>');
                     $.each(data.data, function (index, item) {
@@ -103,6 +115,7 @@ $(document).on("change", "#customerSelectBox", function () {
                     $("#motHistoryDiv").removeClass("d-none");
                 } else {
                     sAlert(data.data, data.status);
+                    motHistorySelect.empty();
                 }
             }
         });
@@ -112,49 +125,44 @@ $(document).on("change", "#customerSelectBox", function () {
 });
 
 
-$(document).ready(function () {
+// When user selects or adds a new option
+// Handle new service creation via Select2
+$(document).on('select2:select', '.select2-list', function (e) {
+    const selectedData = e.params.data;
+    const $select = $(this);
+    const type = $select.data('type');
 
-    // When user selects or adds a new option
-    $('.select2-list').on('select2:select', function (e) {
-        const data = e.params.data;
-        const $select = $(this);
-        const type = $select.data('type'); // custom data-type attribute if needed
-
-        // Only trigger AJAX for new tags (not existing ones)
-        if (data.id === data.text) {
-            $.ajax({
-                url: 'controllers/services', // your PHP file name
-                type: 'POST',
-                data: {
-                    type: type,
-                    value: data.text,
-                    addNewServices: true
-                },
-                dataType: "json",
-                success: function (res) {
-                    try {
-                        console.log(res);
-                        if (res.status === 'success') {
-                            let data = res.data;
-                            const newOption = new Option(data.text, data.id, true, true);
-                            $select.append(newOption).trigger('change');
-                            sAlert('Service added successfully');
-                            SERVICES = data.services;
-                        } else {
-                            sAlert(res.message || 'Duplicate or error');
-                        }
-                    } catch (err) {
-                        console.log('Error parsing response:', res);
-                    }
+    // Trigger AJAX only for new tags
+    if (selectedData.id === selectedData.text) {
+        $.ajax({
+            url: 'controllers/services',
+            type: 'POST',
+            data: {
+                type: type,
+                value: selectedData.text,
+                addNewServices: true
+            },
+            dataType: "json",
+            success: function (res) {
+                if (res.status === 'success') {
+                    let serviceData = res.data;
+                    const newOption = new Option(serviceData.text, serviceData.id, true, true);
+                    $select.append(newOption).trigger('change');
+                    sAlert('Service added successfully', "success");
+                    SERVICES = serviceData.services;
+                    console.log(SERVICES);
+                } else {
+                    sAlert(res.message || 'Duplicate or error', "error");
                 }
-            });
-        }
-    });
-
-
+            },
+            error: function (xhr, status, err) {
+                console.log("Error:", err);
+            }
+        });
+    }
 });
 
-// Service Amount Update
+
 // Service Amount Update on focus out (blur)
 $(document).on("focusout", ".service_amount", function () {
     let $input = $(this);
