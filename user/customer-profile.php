@@ -47,24 +47,27 @@ $total_invoice = count($invoice);
 
 
 $agency_id = LOGGED_IN_USER['agency_id'];
-$assigned_staff = $db->query("SELECT 
-    `customer_staff`.`id`,
-    `customer_staff`.`staff_id`,
-    `customer_staff`.`assignment_date`,
-    `staffs`.`fname`,
-    `staffs`.`lname`,
-    `staffs`.`email`,
-    `staffs`.`contact`,
-    `staffs`.`title`
-FROM 
-    `customer_staff`
-INNER JOIN 
-    `staffs` ON `customer_staff`.`staff_id` = `staffs`.`id`
-WHERE 
-    `customer_staff`.`customer_id` = $get_id
-    AND `customer_staff`.`company_id` = $get_id
-    AND `customer_staff`.`agency_id` = $agency_id
-    AND `customer_staff`.`is_active` = 1", ["select_query" => true]);
+$assigned_staff = $db->query("
+    SELECT 
+        cs.id,
+        cs.staff_id,
+        cs.assignment_date,
+        u.fname,
+        u.lname,
+        u.email,
+        u.contact,
+        u.title
+    FROM customer_staff cs
+    INNER JOIN users u ON cs.staff_id = u.id
+    WHERE cs.customer_id = $get_id
+      AND cs.company_id = " . LOGGED_IN_USER['company_id'] . "
+      AND cs.agency_id = $agency_id
+      AND cs.is_active = 1
+      AND u.type = 'staff'
+", [
+    "select_query" => true,
+]);
+
 
 // Customer Cars
 $cars = $db->select("customer_car_history", "*", [

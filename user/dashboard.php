@@ -4,6 +4,7 @@ $page_name = 'Dashboard';
 
 $JS_FILES_ = [];
 if (LOGGED_IN_USER['type'] === "customer") redirectTo("customer-profile?id=" . LOGGED_IN_USER_ID);
+if (LOGGED_IN_USER['type'] === "staff") redirectTo("assigned-vehicles");
 ?>
 <!DOCTYPE html>
 <html lang="en">

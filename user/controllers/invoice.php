@@ -128,7 +128,6 @@ if (isset($_POST['saveInvoice'])) {
             $_tc_email->send([
                 'template' => 'invoice',
                 'to' => $invoice_data['client_email'],
-                // 'to' => "sohailakbar3324@gmail.com",
                 'to_name' => $invoice_data['client_name'],
                 'vars' => [
                     'invoice_type' => $invoiceType,

@@ -11,10 +11,11 @@ $roles_data = $db->select("roles", "*", [
     "agency_id" => LOGGED_IN_USER['agency_id']
 ]);
 
-$staff_data = $db->select_one("staffs", "*", [
+$staff_data = $db->select_one("users", "*", [
     "id" => $id,
     "company_id" => LOGGED_IN_USER['company_id'],
-    "agency_id" => LOGGED_IN_USER['agency_id']
+    "agency_id" => LOGGED_IN_USER['agency_id'],
+    "type" => "staff"
 ]);
 ?>
 <!DOCTYPE html>

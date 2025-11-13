@@ -40,10 +40,10 @@ if (isset($_POST['fetchCarInfo'])) {
     }
 
     // Get all available staff for assignment
-    $all_staff = $db->select("staffs", "*", [
+    $all_staff = $db->select("users", "*", [
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
-        "is_active" => 1
+        "type" => "staff",
     ]);
 
     // Group invoices
@@ -87,9 +87,9 @@ if (isset($_POST['fetchCarInfo'])) {
 
         // Fetch assigned staff for this invoice
         $assigned_staff = $db->query("
-            SELECT cs.id AS cs_id, st.title, st.fname, st.lname, st.email
+            SELECT cs.id AS cs_id, cs.is_active, st.title, st.fname, st.lname, st.email,st.type
             FROM customer_staff cs
-            INNER JOIN staffs st ON cs.staff_id = st.id
+            INNER JOIN users st ON cs.staff_id = st.id AND st.type = 'staff'
             WHERE cs.customer_id = '$customer_id' AND cs.invoice_id = '$invoice_id' AND cs.is_active = 1
         ", ["select_query" => true]);
         $assigned_staff_ids = [];

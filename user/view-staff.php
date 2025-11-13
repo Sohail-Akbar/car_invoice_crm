@@ -9,9 +9,10 @@ $CSS_FILES_ = [
     _DIR_ .  "css/jquery.dataTables.min.css"
 ];
 
-$staffs_data = $db->select("staffs", "*", [
+$staffs_data = $db->select("users", "*", [
     "company_id" => LOGGED_IN_USER['company_id'],
-    "agency_id" => LOGGED_IN_USER['agency_id']
+    "agency_id" => LOGGED_IN_USER['agency_id'],
+    "type" => "staff"
 ], ["order_by" => "id desc"]);
 if (!$staffs_data) $staffs_data = [];
 ?>

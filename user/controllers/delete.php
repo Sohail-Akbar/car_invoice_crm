@@ -4,7 +4,7 @@ require_once(DIR . 'includes/db.php');
 require_once _DIR_ . "includes/Classes/TCDelete.php";
 
 $_delete->set([
-    "staff" => "staffs",
+    "staff" => "users",
     "customer" => "users",
     "customer_car_history" => "customer_car_history",
     "customer_staff" => "customer_staff",

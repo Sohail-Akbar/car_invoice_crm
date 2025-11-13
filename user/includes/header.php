@@ -19,13 +19,13 @@ $company = $db->select_one("companies", "*", [
         </div>
     </div>
     <ul class="nav">
-        <li class="nav-item">
-            <a href="dashboard" class="nav-link">
-                <i class="fas fa-th-large"></i>
-                <span class="text">Dashboard</span>
-            </a>
-        </li>
         <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+            <li class="nav-item">
+                <a href="dashboard" class="nav-link">
+                    <i class="fas fa-th-large"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
             <li class="nav-item with-sub-menu">
                 <a href="#" class="nav-link">
                     <span>
@@ -78,6 +78,20 @@ $company = $db->select_one("companies", "*", [
                 <a href="invoice-search" class="nav-link">
                     <i class="fa fa-search" aria-hidden="true"></i>
                     <span class="text">Invoice Search</span>
+                </a>
+            </li>
+        <?php } ?>
+        <?php if (LOGGED_IN_USER['type'] === "staff") { ?>
+            <li class="nav-item">
+                <a href="assigned-vehicles" class="nav-link">
+                    <i class="fas fa-file-invoice"></i>
+                    <span class="text">Assigned Vehicles - (<?= isset($assigned_tasks) ? count($assigned_tasks) : "0" ?>)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="completed-tasks" class="nav-link">
+                    <i class="fas fa-file-invoice"></i>
+                    <span class="text">Completed Tasks</span>
                 </a>
             </li>
         <?php } ?>
