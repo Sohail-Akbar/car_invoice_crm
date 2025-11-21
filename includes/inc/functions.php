@@ -502,3 +502,121 @@ function generateInvoiceNo()
     $randomNumber = mt_rand(10000, 99999);
     return "INV-" . $randomNumber;
 }
+
+function sms_templates($overrides = [])
+{
+    $templates = [
+        'service_reminder'   => 'Hi {name}, your {vehicle} ({regNumber}) service is due. Please visit AutoCare Garage for service.',
+        'service_completed'  => 'Hello {name}, your {vehicle} service is completed and ready for pickup. Thank you for choosing AutoCare Garage!',
+        'service_delay'      => 'Dear {name}, your {vehicle} service is delayed due to {reason}. New estimated completion: {eta}. We apologize for the inconvenience.',
+        'pickup_reminder'    => 'Hi {name}, your {vehicle} is ready for pickup at AutoCare Garage. We close at 7:00 PM today.',
+        'regular_reminder'   => 'Reminder: Your vehicle {vehicle} is due for service at AutoCare Garage. Please schedule your appointment.'
+    ];
+
+    // Allow runtime overrides or additions
+    return array_merge($templates, $overrides);
+}
+
+/**
+ * Render an SMS template by replacing placeholders with provided data.
+ * Accepts keys with dashes or underscores (e.g. "service-reminder" or "service_reminder").
+ *
+ * Example:
+ *   echo render_sms_template('service_reminder', [
+ *       'name' => 'John',
+ *       'vehicle' => 'Honda Civic',
+ *       'regNumber' => 'ABC-123'
+ *   ]);
+ */
+function render_sms_template($key, $data = [], $default = '')
+{
+    $key = str_replace('-', '_', $key);
+    $templates = sms_templates();
+    if (!isset($templates[$key])) return $default;
+
+    $msg = $templates[$key];
+    foreach ($data as $k => $v) {
+        $msg = str_replace(['{' . $k . '}', '%' . $k . '%'], $v, $msg);
+    }
+
+    return $msg;
+}
+
+
+function sendSMS($company_name, $customer_no, $message)
+{
+    // return true;
+    if (empty($company_name) && empty(get_api_key())) return false;
+
+    // Make sure 'from' is valid: uppercase letters + max 11 chars
+    $sender = preg_replace('/[^A-Z0-9 ]/', '', strtoupper($company_name));
+    $sender = substr($sender, 0, 11); // max 11 chars
+
+    // Format customer number
+    $number = preg_replace('/\D+/', '', $customer_no);
+    if (substr($number, 0, 2) === '44') {
+        $number = '+' . $number;
+    } elseif (substr($number, 0, 1) === '0') {
+        $number = '+44' . substr($number, 1);
+    }
+
+    $url = SMS_API_URL;
+    $data = [
+        "message_body" => $message,
+        "from" => $sender,
+        "to" => [
+            [
+                "correlation_id" => "corr_id_1",
+                "phone" => [$number]
+            ]
+        ]
+    ];
+
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json",
+            "X-AUTH-KEY: " . get_api_key()
+        ],
+        CURLOPT_POSTFIELDS => json_encode($data),
+    ]);
+
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        echo "cURL Error: " . curl_error($ch);
+        curl_close($ch);
+        return false;
+    }
+
+    curl_close($ch);
+    return json_decode($response, true); // returns API response
+}
+
+
+function get_api_key()
+{
+    global $db;
+
+    // Encryption key - ideally from .env
+    $secretKey = "b8f9e1c2d3a4f567b1c2d3e4f5a6b7c8";
+    $iv = "1234567890123456"; // 16 chars
+
+    // Fetch encrypted API key from DB
+    $agency = $db->select_one("agencies", "sms_api_key", [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "id" => LOGGED_IN_USER['agency_id']
+    ]);
+    if (!$agency || empty($agency['sms_api_key'])) {
+        return false; // API key saved nahi hai
+    }
+
+    // Decrypt API key
+    $apiKey = openssl_decrypt($agency['sms_api_key'], "AES-256-CBC", $secretKey, 0, $iv);
+
+    if (!$apiKey) return false; // Decryption failed
+
+    return $apiKey; // Return original API key for usage
+}

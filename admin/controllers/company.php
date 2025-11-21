@@ -8,6 +8,10 @@ if (isset($_POST['addCompany'])) {
     // Get form data
     $company_name = arr_val($_POST, "company_name", "");
     $company_address = arr_val($_POST, "company_address", "");
+    $company_lat = arr_val($_POST, "company_lat", "");
+    $company_lng = arr_val($_POST, "company_lng", "");
+    $company_city = arr_val($_POST, "company_city", "");
+    $company_postcode = arr_val($_POST, "company_postcode", "");
     $company_contact = arr_val($_POST, "company_contact", "");
     $company_email = arr_val($_POST, "company_email", "");
     $title = arr_val($_POST, "title", "");
@@ -25,6 +29,8 @@ if (isset($_POST['addCompany'])) {
 
     $user_id = arr_val($_POST, "user_id", null);
     $company_id = arr_val($_POST, "company_id", null);
+
+    if (strlen($password) !== 6 && !$company_id) returnError("Password must be exactly 6 digits!");
 
     // File upload
     $file = $_fn->upload_file('company_logo', [
@@ -45,6 +51,10 @@ if (isset($_POST['addCompany'])) {
         "company_address" =>  $company_address,
         "company_contact" =>  $company_contact,
         "company_email" =>  $company_email,
+        "company_lat" =>  $company_lat,
+        "company_lng" =>  $company_lng,
+        "company_city" =>  $company_city,
+        "company_postcode" =>  $company_postcode,
     ];
 
     if ($company_logo !== "") {
@@ -87,6 +97,9 @@ if (isset($_POST['addCompany'])) {
         $user_data["password"] =  password_hash($password, PASSWORD_BCRYPT);
     }
 
+    if ($company_logo !== "") {
+        $user_data["image"] =  $company_logo;
+    }
     // User insert/update
     if ($user_id) {
         $db->update("users", $user_data, ["id" => $user_id]);
@@ -94,11 +107,7 @@ if (isset($_POST['addCompany'])) {
         $db->insert("users", $user_data);
     }
 
-    if ($user_id) {
-        returnSuccess("Data saved successfully", [
-            "redirect" => "view-company"
-        ]);
-    } else {
-        returnSuccess("Data saved successfully");
-    }
+    returnSuccess("Data saved successfully", [
+        "redirect" => "view-company"
+    ]);
 }

@@ -2,21 +2,47 @@
 function calculateTotals() {
     let subtotal = 0;
 
-    $(".service_amount").each(function () {
-        subtotal += parseFloat($(this).val()) || 0;
+    $("#invoice_table tbody tr").each(function () {
+        let amount = parseFloat($(this).find(".service_amount").val()) || 0;
+        let qty = parseInt($(this).find(".service_quantity").val()) || 1;
+        subtotal += amount * qty;
     });
 
+    // TAX
     const taxRate = parseFloat($("#tax_rate").val()) || 0;
     const tax = subtotal * (taxRate / 100);
-    const total = subtotal + tax;
+
+    // BRANCH DISCOUNT %
+    let branchDiscountPercentage = parseFloat($("#discountPercentage").val()) || 0;
+
+    // CUSTOM DISCOUNT AMOUNT
+    let customDiscountAmount = parseFloat($("#discountAmount").val()) || 0;
+
+    // BRANCH % discount amount
+    let branchDiscountAmount = (subtotal * branchDiscountPercentage) / 100;
+
+    // TOTAL DISCOUNT = branch % + user custom discount
+    let totalDiscount = branchDiscountAmount + customDiscountAmount;
+
+    // FINAL TOTAL
+    const totalBeforeDiscount = subtotal + tax;
+    const total = totalBeforeDiscount - totalDiscount;
+
+    // PAID / DUE
     const paid = parseFloat($("#paid_amount").val()) || 0;
     const due = total - paid;
 
+    // OUTPUT
     $("#subtotal").text(subtotal.toFixed(2));
     $("#tax_amount").text(tax.toFixed(2));
+    $("#discount_show").text(totalDiscount.toFixed(2));
     $("#total_amount").text(total.toFixed(2));
     $("#due_amount").text(due.toFixed(2));
 }
+
+
+
+$(document).on("input", ".service_quantity, #discountAmount", calculateTotals);
 
 // Function to generate service options HTML from SERVICES array
 function getServiceOptions() {
@@ -38,12 +64,14 @@ function addInvoiceRow() {
                     ${getServiceOptions()}
                 </select>
             </td>
+            <td><input type="number" class="form-control service_quantity" step="1" min="1" name="service_quantity[]" value="1"></td>
             <td><input type="number" class="form-control service_amount" step="any" name="service_amount[]" value="0"></td>
             <td><button type="button" class="btn btn-danger btn-sm remove-row">&times;</button></td>
         </tr>`;
     $("#invoice_table tbody").append(newRow);
     select2();
 }
+
 
 // Event: Service change updates amount
 $(document).on("change", ".service_id", function () {
@@ -66,6 +94,10 @@ $(document).on("click", ".remove-row", function () {
 });
 
 $(document).ready(function () {
+    // if customer id and vehicle id is existing 
+    if (_GET.customer_id) {
+        $("#customerSelectBox").val(_GET.customer_id).trigger("change");
+    }
     // Initialize Select2 for all selects
     select2();
 
@@ -79,6 +111,8 @@ $(document).ready(function () {
             const $select = $lastRow.find(".service_id");
 
             $select.find(`option[value="${item.id}"]`).prop("selected", true).trigger("change");
+            // Set the quantity for the current row only
+            $lastRow.find(".service_quantity").val(item.quantity);
         });
     } else {
         // Add one empty row if no invoice items exist
@@ -91,7 +125,7 @@ $(document).ready(function () {
 
 
 
-// Customer's Mot History
+// Customer's vehicle History
 $(document).on("change", "#customerSelectBox", function () {
     let customerId = $(this).val();
     if (customerId) {
@@ -106,13 +140,14 @@ $(document).on("change", "#customerSelectBox", function () {
                 let motHistorySelect = $("#motHistorySelectBox");
                 if (data.status === "success") {
                     motHistorySelect.empty();
-                    motHistorySelect.append('<option value="">-- Select MOT History --</option>');
+                    motHistorySelect.append('<option value="">-- Select Vehicle History --</option>');
                     $.each(data.data, function (index, item) {
-                        console.log(item);
-
                         motHistorySelect.append('<option value="' + item.id + '">' + item.reg_number + '</option>');
                     });
                     $("#motHistoryDiv").removeClass("d-none");
+                    if (_GET.vehicle_id) {
+                        $("#motHistorySelectBox").val(_GET.vehicle_id).trigger("change");
+                    }
                 } else {
                     sAlert(data.data, data.status);
                     motHistorySelect.empty();
@@ -120,7 +155,7 @@ $(document).on("change", "#customerSelectBox", function () {
             }
         });
     } else {
-        sAlert("Please select a customer to fetch MOT history.", "warning");
+        sAlert("Please select a customer to fetch vehicle history.", "warning");
     }
 });
 

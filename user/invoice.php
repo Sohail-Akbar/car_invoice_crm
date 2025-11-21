@@ -7,7 +7,8 @@ $JS_FILES_ = [
     _DIR_ . "js/select2.min.js"
 ];
 $CSS_FILES_ = [
-    _DIR_ . "css/select2.min.css"
+    _DIR_ . "css/select2.min.css",
+    "invoice.css"
 ];
 
 $get_invoice_id = _get_param("id", null);
@@ -40,14 +41,14 @@ $invoiceItems = [];
 $invoiceData = [];
 if ($get_invoice_id) {
     // Services Item
-    $invoiceItems = $db->query("SELECT s.id, s.text, s.amount 
+    $invoiceItems = $db->query("SELECT s.id, s.text, s.amount, i.quantity
     FROM invoice_items i
     INNER JOIN services s ON i.services_id = s.id
     WHERE i.invoice_id = '$get_invoice_id'", ["select_query" => true]);
     if (!$invoiceItems) $invoiceItems = [];
 
     // $invoiceData
-    $invoiceData = $db->select_one("invoices", "id,notes", [
+    $invoiceData = $db->select_one("invoices", "id,notes,discount,wright_off", [
         "id" => $get_invoice_id,
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
@@ -61,93 +62,6 @@ if ($get_invoice_id) {
 
 <head>
     <?php require_once('./includes/head.php'); ?>
-    <style>
-        /* Make Select2 look like Bootstrap .form-control */
-        .select2-container--default .select2-selection--single {
-            height: calc(2.25rem + 2px);
-            padding: .375rem .75rem;
-            border: 1px solid #ced4da;
-            border-radius: .375rem;
-            background-color: #fff;
-            box-shadow: none;
-            line-height: 1.2;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #212529;
-            margin-top: -1px;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: calc(2.25rem + 2px);
-            right: .5rem;
-            top: 0;
-            width: 2.25rem;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow b {
-            border-color: #212529 transparent transparent transparent;
-        }
-
-        .select2-container--default .select2-selection--single:focus,
-        .select2-container--default .select2-selection--single.select2-selection--focus {
-            outline: 0;
-            border-color: #86b7fe;
-            box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
-        }
-
-        .select2-container--default .select2-selection--multiple {
-            min-height: calc(2.25rem + 2px);
-            padding: .25rem .5rem;
-            border: 1px solid #ced4da;
-            border-radius: .375rem;
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            background: #0d6efd;
-            color: #fff;
-            border: none;
-            padding: .25rem .5rem;
-            margin-top: .2rem;
-            margin-right: .25rem;
-            border-radius: .375rem;
-            font-size: .85em;
-        }
-
-        .select2-container .select2-dropdown {
-            border-radius: .375rem;
-            border: 1px solid rgba(0, 0, 0, .15);
-            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
-        }
-
-        .select2-container {
-            width: 100% !important;
-        }
-
-        .select2-container--default .select2-search--dropdown .select2-search__field {
-            border: 1px solid #ced4da;
-            border-radius: .25rem;
-            padding: .375rem .75rem;
-            height: auto;
-        }
-
-        .select2-container--default.select2-container--disabled .select2-selection--single {
-            background-color: #e9ecef;
-            opacity: 1;
-        }
-
-        .select2-container--default.select2-container--small .select2-selection--single {
-            height: calc(1.5rem + 2px);
-            padding: .125rem .5rem;
-            border-radius: .25rem;
-        }
-
-        .select2-container--default.select2-container--large .select2-selection--single {
-            height: calc(2.75rem + 2px);
-            padding: .5rem 1rem;
-            border-radius: .5rem;
-        }
-    </style>
 </head>
 
 <body>
@@ -190,7 +104,7 @@ if ($get_invoice_id) {
                                 </select>
                             </div>
                             <div class="col-md-4 d-none" id="motHistoryDiv">
-                                <label>Mot History (Reg No.)</label>
+                                <label>Vehicle (Reg No.)</label>
                                 <select name="mot_id" class="form-control" id="motHistorySelectBox">
                                 </select>
                             </div>
@@ -203,10 +117,26 @@ if ($get_invoice_id) {
                                 <option value="partial">Partial</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
-                            <label>VAT%</label>
-                            <input type="number" step="0.01" name="tax_rate" id="tax_rate" class="form-control"
-                                value="<?= $agency['vat_percentage'] ?>" readonly>
+                        <div class="col-md-12 mt-3">
+                            <div class="row mx-0">
+                                <div class="col-md-4 px-0">
+                                    <label>VAT%</label>
+                                    <input type="number" step="0.01" name="tax_rate" id="tax_rate" class="form-control"
+                                        value="<?= arr_val($agency, "vat_percentage", 0) ?>" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Discount%</label>
+                                    <input type="number" step="0.01" name="discount_percentage" id="discountPercentage" class="form-control"
+                                        value="<?= arr_val($agency, "discount_percentage", 0)  ?>" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Discount Amount</label>
+                                    <input type="number" step="0.01"
+                                        name="discount_amount"
+                                        id="discountAmount"
+                                        class="form-control" value="<?= arr_val($invoiceData, "discount", 0); ?>">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -215,6 +145,7 @@ if ($get_invoice_id) {
                         <thead class="thead-light">
                             <tr>
                                 <th>Service</th>
+                                <th width="80">Quantity</th>
                                 <th width="100">Amount</th>
                                 <th width="50">#</th>
                             </tr>
@@ -238,6 +169,10 @@ if ($get_invoice_id) {
                                     <td><span id="tax_amount">0</span></td>
                                 </tr>
                                 <tr>
+                                    <th>Discount:</th>
+                                    <td><span id="discount_show">0</span></td>
+                                </tr>
+                                <tr>
                                     <th>Total:</th>
                                     <td><span id="total_amount">0</span></td>
                                 </tr>
@@ -247,7 +182,12 @@ if ($get_invoice_id) {
                                 </tr>
                                 <tr>
                                     <th>Due:</th>
-                                    <td><span id="due_amount">0</span></td>
+                                    <td>
+                                        <div class="pull-away">
+                                            <span id="due_amount">0</span>
+                                            <input type="checkbox" class="tc-checkbox" <?= arr_val($invoiceData, "wright_off", 0) == 1 ? "checked" : "" ?> data-label="Wright off" name="wright_off">
+                                        </div>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -284,6 +224,7 @@ if ($get_invoice_id) {
     <script>
         let SERVICES = <?= json_encode($services); ?>;
         let INVOICE_ITEMS = <?= json_encode($invoiceItems) ?>;
+        let _GET = <?= json_encode($_GET) ?>;
     </script>
     <?php require_once('./includes/js.php'); ?>
 </body>

@@ -5,9 +5,10 @@ $page_name = 'Users';
 $JS_FILES_ = [
     "customer.js",
     _DIR_ . "js/jquery.dataTables.min.js",
+    _DIR_ . "js/bootstrap.bundle.min.js",
 ];
 $CSS_FILES_ = [
-    _DIR_ .  "css/jquery.dataTables.min.css"
+    _DIR_ .  "css/jquery.dataTables.min.css",
 ];
 
 ?>
@@ -16,6 +17,37 @@ $CSS_FILES_ = [
 
 <head>
     <?php require_once('./includes/head.php'); ?>
+    <style>
+        .dropdown-menu {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 10px 0;
+            min-width: 250px;
+            transform: translate3d(0px, 37.0909px, 0px) !important;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            border-left-color: #667eea;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body>

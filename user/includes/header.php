@@ -2,12 +2,19 @@
 $company = $db->select_one("companies", "*", [
     "id" => LOGGED_IN_USER['company_id']
 ]);
+
+$user_img = "";
+if (LOGGED_IN_USER['image'] == "avatar.png") {
+    $user_img =  _DIR_ . "images/users/" . LOGGED_IN_USER['image'];
+} else {
+    $user_img = _DIR_ . "uploads/" . LOGGED_IN_USER['image'];
+}
 ?>
 
 <div class="sidebar">
     <div class="user-info text-center">
         <div class="user-image-container">
-            <img src="<?= _DIR_ ?>images/users/<?= LOGGED_IN_USER['image'] ?>" alt="user image" class="user-img">
+            <img src="<?= $user_img ?>" alt="user image" class="user-img">
             <label class="overlay"><i class="fas fa-camera"></i>
                 <input type="file" class="user-img-file d-none" accept="image/*">
             </label>
@@ -80,6 +87,12 @@ $company = $db->select_one("companies", "*", [
                     <span class="text">Invoice Search</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="send-sms" class="nav-link">
+                    <i class="fa fa-comment" aria-hidden="true"></i>
+                    <span class="text">Send SMS To Customer</span>
+                </a>
+            </li>
         <?php } ?>
         <?php if (LOGGED_IN_USER['type'] === "staff") { ?>
             <li class="nav-item">
@@ -99,7 +112,7 @@ $company = $db->select_one("companies", "*", [
 </div>
 <nav class="navbar">
     <a class="logo page-name" href="dashboard">
-        <?= ucfirst(LOGGED_IN_USER['type']) ?> Dashboard
+        <?= ucfirst(LOGGED_IN_USER['type']) === "Agency" ? "Branch" : ucfirst(LOGGED_IN_USER['type']) ?> Dashboard
     </a>
     <h4><b><?= $company['company_name'] ?></b></h4>
     <div class="menu">
@@ -125,9 +138,9 @@ $company = $db->select_one("companies", "*", [
                         <i class="fas fa-plus-circle pt-1"></i>
                         Add Services
                     </a>
-                    <a href="vat" class="dropdown-item">
-                        <i class="fas fa-plus-circle pt-1"></i>
-                        VAT%
+                    <a href="settings" class="dropdown-item">
+                        <i class="fas fa-cog pt-1"></i>
+                        Settings
                     </a>
                 <?php } ?>
                 <a href="setting" class="dropdown-item">
@@ -138,7 +151,7 @@ $company = $db->select_one("companies", "*", [
         </div>
         <div class="dropdown">
             <button class="dropdown-toggle menu-item no-arrow-icon" type="button" data-toggle="dropdown">
-                <img src="../images/users/<?= LOGGED_IN_USER['image']; ?>" alt="user-img" class="user-img">
+                <img src="<?= $user_img ?> ?>" alt="user-img" class="user-img">
             </button>
             <div class="dropdown-menu">
                 <?php if (IS_ADMIN) { ?>

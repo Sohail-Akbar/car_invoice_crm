@@ -30,7 +30,7 @@ $agency_data = $db->query($agency_data, ["select_query" => true]);
             <div class="card-header">
                 <div class="pull-away">
                     <p>Agencies</p>
-                    <a href="add-agency">Add New Agency</a>
+                    <a href="add-agency">Add New Branch</a>
                 </div>
             </div>
             <div class="card-body">
@@ -42,9 +42,9 @@ $agency_data = $db->query($agency_data, ["select_query" => true]);
                             <thead class="thead-light">
                                 <tr>
                                     <th>#</th>
-                                    <th>Agency Details</th>
-                                    <th>Agency Details</th>
-                                    <th>Agency Logo</th>
+                                    <th>Branch Details</th>
+                                    <th>Branch Details</th>
+                                    <th>Branch Logo</th>
                                     <th>Status</th>
                                     <th></th>
                                 </tr>
@@ -58,7 +58,7 @@ $agency_data = $db->query($agency_data, ["select_query" => true]);
                                     <tr>
                                         <td><?php echo $count; ?></td>
                                         <td>
-                                            <strong>Agency Name: </strong>
+                                            <strong>Branch Name: </strong>
                                             <?= $user['agency_name'] ?><br>
                                             <strong>Agency Contact :</strong>
                                             <?= $user['agency_contact'] ?><br>

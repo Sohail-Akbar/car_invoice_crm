@@ -37,16 +37,29 @@ $(document).ready(function () {
                     "data": null,
                     "orderable": false,
                     "render": function (data, type, row) {
-                        return `<div class="align-center child-el-margin-x">
-                                    <a class="no-btn-styles text-success cp" href="add-customer?id=${row.id}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="no-btn-styles text-danger cp tc-delete-btn" title="Delete" data-target="${row.id}" data-action="customer">
-                                        <i class="fas fa-trash-alt"></i>
+                        return `<div class="dropdown">
+                                    <button class="btn btn-outline-primary bg-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-cog"></i> Action
                                     </button>
-                                    <a href="customer-profile?id=${row.id}" class="text-success" title="View Customer Profile">
-                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="add-customer?id=${row.id}"><i class="fas fa-edit me-2 text-primary"></i>Edit</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="customer-profile?id=${row.id}"><i class="fa fa-eye text-success" aria-hidden="true"></i>View Profile</a>
+                                        </li> 
+                                        <li>
+                                            <a class="dropdown-item" href="invoice?customer_id=${row.id}"><i class="fas fa-file-alt text-success"></i>Generate Invoice</a>
+                                        </li> 
+                                        <li>
+                                            <a class="dropdown-item" href="send-sms?customer_id=${row.id}"><i class="fas fa-envelope me-2 text-warning"></i>Send Message</a>
+                                        </li>
+                                        <li>
+                                            <button class="no-btn-styles dropdown-item text-danger cp tc-delete-btn" title="Delete" data-target="${row.id}" data-action="customer">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                             </button>
+                                        </li>
+                                    </ul>
                                 </div>`;
                     }
                 }

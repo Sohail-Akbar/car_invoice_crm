@@ -67,7 +67,7 @@ if (LOGGED_IN_USER['type'] === "staff") redirectTo("assigned-vehicles");
             </p>
 
             <div class="tabs-container">
-                <div class="tab-card" onclick="location.href='invoice'">
+                <div class="tab-card" onclick="location.href='registration-vehicle'">
                     <i class="fas fa-plus-circle"></i>
                     <h4>Create Invoice</h4>
                 </div>

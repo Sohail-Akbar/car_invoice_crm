@@ -1,6 +1,6 @@
 <?php
 session_start();
-// date_default_timezone_set('UTC');
+date_default_timezone_set('UTC');
 
 if (!defined('DIR')) define('DIR', './');
 if (!defined('_DIR_')) define('_DIR_', DIR);

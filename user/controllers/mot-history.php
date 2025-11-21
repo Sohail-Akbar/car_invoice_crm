@@ -136,7 +136,7 @@ if (isset($_POST['fetchRegistrationCar'])) {
             ]);
 
             returnSuccess("Vehicle data saved successfully.", [
-                "redirect" => "registration-vehicle",
+                "redirect" => "invoice?customer_id=$customer_id&vehicle_id=$save",
             ]);
         } else {
             returnError("Failed to save vehicle data.");
@@ -237,7 +237,7 @@ if (isset($_POST['fetchRegistrationCar'])) {
 
             if ($save) {
                 returnSuccess("Vehicle data saved successfully.", [
-                    "redirect" => "registration-vehicle",
+                    "redirect" => "invoice?customer_id=$customerId&vehicle_id=$save",
                 ]);
             } else {
                 returnError('Failed to save vehicle data.');

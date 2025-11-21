@@ -36,3 +36,6 @@ define('EMAILS', [
 define('SMTP_HOST', 'smtp.hostinger.com');
 define('SMTP_PASSWORD', '_-bi!DX2TZGHv69');
 define('SMTP_EMAIL', "garagenoreply@devmedqon.com");
+
+define("UTC_TIME", new DateTime("now", new DateTimeZone("UTC")));
+define("CREATED_AT", UTC_TIME->format("Y-m-d H:i:s"));

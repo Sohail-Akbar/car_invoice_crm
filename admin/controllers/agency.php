@@ -27,6 +27,8 @@ if (isset($_POST['addAgency'])) {
     $company_login_id = arr_val($_POST, "company_login_id", null);
     $_agency_id = arr_val($_POST, "agency_id", null);
 
+    if (strlen($password) !== 6 && !$agency_user_id) returnError("Password must be exactly 6 digits!");
+
     // File upload
     $file = $_fn->upload_file('agency_logo', [
         "multiple" => false,
@@ -46,7 +48,11 @@ if (isset($_POST['addAgency'])) {
         "address" =>  $agency_address,
         "contact" =>  $agency_contact,
         "email" =>  $agency_email,
-        "company_id" => $company_login_id
+        "company_id" => $company_login_id,
+        "city" => arr_val($_POST, "branch_city", ""),
+        "postcode" => arr_val($_POST, "branch_postcode", ""),
+        "lat" => arr_val($_POST, "branch_lat", ""),
+        "lng" => arr_val($_POST, "branch_lng", ""),
     ];
 
     if ($company_logo !== "") {
@@ -92,6 +98,9 @@ if (isset($_POST['addAgency'])) {
         $user_data["password"] =  password_hash($password, PASSWORD_BCRYPT);
     }
 
+    if ($company_logo !== "") {
+        $user_data["image"] =  $company_logo;
+    }
     // User insert/update
     if ($agency_user_id) {
         $db->update("users", $user_data, ["id" => $agency_user_id, "company_id" => $company_login_id, "agency_id" => $agency_id]);
@@ -99,11 +108,8 @@ if (isset($_POST['addAgency'])) {
         $db->insert("users", $user_data);
     }
 
-    if ($agency_user_id) {
-        returnSuccess("Data saved successfully", [
-            "redirect" => "view-agency"
-        ]);
-    } else {
-        returnSuccess("Data saved successfully");
-    }
+
+    returnSuccess("Data saved successfully", [
+        "redirect" => "view-agency"
+    ]);
 }

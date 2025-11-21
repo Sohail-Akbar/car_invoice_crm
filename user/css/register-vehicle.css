@@ -254,3 +254,157 @@
     background: #ffebee;
     color: #c62828;
 }
+
+
+
+  .compact-info-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            overflow: hidden;
+        }
+        
+       .compact-info-card .card-header {
+            background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+      .compact-info-card  .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+      .compact-info-card  .card-title i {
+            margin-right: 8px;
+        }
+        
+      .compact-info-card  .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+       .compact-info-card .edit-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+       .compact-info-card .edit-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+       .compact-info-card .edit-btn i {
+            margin-right: 5px;
+        }
+        
+      .compact-info-card  .info-content {
+            display: flex;
+            padding: 20px;
+        }
+        
+      .compact-info-card  .customer-section, .vehicle-section {
+            flex: 1;
+            padding: 0 15px;
+        }
+        
+       .compact-info-card .section-divider {
+            width: 1px;
+            background: #e0e0e0;
+            margin: 0 10px;
+        }
+        
+       .compact-info-card .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4a00e0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+      .compact-info-card  .section-title i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+       .compact-info-card .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+      .compact-info-card  .info-item {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+      .compact-info-card  .info-icon {
+            width: 24px;
+            color: #6c757d;
+            margin-right: 8px;
+            text-align: center;
+        }
+        
+       .compact-info-card .info-details {
+            flex: 1;
+        }
+        
+      .compact-info-card  .info-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 2px;
+        }
+        
+       .compact-info-card .info-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+       .compact-info-card .highlight {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 992px) {
+        .compact-info-card    .info-content {
+                flex-direction: column;
+            }
+            
+           .compact-info-card .section-divider {
+                width: 100%;
+                height: 1px;
+                margin: 15px 0;
+            }
+            
+           .compact-info-card .customer-section, .vehicle-section {
+                padding: 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+          .compact-info-card  .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+          .compact-info-card .header-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+           .compact-info-card .edit-btn {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+        }

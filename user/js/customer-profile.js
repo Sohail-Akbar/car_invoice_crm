@@ -292,3 +292,47 @@ $(document).ready(function () {
         });
     }
 });
+
+
+// Customer Email History 
+$(document).ready(function () {
+    if ($("#invoicesEmailHistoryTable").length) {
+
+        const customerId = _GET.id; // customer ID from URL
+
+        $('#invoicesEmailHistoryTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "controllers/customer.php?fetchInvoiceEmailHistory=true",
+                "type": "POST",
+                "data": function (d) {
+                    d.customer_id = customerId;
+                }
+            },
+            "pageLength": 10,
+            "lengthChange": true,
+            "scrollY": "400px",
+            "scrollCollapse": true,
+            "autoWidth": false,
+            "columns": [
+                { "data": "id", "width": "10%" },
+                { "data": "invoice_type", "width": "30%" },
+                { "data": "created_at", "width": "30%" },
+                {
+                    "data": "pdf_file",
+                    "render": function (data, type, row) {
+                        if (!data) return '<span class="text-muted">No file</span>';
+                        return `<a class="btn btn-view text-white" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
+                                    <i class="fas fa-eye"></i> View
+                                </a>`;
+                    },
+                    "orderable": false
+                }
+            ],
+            "scrollX": true,
+            "initComplete": function () { this.api().columns.adjust().draw(); },
+            "drawCallback": function () { this.api().columns.adjust(); }
+        });
+    }
+});

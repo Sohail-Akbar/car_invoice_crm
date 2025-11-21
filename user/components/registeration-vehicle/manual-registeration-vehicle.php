@@ -1,7 +1,7 @@
 <div class="card mt-3" id="registrationCarContainer">
     <div class="card-body">
         <div class="pull-away">
-            <h3 class="heading">Manually Registration Car</h3>
+            <h3 class="heading">Manually Registration Vehicle</h3>
         </div>
         <form action="mot-history" method="POST" class="ajax_form">
             <div class="row mt-4">

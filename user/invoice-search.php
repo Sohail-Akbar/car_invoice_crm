@@ -165,7 +165,6 @@ $JS_FILES_ = [];
                                         </tr>
                                     </thead>
                                     <tbody id="resultsBody">
-                                        <!-- Results will be populated here -->
                                     </tbody>
                                 </table>
                             </div>
@@ -242,63 +241,56 @@ $JS_FILES_ = [];
                     $('#noResults').show();
                     $('#resultCount').text('0 invoices found');
                 } else {
+                    let totalAmount = 0;
+                    let totalPaid = 0;
+                    let totalDue = 0;
+
                     invoices.forEach(function(invoice) {
                         const statusClass = `badge-${invoice.status}`;
                         const statusText = invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1);
 
+                        totalAmount += parseFloat(invoice.total_amount);
+                        totalPaid += parseFloat(invoice.paid_amount);
+                        totalDue += parseFloat(invoice.due_amount);
+
                         const row = `
-                            <tr>
-                                <td>${invoice.invoice_no}</td>
-                                <td>${invoice.invoice_date}</td>
-                                <td>${invoice.customer_name}</td>
-                                <td>${invoice.reg_number}</td>
-                                <td>£${parseFloat(invoice.total_amount).toFixed(2)}</td>
-                                <td>£${parseFloat(invoice.paid_amount).toFixed(2)}</td>
-                                <td>£${parseFloat(invoice.due_amount).toFixed(2)}</td>
-                                <td><span class="badge ${statusClass}">${statusText}</span></td>
-                                <td class="invoice-actions">
-                                    <a href="${SITE_URL}/uploads/invoices/${invoice.pdf_file}" class="btn btn-sm btn-outline-info" target="_blank">
-                                        <i class="fas fa-file-pdf"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        `;
+                <tr>
+                    <td>${invoice.invoice_no}</td>
+                    <td>${invoice.invoice_date}</td>
+                    <td>${invoice.customer_name}</td>
+                    <td>${invoice.reg_number}</td>
+                    <td>£${parseFloat(invoice.total_amount).toFixed(2)}</td>
+                    <td>£${parseFloat(invoice.paid_amount).toFixed(2)}</td>
+                    <td>£${parseFloat(invoice.due_amount).toFixed(2)}</td>
+                    <td><span class="badge ${statusClass}">${statusText}</span></td>
+                    <td class="invoice-actions">
+                        <a href="${SITE_URL}/uploads/invoices/${invoice.pdf_file}" class="btn btn-sm btn-outline-info" target="_blank">
+                            <i class="fas fa-file-pdf"></i>
+                        </a>
+                    </td>
+                </tr>
+            `;
                         resultsBody.append(row);
                     });
+
+                    // Append total row
+                    const totalRow = `
+            <tr style="font-weight:bold; background-color:#f1f1f1;">
+                <td colspan="4" class="text-end">Total:</td>
+                <td>£${totalAmount.toFixed(2)}</td>
+                <td>£${totalPaid.toFixed(2)}</td>
+                <td>£${totalDue.toFixed(2)}</td>
+                <td colspan="2"></td>
+            </tr>
+        `;
+                    resultsBody.append(totalRow);
 
                     $('#resultCount').text(`${invoices.length} invoice(s) found`);
                 }
 
                 $('#resultsSection').show();
-
-                // Add event listeners to action buttons
-                $('.view-invoice').on('click', function() {
-                    const invoiceId = $(this).data('id');
-                    viewInvoice(invoiceId);
-                });
-
-                $('.edit-invoice').on('click', function() {
-                    const invoiceId = $(this).data('id');
-                    editInvoice(invoiceId);
-                });
             }
 
-            // View invoice details
-            function viewInvoice(invoiceId) {
-                alert(`View invoice with ID: ${invoiceId}`);
-                // You can implement a modal or redirect to view page
-            }
-
-            // Edit invoice
-            function editInvoice(invoiceId) {
-                alert(`Edit invoice with ID: ${invoiceId}`);
-                // You can implement a modal or redirect to edit page
-            }
-
-            // Auto-search on filter change (optional)
-            // $('#invoice_no, #customer_name, #reg_number, #status').on('change', function() {
-            //     searchInvoices();
-            // });
         });
     </script>
 </body>

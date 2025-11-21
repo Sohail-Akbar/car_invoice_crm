@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="pull-away vehicle-information-header">
             <h3 class="heading">Registration Vehicle</h3>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".mot-history-model">View MOT History</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".mot-history-model">View Vehicle History</button>
         </div>
         <form action="mot-history" method="POST" class="ajax_form reset customer-vehicle-form" data-reset="reset">
             <div class="row mt-4">
@@ -20,7 +20,8 @@
                 </div>
                 <div class="col-md-4">
                     <label for=""></label><br>
-                    <button class="btn btn-secondary" type="button" data-toggle="modal" data-target=".add-new-customer-model">Add New Customer</button>
+                    <!-- data-toggle="modal" data-target=".add-new-customer-model" -->
+                    <button class="btn btn-secondary add-new-customer-btn" type="button">Add New Customer</button>
                 </div>
                 <div id="motFields">
                     <div class="row m-0"></div>

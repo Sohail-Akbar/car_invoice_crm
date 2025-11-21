@@ -21,12 +21,12 @@ function appendFormFields(data) {
     });
 }
 
-// Render MOT history (jQuery)
+// Render vehicle history (jQuery)
 async function renderMotHistory(data) {
     const $container = $("#modalMotContent").empty();
 
     if (!data.length) {
-        $container.html("<p>No MOT history available.</p>");
+        $container.html("<p>No vehicle history available.</p>");
         return;
     }
 
@@ -115,145 +115,304 @@ async function renderMotHistory(data) {
     });
 }
 
+// function renderCustomerAndVehicle(data) {
+//     const c = data.data.customer;
+//     const v = data.data.existingRecord;
+
+//     let $vehicleEditHtml = "";
+//     if (v.is_manual == 1) $vehicleEditHtml = `<button class="edit-btn car-edit-btn" data-vehicle='${JSON.stringify(v)}'><i class="fas fa-edit"></i> Edit</button>`;
+
+//     return `
+//         <div class="content-grid row m-0">
+//             <!-- Customer Info -->
+//             <div class="col-md-7">
+//                 <div class="card">
+//                     <div class="card-header customer-header">
+//                         <div class="card-title">
+//                             <i class="fas fa-user"></i> Customer Information
+//                         </div>
+//                         <button class="edit-btn customer-edit-btn toggle-edit" data-customer='${JSON.stringify(c)}'>
+//                             <i class="fas fa-edit"></i> Edit
+//                         </button>
+//                         <button class="edit-btn change-customer-btn toggle-edit" title="Change Customer" data-vehicle='${JSON.stringify(v)}'>
+//                             <i class="fas fa-edit"></i> Change Customer
+//                         </button>
+//                     </div>
+//                     <div class="card-content">
+//                         <div class="detail-row">
+//                             <div class="detail-icon customer-icon"><i class="fas fa-user-circle"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Full Name</div>
+//                                 <div class="detail-value">${c.title} ${c.fname} ${c.lname}</div>
+//                             </div>
+//                         </div>
+//                         <div class="detail-row">
+//                             <div class="detail-icon customer-icon"><i class="fas fa-envelope"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Email Address</div>
+//                                 <div class="detail-value">${c.email}</div>
+//                             </div>
+//                         </div>
+//                         <div class="detail-row">
+//                             <div class="detail-icon customer-icon"><i class="fas fa-phone"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Phone Number</div>
+//                                 <div class="detail-value">${c.contact}</div>
+//                             </div>
+//                         </div>
+//                         <div class="detail-row">
+//                             <div class="detail-icon customer-icon"><i class="fas fa-map-marker-alt"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Address</div>
+//                                 <div class="detail-value">${c.address}, ${c.city}, ${c.postcode}</div>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             <!-- Vehicle Info -->
+//             <div class="col-md-5">
+//                 <div class="card">
+//                     <div class="card-header car-header">
+//                         <div class="card-title">
+//                             <i class="fas fa-car"></i> Vehicle Information
+//                         </div>
+//                         ${$vehicleEditHtml}
+//                     </div>
+//                     <div class="card-content">
+//                         <div class="detail-row">
+//                             <div class="detail-icon car-icon"><i class="fas fa-car-side"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Make & Model</div>
+//                                 <div class="detail-value">${v.make} ${v.model}</div>
+//                             </div>
+//                         </div>
+
+//                         <div class="detail-row">
+//                             <div class="detail-icon car-icon"><i class="fas fa-hashtag"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Registration</div>
+//                                 <div class="detail-value">${v.registrationDate}</div>
+//                             </div>
+//                         </div>
+
+//                         <div class="detail-row">
+//                             <div class="detail-icon car-icon"><i class="fas fa-calendar-alt"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">First Used Date</div>
+//                                 <div class="detail-value">${v.firstUsedDate}</div>
+//                             </div>
+//                         </div>
+
+//                         <div class="detail-row">
+//                             <div class="detail-icon car-icon"><i class="fas fa-gas-pump"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Fuel Type</div>
+//                                 <div class="detail-value">${v.fuelType}</div>
+//                             </div>
+//                         </div>
+
+//                         <div class="detail-row">
+//                             <div class="detail-icon car-icon"><i class="fas fa-palette"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Color</div>
+//                                 <div class="detail-value">${v.primaryColour}</div>
+//                             </div>
+//                         </div>
+
+//                         <div class="detail-row">
+//                             <div class="detail-icon car-icon"><i class="fas fa-cogs"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Engine Size</div>
+//                                 <div class="detail-value">${v.engineSize} cc</div>
+//                             </div>
+//                         </div>
+
+//                         <div class="detail-row">
+//                             <div class="detail-icon car-icon"><i class="fas fa-calendar-check"></i></div>
+//                             <div class="detail-content">
+//                                 <div class="detail-label">Registration Expiry</div>
+//                                 <div class="detail-value">
+//                                     ${v.expiryDate}
+//                                 </div>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     `;
+// }
+
 function renderCustomerAndVehicle(data) {
     const c = data.data.customer;
     const v = data.data.existingRecord;
 
     let $vehicleEditHtml = "";
-    if (v.is_manual == 1) $vehicleEditHtml = `<button class="edit-btn car-edit-btn" data-vehicle='${JSON.stringify(v)}'><i class="fas fa-edit"></i> Edit</button>`;
+    if (v.is_manual == 1) $vehicleEditHtml = `<i class="fas fa-edit text-success edit-btn car-edit-btn cp" data-vehicle='${JSON.stringify(v)}'></i>`;
 
     return `
-        <div class="content-grid row m-0">
-            <!-- Customer Info -->
-            <div class="col-md-7">
-                <div class="card">
-                    <div class="card-header customer-header">
-                        <div class="card-title">
-                            <i class="fas fa-user"></i> Customer Information
+    <div class="compact-info-card">
+        <div class="card-header">
+            <div class="card-title mb-0">
+                <i class="fas fa-id-card"></i> Customer & Vehicle Information
+            </div>
+            <div class="header-buttons">
+                <button class="edit-btn change-customer-btn toggle-edit" title="Change Customer" data-vehicle='${JSON.stringify(v)}'>
+                    <i class="fas fa-exchange-alt"></i> Change Customer
+                </button>
+                <a href="invoice?customer_id=${c.id}&vehicle_id=${v.id}" class="edit-btn" title="Generate Invoice">
+                    <i class="fas fa-file-alt"></i> Generate Invoice
+                </a>
+            </div>
+        </div>
+        
+        <div class="info-content">
+            <!-- Customer Information Section -->
+            <div class="customer-section">
+                <div class="section-title">
+                    <i class="fas fa-user"></i> Customer Details &nbsp; <i class="fas fa-edit text-success cp edit-btn customer-edit-btn toggle-edit" data-customer='${JSON.stringify(c)}'></i>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-user-circle"></i>
                         </div>
-                        <button class="edit-btn customer-edit-btn toggle-edit" data-customer='${JSON.stringify(c)}'>
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="edit-btn change-customer-btn toggle-edit" title="Change Customer" data-vehicle='${JSON.stringify(v)}'>
-                            <i class="fas fa-edit"></i> Change Customer
-                        </button>
+                        <div class="info-details">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value">${c.title} ${c.fname} ${c.lname}</div>
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <div class="detail-row">
-                            <div class="detail-icon customer-icon"><i class="fas fa-user-circle"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Full Name</div>
-                                <div class="detail-value">${c.title} ${c.fname} ${c.lname}</div>
-                            </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
                         </div>
-                        <div class="detail-row">
-                            <div class="detail-icon customer-icon"><i class="fas fa-envelope"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Email Address</div>
-                                <div class="detail-value">${c.email}</div>
-                            </div>
+                        <div class="info-details">
+                            <div class="info-label">Email Address</div>
+                            <div class="info-value">${c.email}</div>
                         </div>
-                        <div class="detail-row">
-                            <div class="detail-icon customer-icon"><i class="fas fa-phone"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Phone Number</div>
-                                <div class="detail-value">${c.contact}</div>
-                            </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
                         </div>
-                        <div class="detail-row">
-                            <div class="detail-icon customer-icon"><i class="fas fa-map-marker-alt"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Address</div>
-                                <div class="detail-value">${c.address}, ${c.city}, ${c.postcode}</div>
-                            </div>
+                        <div class="info-details">
+                            <div class="info-label">Phone Number</div>
+                            <div class="info-value">${c.contact}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-details">
+                            <div class="info-label">Address</div>
+                            <div class="info-value">${c.address}, ${c.city}, ${c.postcode}</div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Vehicle Info -->
-            <div class="col-md-5">
-                <div class="card">
-                    <div class="card-header car-header">
-                        <div class="card-title">
-                            <i class="fas fa-car"></i> Vehicle Information
+            
+            <div class="section-divider"></div>
+            
+            <!-- Vehicle Information Section -->
+            <div class="vehicle-section">
+                <div class="section-title">
+                    <i class="fas fa-car"></i> Vehicle Details &nbsp; ${$vehicleEditHtml}
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-car-side"></i>
                         </div>
-                        ${$vehicleEditHtml}
+                        <div class="info-details">
+                            <div class="info-label">Make & Model</div>
+                            <div class="info-value">${v.make} ${v.model}</div>
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <div class="detail-row">
-                            <div class="detail-icon car-icon"><i class="fas fa-car-side"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Make & Model</div>
-                                <div class="detail-value">${v.make} ${v.model}</div>
-                            </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-hashtag"></i>
                         </div>
-
-                        <div class="detail-row">
-                            <div class="detail-icon car-icon"><i class="fas fa-hashtag"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Registration</div>
-                                <div class="detail-value">${v.registrationDate}</div>
-                            </div>
+                        <div class="info-details">
+                            <div class="info-label">Registration</div>
+                            <div class="info-value">${v.registrationDate}</div>
                         </div>
-
-                        <div class="detail-row">
-                            <div class="detail-icon car-icon"><i class="fas fa-calendar-alt"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">First Used Date</div>
-                                <div class="detail-value">${v.firstUsedDate}</div>
-                            </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-alt"></i>
                         </div>
-
-                        <div class="detail-row">
-                            <div class="detail-icon car-icon"><i class="fas fa-gas-pump"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Fuel Type</div>
-                                <div class="detail-value">${v.fuelType}</div>
-                            </div>
+                        <div class="info-details">
+                            <div class="info-label">First Used Date</div>
+                            <div class="info-value">${v.firstUsedDate}</div>
                         </div>
-
-                        <div class="detail-row">
-                            <div class="detail-icon car-icon"><i class="fas fa-palette"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Color</div>
-                                <div class="detail-value">${v.primaryColour}</div>
-                            </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-gas-pump"></i>
                         </div>
-
-                        <div class="detail-row">
-                            <div class="detail-icon car-icon"><i class="fas fa-cogs"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Engine Size</div>
-                                <div class="detail-value">${v.engineSize} cc</div>
-                            </div>
+                        <div class="info-details">
+                            <div class="info-label">Fuel Type</div>
+                            <div class="info-value">${v.fuelType}</div>
                         </div>
-
-                        <div class="detail-row">
-                            <div class="detail-icon car-icon"><i class="fas fa-calendar-check"></i></div>
-                            <div class="detail-content">
-                                <div class="detail-label">Registration Expiry</div>
-                                <div class="detail-value">
-                                    ${v.expiryDate}
-                                </div>
-                            </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="info-details">
+                            <div class="info-label">Color</div>
+                            <div class="info-value">${v.primaryColour}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="info-details">
+                            <div class="info-label">Engine Size</div>
+                            <div class="info-value">${v.engineSize} cc</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="info-details">
+                            <div class="info-label">Registration Expiry</div>
+                            <div class="info-value highlight">${v.expiryDate}</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     `;
 }
 
 
 
 
-// mot history
+// vehicle history
 tc.fn.cb.motHistoryCB = async (form, data) => {
     let $registerVehicleCon = $("#registrationCarContainer");
+    // header
     $registerVehicleCon.find(".vehicle-information-header").removeClass("mb-4");
     $registerVehicleCon.addClass("d-none");
+    // already register vehicle details
     $(".already-register-details").addClass("d-none")
+
     if (data.status === "success") {
         if (data.data.isExistingRecord) {
             $registerVehicleCon.find("form").addClass("d-none");
@@ -276,7 +435,7 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
         }
     } else {
         Swal.fire({
-            title: 'No MOT History Found',
+            title: 'No Vehicle History Found',
             text: "We couldn’t find MOT data for this registration.",
             type: 'warning',
             showCancelButton: true,
@@ -350,6 +509,22 @@ $(document).on("click", ".customer-edit-btn", function () {
     $('.add-new-customer-model').modal('show');
 });
 
+// add customer btn
+$(document).on("click", ".add-new-customer-btn", function () {
+    let $modal = $(".add-new-customer-model");
+    let $form = $modal.find("form");
+    $form.find(`[name="customer_id"]`).remove();
+    $form.find(`[name="updateCustomerInfo"]`).remove();
+    $form.append(`<input type="hidden" name="createCustomer" value="true">`);
+    $modal.find(".modal-title").text("Add Customer Information");
+    $form.attr("action", "customer");
+    $form.attr("data-callback", "addCustomerCB");
+    $form.find(`[name="password"]`).attr("required", "true");
+    $form.get(0).reset()
+
+    $modal.modal('show');
+});
+
 // update customer callback
 tc.fn.cb.updateCustomerInfoCB = async (form, data) => {
     if (data.status === 'success') {
@@ -413,7 +588,6 @@ $(document).on("click", ".change-customer-btn", function () {
     let data = $(this).data("vehicle");
     let $parent = $("#registrationCarContainer");
     let $alreadyRegCustomer = $parent.find(".already-register-details");
-    console.log(data);
 
     $alreadyRegCustomer.addClass("d-none");
     $parent.find(`.customer-vehicle-form`).removeClass("d-none");

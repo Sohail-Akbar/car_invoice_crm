@@ -667,3 +667,124 @@ if (isset($_POST['createCustomer'])) {
         returnError("Error saving customer. Please try again.");
     }
 }
+
+
+// Send SMS to Customer
+if (isset($_POST['sendSMSToCustomers'])) {
+    $customer_id  = $_POST['customer_id'];
+    $service_template  = arr_val($_POST, 'service_template', "");
+    $message  = arr_val($_POST, 'message', "");
+
+    $sql = "
+SELECT 
+    u.id AS customer_id,
+    CONCAT(u.fname, ' ', u.lname) AS name,
+    u.contact AS phone,
+    CONCAT(h.make, ' ', h.model) AS vehicle,
+    h.reg_number AS regNumber,
+    c.company_name
+FROM users u
+INNER JOIN customer_car_history h ON u.id = h.customer_id
+INNER JOIN companies c ON c.id = u.company_id
+WHERE u.is_active = '1' AND c.is_active = '1' AND h.is_active = 1 AND u.type = 'customer'
+  AND u.company_id = " . LOGGED_IN_USER['company_id'] . " 
+  AND u.agency_id = " . LOGGED_IN_USER['agency_id'] . "
+  AND u.id = " . $customer_id . "
+ORDER BY u.fname, u.lname";
+
+    $customer = $db->query($sql, ["select_query" => true]);
+    if (empty($customer)) $customer = [];
+    if ($customer) $customer = $customer[0];
+
+    $message = render_sms_template('service_reminder', [
+        'name' => $customer['name'],
+        'vehicle' => $customer['vehicle'],
+        'regNumber' => $customer['regNumber']
+    ]);
+
+    // ✅ 1. Save SMS log in database
+    $smsData = [
+        'company_id'   => LOGGED_IN_USER['company_id'],
+        'agency_id'    => LOGGED_IN_USER['agency_id'],
+        'customer_id'  => $customer_id,
+        'reg_number'   => $customer['regNumber'],
+        'template_id'  => $service_template,
+        'message'      => $message,
+        'status'       => 'pending'
+    ];
+
+    $save_sms_logs = $db->insert('sms_logs', $smsData);
+
+    if ($save_sms_logs) {
+        // ✅ 2. Send SMS via API (pseudo code)
+        // $customer['phone']
+        // "07713628902" || $customer['phone']
+        $smsSent = sendSMS($customer['company_name'], $customer['phone'], $message); // your SMS API function
+        if (isset($smsSent['error']) && $smsSent['error']) $smsSentStatus = "failed";
+        else $smsSentStatus = "sent";
+        // ✅ 3. Update status in sms_logs
+        $status = $smsSentStatus;
+        $db->update('sms_logs', ['status' => $status], [
+            "customer_id" => $customer['customer_id'],
+            "reg_number" => $customer['regNumber'],
+            "id" => $save_sms_logs
+        ]);
+
+        if (isset($smsSent['error']) && $smsSent['error']) {
+            returnError($smsSent['message']);
+        } else {
+            returnSuccess("SMS sent successfully!", [
+                "redirect" => ""
+            ]);
+        }
+    }
+}
+
+
+// Customer Email History 
+if (isset($_GET['fetchInvoiceEmailHistory'])) {
+
+    $columns = ['id', 'invoice_type', 'created_at', 'pdf_file'];
+
+    $draw = intval($_POST['draw']);
+    $start = intval($_POST['start']);
+    $length = intval($_POST['length']);
+    $searchValue = $_POST['search']['value'];
+    $customer_id = intval($_POST['customer_id']);
+
+    // Base query
+    $sql = "SELECT * FROM customer_email_history WHERE customer_id = '$customer_id'";
+
+    if (!empty($searchValue)) {
+        $sql .= " AND (invoice_type LIKE '%$searchValue%' OR pdf_file LIKE '%$searchValue%')";
+    }
+
+    // Total records
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM customer_email_history WHERE customer_id = '$customer_id'", ["select_query" => true]);
+    $totalRecords = $totalQuery[0]['total'];
+
+    // Filtered records
+    $filteredQuery = $db->query(
+        "SELECT COUNT(*) as total FROM customer_email_history WHERE customer_id = '$customer_id'" .
+            (!empty($searchValue) ? " AND (invoice_type LIKE '%$searchValue%' OR pdf_file LIKE '%$searchValue%')" : ""),
+        ["select_query" => true]
+    );
+    $filteredRecords = $filteredQuery[0]['total'];
+
+    // Pagination
+    $sql .= " ORDER BY id DESC LIMIT $start, $length";
+    $dataRows = $db->query($sql, ["select_query" => true]);
+
+    $data = [];
+    foreach ($dataRows as $row) {
+        $data[] = $row;
+    }
+
+    echo json_encode([
+        "draw" => $draw,
+        "recordsTotal" => $totalRecords,
+        "recordsFiltered" => $filteredRecords,
+        "data" => $data
+    ]);
+    exit;
+}

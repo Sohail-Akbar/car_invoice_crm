@@ -9,6 +9,9 @@
         <i class="fas fa-file-invoice"></i> Proforma
     </div>
     <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+        <div class="tab" data-tab="invoicesEmailHistory">
+            <i class="fas fa-file-invoice"></i> Invoice Email History
+        </div>
         <div class="tab" data-tab="notes">
             <i class="fas fa-sticky-note"></i> Notes
         </div>

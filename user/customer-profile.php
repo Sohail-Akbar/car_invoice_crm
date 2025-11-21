@@ -120,6 +120,8 @@ $cars = $db->select("customer_car_history", "*", [
             require_once "./components/customer-profile/invoices.php";
             // Proforma Invoice
             require_once "./components/customer-profile/proforma-invoices.php";
+            // Email History
+            require_once "./components/customer-profile/invoice-email-history.php";
             // Notes
             require_once "./components/customer-profile/notes.php";
             ?>

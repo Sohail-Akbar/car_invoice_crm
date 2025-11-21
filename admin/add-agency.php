@@ -11,7 +11,8 @@ $JS_FILES_ = [
 
 $id = _get_param("id", "");
 
-$agency_data_sql = "SELECT u.*, a.name as agency_name, a.contact as agency_contact, a.address as agency_address, a.agency_logo, a.email as agency_email, a.id as agency_id
+$agency_data_sql = "SELECT u.*, a.name as agency_name, a.contact as agency_contact, a.address as agency_address, a.city as branch_city, a.postcode as branch_postcode, a.lat as branch_lat, a.lng as branch_lng, a.agency_logo, a.email as agency_email, a.id as agency_id,
+                        u.address as user_address
                         FROM users AS u
                         LEFT JOIN agencies AS a ON u.company_id = a.company_id AND u.agency_id = a.id
                         WHERE u.company_id = a.company_id AND u.agency_id = a.id AND u.user_id = '" . LOGGED_IN_USER_ID . "' AND u.id = '" . $id . "'";
@@ -31,49 +32,73 @@ if (count($agency_data)) $agency_data = $agency_data[0];
     <div class="all-content">
         <div class="col-md-12 px-0">
             <div class="box-content px-4 py-3">
-                <h4 class="box-title text-style">Add Agency</h4>
-                <span class="bottom-text">Please Enter Agency and user details</span>
+                <h4 class="box-title text-style">Add Branch</h4>
+                <span class="bottom-text">Please Enter Branch and user details</span>
             </div>
         </div>
         <div class="col-lg-12 mb-0 mt-4">
-            <h2 class="box-title text-style"><b>Agency's Details</b></h2>
+            <h2 class="box-title text-style"><b>Branch's Details</b></h2>
         </div>
         <div class="col-xs-12 mt-3">
             <div class="box-content p-2">
-                <form action="agency" method="POST" class="mt-4 ajax_form reset" data-reset="reset">
+                <form action="agency" method="POST" class="mt-4 ajax_form">
+                    <!-- Branch Name -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputName" class="control-label">Agency's Name</label>
+                            <label for="inputName" class="control-label">Branch's Name</label>
                             <input type="text" class="form-control" id="inputName" name="agency_name" value="<?= arr_val($agency_data, "agency_name", "") ?>" placeholder="Enter New Company" required="">
                         </div>
                     </div>
+
+                    <!-- Branch Address -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Agency's Address</label>
-                            <input type="text" class="form-control" name="agency_address" value="<?= arr_val($agency_data, "agency_address", "") ?>" placeholder="Enter Company Address" required="">
+                            <label class="control-label">Branch's Address</label>
+                            <input type="text" class="form-control" name="agency_address" value="<?= arr_val($agency_data, "agency_address", "") ?>" placeholder="Enter Company Address" id="branch_autocomplete" required>
+                            <input type="hidden" name="branch_city" id="branch_city" value="<?= arr_val($agency_data, "branch_city", "") ?>">
+                            <input type="hidden" name="branch_postcode" id="branch_postcode" value="<?= arr_val($agency_data, "branch_postcode", "") ?>">
+                            <input type="hidden" name="branch_lat" id="branch_lat" value="<?= arr_val($agency_data, "branch_lat", "") ?>">
+                            <input type="hidden" name="branch_lng" id="branch_lng" value="<?= arr_val($agency_data, "branch_lng", "") ?>">
+                            <div class="mt-0 bg-light rounded">
+                                <small>
+                                    <strong>Detected:</strong>
+                                    <span id="branch_display_city"></span>
+                                    <span id="branch_display_postcode" class="ml-2"></span>
+                                </small>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Branch Contact -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputPhone" class="control-label">Agency's Contact</label>
+                            <label for="inputPhone" class="control-label">Branch's Contact</label>
                             <input type="text" class="form-control" id="inputPhone" name="agency_contact" value="<?= arr_val($agency_data, "agency_contact", "") ?>" placeholder="Enter Company Contact" required="">
                         </div>
                     </div>
+
+                    <!-- Branch Email -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputPhone" class="control-label">Agency's Email</label>
+                            <label for="inputEmail" class="control-label">Branch's Email</label>
                             <input type="text" class="form-control" id="inputEmail" name="agency_email" value="<?= arr_val($agency_data, "agency_email", "") ?>" placeholder="Enter Company Email" required="">
                         </div>
                     </div>
+
+                    <!-- Branch Logo -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Agency's Logo</label>
+                            <label class="control-label">Branch's Logo</label>
                             <input type="file" name="agency_logo" class="form-control">
                         </div>
                     </div>
+
+                    <!-- User Details -->
                     <div class="col-lg-12">
                         <h4 class="box-title text-style">User's Details</h4>
                     </div>
+
+                    <!-- Title / Gender -->
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
@@ -84,8 +109,6 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                                     <option <?= arr_val($agency_data, "title", "") == "Mrs" ? "selected" : '' ?> value="Mrs">Mrs</option>
                                     <option <?= arr_val($agency_data, "title", "") == "Miss" ? "selected" : '' ?> value="Miss">Miss</option>
                                 </select>
-                                <div class="clearfix"></div>
-                                <div class="help-block with-errors"></div>
                             </div>
                             <div class="col-md-6">
                                 <label class="control-label">Gender</label>
@@ -94,67 +117,71 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                                     <option <?= arr_val($agency_data, "gender", "") == "Male" ? "selected" : '' ?> value="Male">Male</option>
                                     <option <?= arr_val($agency_data, "gender", "") == "Female" ? "selected" : '' ?> value="Female">Female</option>
                                 </select>
-                                <div class="clearfix"></div>
-                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- First / Last Name -->
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
                                 <label class="control-label">First Name</label>
                                 <input type="text" name="first_name" value="<?= arr_val($agency_data, "fname", "") ?>" class="form-control" placeholder="Enter Your First Name" required="required">
-                                <div class="help-block with-errors"></div>
                             </div>
                             <div class="col-md-6">
-                                <label class=" control-label">Last Name</label>
+                                <label class="control-label">Last Name</label>
                                 <input type="text" name="last_name" value="<?= arr_val($agency_data, "lname", "") ?>" class="form-control" placeholder="Enter Your Last Name" required="required">
-                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Contact / Email -->
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class=" control-label">Contact</label>
+                                <label class="control-label">Contact</label>
                                 <input type="text" name="contact" value="<?= arr_val($agency_data, "contact", "") ?>" class="form-control" placeholder="Enter contact" required="required">
-                                <div class="help-block with-errors"></div>
                             </div>
                             <div class="col-md-6">
-                                <label for="inputEmail" class="control-label">Email</label>
-                                <input type="email" class="form-control" value="<?= arr_val($agency_data, "email", "") ?>" id="inputEmail" placeholder="Email" name="email" data-error="Whoops, that email address is invalid" required="">
-                                <div class="help-block with-errors"></div>
+                                <label class="control-label">Email</label>
+                                <input type="email" class="form-control" value="<?= arr_val($agency_data, "email", "") ?>" placeholder="Email" name="email" required="">
                             </div>
                         </div>
                     </div>
+
+                    <!-- User Address -->
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-12">
                                 <label class="control-label">Address</label>
-                                <input type="text" class="form-control" name="address" value="<?= arr_val($agency_data, "address", "") ?>" placeholder="Enter Address" id="autocomplete" required>
-                                <input type="hidden" value="<?= arr_val($agency_data, "city", "") ?>" id="locality" name="city">
-                                <input type="hidden" value="<?= arr_val($agency_data, "lat", "") ?>" id="lat" name="lat">
-                                <input type="hidden" value="<?= arr_val($agency_data, "lng", "") ?>" id="lng" name="lng">
-                                <input type="hidden" value="<?= arr_val($agency_data, "postcode", "") ?>" id="postal_code" name="postcode">
+                                <input type="text" class="form-control" name="address" value="<?= arr_val($agency_data, "user_address", "") ?>" placeholder="Enter Address" id="user_autocomplete" required>
+                                <input type="hidden" name="city" id="user_city" value="<?= arr_val($agency_data, "city", "") ?>">
+                                <input type="hidden" name="postcode" id="user_postcode" value="<?= arr_val($agency_data, "postcode", "") ?>">
+                                <input type="hidden" name="lat" id="user_lat" value="<?= arr_val($agency_data, "lat", "") ?>">
+                                <input type="hidden" name="lng" id="user_lng" value="<?= arr_val($agency_data, "lng", "") ?>">
                                 <div class="mt-0 bg-light rounded">
                                     <small>
                                         <strong>Detected:</strong>
-                                        <span id="display_city"></span>
-                                        <span id="display_postcode" class="ml-2"></span>
+                                        <span id="user_display_city"></span>
+                                        <span id="user_display_postcode" class="ml-2"></span>
                                     </small>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Password -->
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-12">
-                                <label for="inputPassword" class="control-label">Password</label>
-                                <input type="password" data-minlength="6" class="form-control" id="inputPassword" name="password" placeholder="Password" <?= arr_val($agency_data, "password", "") ? "" : 'required' ?>>
+                                <label class="control-label">Password</label>
+                                <input type="password" data-minlength="6" class="form-control" name="password" placeholder="Password" <?= arr_val($agency_data, "password", "") ? "" : 'required' ?>>
                                 <div class="help-block">Minimum of 6 characters</div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Hidden IDs & Submit -->
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-12">
@@ -170,78 +197,76 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     </div>
                 </form>
             </div>
-            <!-- /.box-content -->
         </div>
     </div>
 
-
+    <!-- Google Maps Autocomplete -->
     <script>
-        var placeSearch, autocomplete;
+        var branchAutocomplete, userAutocomplete;
 
         function initAutocomplete() {
-            autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById('autocomplete'), {
+            // Branch address
+            branchAutocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('branch_autocomplete'), {
                     types: ['address'],
                     componentRestrictions: {
                         country: 'GB'
                     }
                 }
             );
-            autocomplete.addListener('place_changed', fillInAddress);
+            branchAutocomplete.addListener('place_changed', function() {
+                fillInAddress(branchAutocomplete, 'branch');
+            });
+
+            // User address
+            userAutocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('user_autocomplete'), {
+                    types: ['address'],
+                    componentRestrictions: {
+                        country: 'GB'
+                    }
+                }
+            );
+            userAutocomplete.addListener('place_changed', function() {
+                fillInAddress(userAutocomplete, 'user');
+            });
         }
 
-        function fillInAddress() {
-            var place = autocomplete.getPlace();
-            console.log('Place details:', place);
-
+        function fillInAddress(autocompleteObj, prefix) {
+            var place = autocompleteObj.getPlace();
             if (!place.geometry) {
                 alert('Please select a valid address from the dropdown');
                 return;
             }
 
-            // Coordinates
-            $("#lat").val(place.geometry.location.lat());
-            $("#lng").val(place.geometry.location.lng());
+            $("#" + prefix + "_lat").val(place.geometry.location.lat());
+            $("#" + prefix + "_lng").val(place.geometry.location.lng());
+            $("#" + prefix + "_city").val('');
+            $("#" + prefix + "_postcode").val('');
+            $("#" + prefix + "_display_city").text('');
+            $("#" + prefix + "_display_postcode").text('');
 
-            // Reset previous values
-            $("#locality").val('');
-            $("#postal_code").val('');
-            $("#display_city").text('');
-            $("#display_postcode").text('');
-
-            // Extract address components
             var city = '';
             var postcode = '';
-
-            for (var i = 0; i < place.address_components.length; i++) {
-                var component = place.address_components[i];
-                var addressType = component.types[0];
-
-                if (addressType === 'locality' || addressType === 'postal_town') {
-                    city = component.long_name;
-                    $("#locality").val(city);
-                    $("#display_city").text('City: ' + city);
+            place.address_components.forEach(function(comp) {
+                if (comp.types.includes('locality') || comp.types.includes('postal_town')) {
+                    city = comp.long_name;
                 }
-
-                if (addressType === 'postal_code') {
-                    postcode = component.long_name;
-                    $("#postal_code").val(postcode);
-                    $("#display_postcode").text('Postcode: ' + postcode);
+                if (comp.types.includes('postal_code')) {
+                    postcode = comp.long_name;
                 }
-            }
-
-            // Also check for UK specific postal town
+            });
             if (!city) {
-                for (var i = 0; i < place.address_components.length; i++) {
-                    var component = place.address_components[i];
-                    if (component.types.includes('postal_town')) {
-                        city = component.long_name;
-                        $("#locality").val(city);
-                        $("#display_city").text('City: ' + city);
-                        break;
+                place.address_components.forEach(function(comp) {
+                    if (comp.types.includes('postal_town')) {
+                        city = comp.long_name;
                     }
-                }
+                });
             }
+            $("#" + prefix + "_city").val(city);
+            $("#" + prefix + "_display_city").text('City: ' + city);
+            $("#" + prefix + "_postcode").val(postcode);
+            $("#" + prefix + "_display_postcode").text('Postcode: ' + postcode);
         }
 
         function geolocate() {
@@ -255,14 +280,13 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                         center: geolocation,
                         radius: position.coords.accuracy
                     });
-                    if (autocomplete) {
-                        autocomplete.setBounds(circle.getBounds());
-                    }
+                    if (branchAutocomplete) branchAutocomplete.setBounds(circle.getBounds());
+                    if (userAutocomplete) userAutocomplete.setBounds(circle.getBounds());
                 });
             }
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFeQ9V13F9lHKxCry0MmMQaRH32C8zIJY&libraries=places&region=GB&callback=initAutocomplete" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_API_KEY ?>&libraries=places&region=GB&callback=initAutocomplete" async defer></script>
     <?php require_once('./includes/js.php'); ?>
 </body>
 
