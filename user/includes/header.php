@@ -88,6 +88,12 @@ if (LOGGED_IN_USER['image'] == "avatar.png") {
                 </a>
             </li>
             <li class="nav-item">
+                <a href="financial-income-reports" class="nav-link">
+                    <i class="fas fa-chart-line me-2"></i>
+                    <span class="text">Financial Income Reports</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="send-sms" class="nav-link">
                     <i class="fa fa-comment" aria-hidden="true"></i>
                     <span class="text">Send SMS To Customer</span>
@@ -140,7 +146,7 @@ if (LOGGED_IN_USER['image'] == "avatar.png") {
                     </a>
                     <a href="settings" class="dropdown-item">
                         <i class="fas fa-cog pt-1"></i>
-                        Settings
+                        Branch Settings
                     </a>
                 <?php } ?>
                 <a href="setting" class="dropdown-item">

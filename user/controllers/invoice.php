@@ -23,7 +23,7 @@ if (isset($_POST['saveInvoice'])) {
     $company_id = LOGGED_IN_USER['company_id'];
     $agency_id = LOGGED_IN_USER['agency_id'];
     $customer_id = intval($_POST['customer_id']);
-    $wright_off = isset($_POST['wright_off']) ? 1 : 0;
+    $write_off = isset($_POST['write_off']) ? 1 : 0;
 
     if (empty($customer_id)) {
         returnError("Please select a customer before saving the invoice.");
@@ -152,7 +152,7 @@ if (isset($_POST['saveInvoice'])) {
         "discount_amount" => $discount_amount,
         "total_amount" => $total_amount,
         "due_amount" => $due_amount,
-        "wright_off" => $wright_off
+        "write_off" => $write_off
     ];
 
     // Update Invoice 
@@ -166,7 +166,7 @@ if (isset($_POST['saveInvoice'])) {
             "notes" => $notes,
             "proforma" => $proforma,
             "due_date" => $due_date,
-            "wright_off" => $wright_off,
+            "write_off" => $write_off,
             "discount" => $discount_amount,
         ];
 
@@ -249,7 +249,7 @@ if (isset($_POST['saveInvoice'])) {
         "due_amount" => $due_amount,
         "notes" => $notes,
         "proforma" => $proforma,
-        "wright_off" => $wright_off,
+        "write_off" => $write_off,
     ];
 
 
@@ -570,11 +570,11 @@ function saveInvoicePDF($invoice_data = [])
         </tr>';
     }
 
-    // Wright off amount 
-    $wright_off_row = "";
-    if ($invoice_data['wright_off']) {
-        $wright_off_row = '<tr class="' . $is_proforma_div_hide . '">
-                        <td><strong>Wright Off Amount:</strong></td>
+    // Write off amount 
+    $write_off_row = "";
+    if ($invoice_data['write_off']) {
+        $write_off_row = '<tr class="' . $is_proforma_div_hide . '">
+                        <td><strong>Write Off Amount:</strong></td>
                         <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($invoice_data['due_amount'], 2) . '</strong></td>
                     </tr>';
         $invoice_data['due_amount'] = 0;
@@ -611,7 +611,7 @@ function saveInvoicePDF($invoice_data = [])
                         <td><strong>Due Amount:</strong></td>
                         <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($invoice_data['due_amount'], 2) . '</strong></td>
                     </tr>
-                    ' . $wright_off_row . '
+                    ' . $write_off_row . '
                 </table>
             </div>
 
@@ -810,7 +810,7 @@ if (isset($_POST['updateInvoicePayment'])) {
         "discount_amount" => $invoice['discount'],
         "total_amount" => $invoice['total_amount'],
         "due_amount" => $invoice['due_amount'],
-        "wright_off" => $invoice['wright_off']
+        "write_off" => $invoice['write_off']
     ];
 
     $pdf = saveInvoicePDF($invoice_data);

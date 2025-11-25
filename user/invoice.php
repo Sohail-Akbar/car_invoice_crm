@@ -48,7 +48,7 @@ if ($get_invoice_id) {
     if (!$invoiceItems) $invoiceItems = [];
 
     // $invoiceData
-    $invoiceData = $db->select_one("invoices", "id,notes,discount,wright_off", [
+    $invoiceData = $db->select_one("invoices", "id,notes,discount,write_off", [
         "id" => $get_invoice_id,
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
@@ -185,7 +185,7 @@ if ($get_invoice_id) {
                                     <td>
                                         <div class="pull-away">
                                             <span id="due_amount">0</span>
-                                            <input type="checkbox" class="tc-checkbox" <?= arr_val($invoiceData, "wright_off", 0) == 1 ? "checked" : "" ?> data-label="Wright off" name="wright_off">
+                                            <input type="checkbox" class="tc-checkbox" <?= arr_val($invoiceData, "write_off", 0) == 1 ? "checked" : "" ?> data-label="Write off" name="write_off">
                                         </div>
                                     </td>
                                 </tr>

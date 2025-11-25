@@ -1,13 +1,22 @@
+<?php
+require_once('includes/db.php');
+$page_name = 'Dashboard';
+
+$JS_FILES_ = [
+    _DIR_ . "js/jquery.dataTables.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",
+    "report.js",
+];
+$CSS_FILES_ = [
+    _DIR_ .  "css/jquery.dataTables.min.css",
+];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Income Reports</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <?php require_once('./includes/head.php'); ?>
     <style>
         .card {
             border-radius: 10px;
@@ -61,74 +70,64 @@
 </head>
 
 <body>
-    <div class="container-fluid py-4">
+    <?php require_once('./includes/header.php'); ?>
+    <div class="all-content">
         <!-- Header -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h3 mb-0"><i class="fas fa-chart-line me-2"></i>Financial Income Reports</h1>
+                        <h1 class="h3 mb-0"><i class="fas fa-chart-line mr-2"></i>Financial Income Reports</h1>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- Filters -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Report Filters</h5>
+                        <h5 class="mb-0"><i class="fas fa-filter me-2"></i> Report Filters</h5>
                     </div>
                     <div class="card-body">
                         <form id="reportFilter">
                             <div class="row g-3">
-                                <div class="col-md-2">
-                                    <label class="form-label">Company ID</label>
-                                    <input type="number" class="form-control" id="company_id" name="company_id"
-                                        value="1" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Agency ID</label>
-                                    <input type="number" class="form-control" id="agency_id" name="agency_id" value="1"
-                                        required>
-                                </div>
-                                <div class="col-md-2">
+                                <div class="col-md-6">
                                     <label class="form-label">Start Date</label>
                                     <input type="date" class="form-control" id="start_date" name="start_date" required>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-6">
                                     <label class="form-label">End Date</label>
                                     <input type="date" class="form-control" id="end_date" name="end_date" required>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-6 mt-3">
                                     <label class="form-label">Vehicle Reg</label>
                                     <input type="text" class="form-control" id="vehicle_reg" name="vehicle_reg"
                                         placeholder="Enter registration">
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-6 mt-3">
                                     <label class="form-label">Customer Name</label>
                                     <input type="text" class="form-control" id="customer_name" name="customer_name"
                                         placeholder="Enter name">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6 mt-3">
                                     <label class="form-label">Report Type</label>
-                                    <select class="form-select" id="report_type" name="report_type">
+                                    <select class="form-control" id="report_type" name="report_type">
                                         <option value="all">All Invoices</option>
                                         <option value="paid">Paid Income</option>
                                         <option value="unpaid">Unpaid Income</option>
                                         <option value="write_off">Write-off Income</option>
                                     </select>
                                 </div>
-                                <div class="col-md-9 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary me-2">
+                                <div class="col-md-9 d-flex align-items-end mt-3">
+                                    <button type="submit" class="btn btn-primary mr-2">
                                         <i class="fas fa-search me-1"></i> Generate Report
                                     </button>
-                                    <button type="button" id="exportPdf" class="btn btn-success me-2">
+                                    <!-- <button type="button" id="exportPdf" class="btn btn-success mr-2">
                                         <i class="fas fa-file-pdf me-1"></i> Export PDF
-                                    </button>
+                                    </button> -->
                                     <button type="button" id="exportExcel" class="btn btn-success">
-                                        <i class="fas fa-file-excel me-1"></i> Export Excel
+                                        <i class="fas fa-file-excel mr-1"></i> Export Excel
                                     </button>
                                 </div>
                             </div>
@@ -137,11 +136,10 @@
                 </div>
             </div>
         </div>
-
         <!-- Summary Cards -->
         <div class="row mb-4" id="summarySection" style="display: none;">
             <div class="col-12">
-                <h5 class="mb-3"><i class="fas fa-chart-pie me-2"></i>Report Summary</h5>
+                <h5 class="mb-3"><i class="fas fa-chart-pie me-2"></i> Report Summary</h5>
                 <div class="row" id="summaryCards">
                     <!-- Summary cards will be loaded here -->
                 </div>
@@ -153,7 +151,7 @@
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mt-2">Generating report...</p>
+            <p class="mt-2"> Generating report...</p>
         </div>
 
         <!-- Results Table -->
@@ -161,7 +159,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="fas fa-table me-2"></i>Income Report Results</h5>
+                        <h5 class="mb-0"><i class="fas fa-table me-2"></i> Income Report Results</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -193,15 +191,7 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-    <script src="js/app.js"></script>
+    <?php require_once('./includes/js.php'); ?>
 </body>
 
 </html>
