@@ -60,10 +60,9 @@
            <button class="toggle-sidebar" id="toggleSidebar">
                <i class="fas fa-bars"></i>
            </button>
-           <div class="logo">
-               <i class="fas fa-cube"></i>
-               <span>Dashboard</span>
-           </div>
+           <a href="dashboard" class="logo">
+               <img src="<?= $user_img ?>" width="50px" alt="Logo">
+           </a>
        </div>
 
        <div class="navbar-right">
