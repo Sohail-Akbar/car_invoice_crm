@@ -1,0 +1,81 @@
+ @media (max-width: 768px) {
+
+     .profile-setting-container .card,
+     .setting-container .card,
+     .add-services-container .card,
+     .add-role-container .card,
+     .add-staff-container .card,
+     .view-staff-container .card,
+     .income-report-container .card,
+     .view-reg-vehicle-container .card,
+     .reg-vehicle-container .card,
+     .view-customer-container .card,
+     .add-customer-container .card,
+     .view-reg-vehicle-container .card-body,
+     .view-customer-container .card-body,
+     .invoice-search-container .card-body,
+     .invoice-search-container .card,
+     .invoice-container .card {
+         padding: 0;
+     }
+
+     .dataTable-container .table-responsive {
+         overflow: auto !important;
+     }
+
+     .invoice-container #add_row {
+         margin-top: 20px;
+     }
+
+     body {
+         overflow-x: hidden !important;
+     }
+
+
+ }
+
+ /* Desktop Styles */
+ @media (min-width: 769px) {}
+
+ /* Small mobile optimization */
+ @media (max-width: 480px) {
+     h3 {
+         font-size: 19px !important;
+         margin-bottom: 0 !important;
+     }
+
+     h1 {
+         font-size: 20px !important;
+     }
+
+     .compact-info-card .card-header {
+         flex-direction: column;
+         justify-content: flex-start;
+         display: flex;
+         align-items: start !important;
+     }
+
+     .modal.fade .modal-dialog {
+         max-width: 100% !important;
+     }
+
+     .dashboard-container .action-buttons {
+         flex-direction: column;
+     }
+
+     .dashboard-container .single-btn {
+         margin-bottom: 20px;
+     }
+
+     .dashboard-container {
+         padding-left: 30px;
+     }
+
+     .dashboard-container .header h2 {
+         font-size: 40px !important;
+     }
+
+     .heading-sm-w {
+         width: 320px !important;
+     }
+ }

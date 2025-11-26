@@ -55,6 +55,7 @@ if (isset($_POST['addCompany'])) {
         "company_lng" =>  $company_lng,
         "company_city" =>  $company_city,
         "company_postcode" =>  $company_postcode,
+        "created" => CREATED_AT
     ];
 
     if ($company_logo !== "") {
@@ -89,7 +90,8 @@ if (isset($_POST['addCompany'])) {
         "image" => "avatar.png",
         "verify_status" => "1",
         "is_admin" => "1",
-        "user_id" => LOGGED_IN_USER_ID
+        "user_id" => LOGGED_IN_USER_ID,
+        "date_added" => CREATED_AT
     ];
 
     // Password hash only if provided

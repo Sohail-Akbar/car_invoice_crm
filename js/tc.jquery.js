@@ -17,7 +17,7 @@ const tcCheckbox = () => {
                         <span class="c-box">
                             <i class="fas fa-check"></i>
                         </span>
-                        <span>${label}</span>
+                        <span class="text">${label}</span>
                     </label>
                 `;
         $(html).insertBefore($(this));

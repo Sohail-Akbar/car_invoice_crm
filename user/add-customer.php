@@ -23,7 +23,7 @@ $customer_data = $db->select_one("users", "*", [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content add-customer-container" id="mainContent">
         <div class="card">
             <div class="card-body">
                 <h3 class="heading mb-4">Create Customer </h3>
@@ -32,7 +32,7 @@ $customer_data = $db->select_one("users", "*", [
                 require_once('./components/customer-form.php'); ?>
             </div>
         </div>
-    </div>
+    </main>
     <script>
         var placeSearch, autocomplete;
 

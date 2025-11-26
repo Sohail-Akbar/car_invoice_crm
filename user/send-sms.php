@@ -38,7 +38,7 @@ if (empty($customer)) $customer = [];
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content sendSMS-container" id="mainContent">
         <div class="send-sms-container">
             <div class="header-card">
                 <div class="garage-header">
@@ -46,7 +46,7 @@ if (empty($customer)) $customer = [];
                     <p>Manage vehicle services and send SMS notifications to customers</p>
                 </div>
             </div>
-            <div class="main-content">
+            <div class="main-content-">
                 <div class="sms-card">
                     <div class="card-header">
                         <i class="fas fa-sms me-2"></i> Send Service SMS
@@ -109,7 +109,7 @@ if (empty($customer)) $customer = [];
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <?php require_once('./includes/js.php'); ?>
     <script>

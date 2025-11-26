@@ -71,7 +71,7 @@ $CSS_FILES_ = [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content income-report-container" id="mainContent">
         <!-- Header -->
         <div class="row mb-4">
             <div class="col-12">
@@ -189,9 +189,9 @@ $CSS_FILES_ = [
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 
-    <?php require_once('./includes/js.php'); ?>
+        <?php require_once('./includes/js.php'); ?>
 </body>
 
 </html>

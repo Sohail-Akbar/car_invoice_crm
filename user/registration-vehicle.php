@@ -68,7 +68,7 @@ $existing_customers = $db->select("users", "*", [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content reg-vehicle-container" id="mainContent">
         <?php if (!$custom_register) { ?>
             <div class="card">
                 <div class="card-body">
@@ -93,7 +93,8 @@ $existing_customers = $db->select("users", "*", [
         <?php } else { ?>
             <?php require_once "./components/registeration-vehicle/manual-registeration-vehicle.php"; ?>
         <?php } ?>
-    </div>
+        </div>
+    </main>
 
     <?php require_once "./components/registeration-vehicle/vehicle-history-modal.php"; ?>
 

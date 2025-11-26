@@ -30,7 +30,7 @@ if ($role_id) {
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content add-role-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 Add Role
@@ -97,7 +97,7 @@ if ($role_id) {
                 </tbody>
             </table>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

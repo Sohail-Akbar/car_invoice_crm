@@ -52,7 +52,7 @@ $CSS_FILES_ = [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content view-customer-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
@@ -79,7 +79,7 @@ $CSS_FILES_ = [
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

@@ -25,11 +25,11 @@ if (!$staffs_data) $staffs_data = [];
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content view-staff-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
-                    <p>Staffs</p>
+                    <p class="text-white">Staffs</p>
                     <a href="add-staff">Add New Staff</a>
                 </div>
             </div>
@@ -92,7 +92,7 @@ if (!$staffs_data) $staffs_data = [];
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

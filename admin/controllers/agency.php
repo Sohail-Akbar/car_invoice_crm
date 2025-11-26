@@ -53,6 +53,7 @@ if (isset($_POST['addAgency'])) {
         "postcode" => arr_val($_POST, "branch_postcode", ""),
         "lat" => arr_val($_POST, "branch_lat", ""),
         "lng" => arr_val($_POST, "branch_lng", ""),
+        "created" => CREATED_AT
     ];
 
     if ($company_logo !== "") {
@@ -88,9 +89,10 @@ if (isset($_POST['addAgency'])) {
         "contact" =>  $contact,
         "type" => "agency",
         "image" => "avatar.png",
-        "verify_status" => "1",
+        // "verify_status" => "1",
         "is_admin" => "0",
-        "user_id" => LOGGED_IN_USER_ID
+        "user_id" => LOGGED_IN_USER_ID,
+        "date_added" => CREATED_AT
     ];
 
     // Password hash only if provided

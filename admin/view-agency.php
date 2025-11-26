@@ -25,11 +25,11 @@ $agency_data = $db->query($agency_data, ["select_query" => true]);
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content view-agency-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
-                    <p>Agencies</p>
+                    <p class="text-white">Agencies</p>
                     <a href="add-agency">Add New Branch</a>
                 </div>
             </div>
@@ -105,7 +105,7 @@ $agency_data = $db->query($agency_data, ["select_query" => true]);
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

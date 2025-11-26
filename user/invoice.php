@@ -66,7 +66,7 @@ if ($get_invoice_id) {
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content invoice-container" id="mainContent">
         <form action="invoice" method="POST" class="ajax_form">
             <div class="card shadow">
                 <div class="card-header  text-white">
@@ -141,20 +141,21 @@ if ($get_invoice_id) {
                     </div>
 
                     <h5 class="mt-4 mb-2 text-primary">Invoice Items</h5>
-                    <table class="table table-bordered" id="invoice_table">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Service</th>
-                                <th width="80">Quantity</th>
-                                <th width="100">Amount</th>
-                                <th width="50">#</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="invoice_table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Service</th>
+                                    <th width="80">Quantity</th>
+                                    <th width="100">Amount</th>
+                                    <th width="50">#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
-
+                            </tbody>
+                        </table>
+                    </div>
                     <button type="button" id="add_row" class="btn btn-secondary btn-sm mb-3">+ Add Item</button>
 
                     <div class="row">
@@ -219,7 +220,7 @@ if ($get_invoice_id) {
                 </div>
             </div>
         </form>
-    </div>
+    </main>
 
     <script>
         let SERVICES = <?= json_encode($services); ?>;

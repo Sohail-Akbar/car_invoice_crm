@@ -30,7 +30,7 @@ if ($service_id) {
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content add-services-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 Add Services
@@ -105,7 +105,7 @@ if ($service_id) {
                 </tbody>
             </table>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

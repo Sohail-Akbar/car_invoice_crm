@@ -1,0 +1,40 @@
+ @media (max-width: 768px) {
+
+     .view-agency-container .card,
+     .add-agency-container .card,
+     .setting-container .card,
+     .add-company-container .card,
+     .view-company-container .card {
+         padding: 0;
+     }
+
+     body {
+         overflow-x: hidden !important;
+     }
+ }
+
+ /* Desktop Styles */
+ @media (min-width: 769px) {}
+
+ /* Small mobile optimization */
+ @media (max-width: 480px) {
+     .dashboard-container .action-buttons {
+         flex-direction: column;
+     }
+
+     .dashboard-container .single-btn {
+         margin-bottom: 20px;
+     }
+
+     .dashboard-container {
+         padding-left: 30px;
+     }
+
+     .dashboard-container .header h2 {
+         font-size: 40px !important;
+     }
+
+     .heading-sm-w {
+         width: 320px !important;
+     }
+ }

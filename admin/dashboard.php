@@ -15,13 +15,15 @@ $CSS_FILES_ = [];
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="heading">Dashboard</h3>
+    <main class="main-content dashboard-container" id="mainContent">
+        <div class="header">
+            <h5>Cody Garage</h5>
+            <div class="heading-sm-w" style="width: 360px;text-align: end;">
+                <h2 class="mb-0" style="font-size: 45px;color: white;"><b>Welcome</b> To Your</h2>
+                <h2 style="font-size: 45px;color: white;"><b>Dashboard...</b></h2>
             </div>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

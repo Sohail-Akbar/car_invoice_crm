@@ -83,12 +83,12 @@ $JS_FILES_ = [];
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content invoice-search-container" id="mainContent">
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="mb-0"><i class="fas fa-search me-2"></i> Invoice Search</h3>
+                    <div class="card-header text-white">
+                        <h3 class="mb-0 text-white"><i class="fas fa-search me-2 text-white"></i> Invoice Search</h3>
                     </div>
                     <div class="card-body">
                         <!-- Search Form -->
@@ -176,7 +176,7 @@ $JS_FILES_ = [];
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <script>
         const SITE_URL = '<?= SITE_URL ?>';
     </script>

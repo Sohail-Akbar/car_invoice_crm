@@ -11,80 +11,45 @@ if (LOGGED_IN_USER['type'] === "staff") redirectTo("assigned-vehicles");
 
 <head>
     <?php require_once('./includes/head.php'); ?>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f5f6fa;
-            margin: 0;
-            padding: 40px;
-        }
-
-        .tabs-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .tab-card {
-            background: white;
-            width: 220px;
-            padding: 30px 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .tab-card:hover {
-            transform: translateY(-5px);
-            border-color: #3498db;
-            box-shadow: 0 6px 14px rgba(52, 152, 219, 0.2);
-        }
-
-        .tab-card i {
-            font-size: 40px;
-            color: #3498db;
-            margin-bottom: 10px;
-        }
-
-        .tab-card h4 {
-            margin: 10px 0 0;
-            color: #333;
-        }
-    </style>
 </head>
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
-        <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
-            <h2 style="text-align:center; margin-bottom:10px; color:#333;">Welcome to Your Dashboard</h2>
-            <p style="text-align:center; color:#666; margin-bottom:40px;">
-                Manage your invoices, payments, and clients easily from here.
-            </p>
-
-            <div class="tabs-container">
-                <div class="tab-card" onclick="location.href='registration-vehicle'">
-                    <i class="fas fa-plus-circle"></i>
-                    <h4>Create Invoice</h4>
-                </div>
-
-                <div class="tab-card" onclick="location.href='invoice-search'">
-                    <i class="fas fa-file-invoice"></i>
-                    <h4>View Invoices</h4>
-                </div>
-
-                <div class="tab-card" onclick="location.href='view-customer'">
-                    <i class="fas fa-search"></i>
-                    <h4>Search Clients</h4>
-                </div>
+    <!-- Main Content -->
+    <main class="main-content dashboard-container" id="mainContent">
+        <div class="header">
+            <h5>Cody Garage</h5>
+            <div class="heading-sm-w" style="width: 360px;text-align: end;">
+                <h2 class="mb-0" style="font-size: 45px;color: white;"><b>Welcome</b> To Your</h2>
+                <h2 style="font-size: 45px;color: white;"><b>Dashboard...</b></h2>
             </div>
-        <?php } ?>
-    </div>
-
+            <p class="text-white mt-4">Manage your invoices, payments, and clients easily from here.</p>
+        </div>
+        <div class="action-buttons">
+            <a href="invoice" class="single-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.7726 5.49629L14.5686 13.7165C14.2515 14.0343 13.8618 14.2702 13.4331 14.4037L11.6899 14.9872C11.2762 15.1041 10.8388 15.1085 10.4228 15C10.0068 14.8915 9.62726 14.6741 9.32328 14.3701C9.0193 14.0661 8.80187 13.6866 8.69339 13.2706C8.58492 12.8546 8.58932 12.4172 8.70616 12.0035L9.28971 10.2603C9.42285 9.83176 9.65824 9.44207 9.97557 9.12481L18.1958 0.919414C18.2711 0.844148 18.3225 0.748228 18.3433 0.643785C18.3641 0.539341 18.3535 0.431066 18.3128 0.332651C18.2721 0.234237 18.2031 0.150103 18.1146 0.0908915C18.0261 0.0316798 17.922 4.9335e-05 17.8155 0H3.76919C2.76954 0 1.81083 0.39711 1.10397 1.10397C0.39711 1.81083 0 2.76954 0 3.76919V19.9229C0 20.9225 0.39711 21.8812 1.10397 22.5881C1.81083 23.2949 2.76954 23.6921 3.76919 23.6921H19.9229C20.9225 23.6921 21.8812 23.2949 22.5881 22.5881C23.2949 21.8812 23.6921 20.9225 23.6921 19.9229V5.87657C23.692 5.77007 23.6604 5.66598 23.6012 5.57745C23.542 5.48893 23.4578 5.41995 23.3594 5.37925C23.261 5.33854 23.1527 5.32794 23.0483 5.34877C22.9438 5.3696 22.8479 5.42094 22.7726 5.49629Z" fill="#214F79" />
+                </svg>
+                <span>Create Invoice</span>
+            </a>
+            <a href="view-customer" class="single-btn">
+                <svg width="26" height="34" viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.3637 17.7273C16.2986 17.7273 17.2126 18.0045 17.99 18.524C18.7674 19.0434 19.3733 19.7817 19.7311 20.6455C20.0889 21.5093 20.1825 22.4598 20.0001 23.3768C19.8177 24.2938 19.3675 25.1361 18.7064 25.7972C18.0452 26.4584 17.2029 26.9086 16.2859 27.091C15.3689 27.2734 14.4184 27.1798 13.5546 26.822C12.6908 26.4642 11.9525 25.8583 11.4331 25.0809C10.9137 24.3035 10.6364 23.3895 10.6364 22.4546C10.638 21.2013 11.1365 19.9998 12.0227 19.1136C12.9089 18.2274 14.1104 17.7288 15.3637 17.7273ZM15.3637 14.1818C13.7275 14.1818 12.128 14.667 10.7676 15.576C9.40715 16.485 8.34681 17.7771 7.72067 19.2887C7.09453 20.8004 6.9307 22.4637 7.2499 24.0685C7.56911 25.6732 8.35701 27.1473 9.51397 28.3043C10.6709 29.4612 12.145 30.2491 13.7497 30.5683C15.3545 30.8875 17.0179 30.7237 18.5295 30.0976C20.0412 29.4714 21.3332 28.4111 22.2422 27.0506C23.1512 25.6902 23.6364 24.0907 23.6364 22.4546C23.6364 20.2605 22.7648 18.1563 21.2134 16.6049C19.6619 15.0534 17.5577 14.1818 15.3637 14.1818Z" fill="#214F79" />
+                    <path d="M18.4198 28.8529L21.762 25.5107L26 29.7464L22.6555 33.0909L18.4198 28.8529ZM7.09091 28.3636H2.36364V2.36364H13.2033L21.2727 10.4331V11.8182H23.6364V9.45455L14.1818 0H2.36364C1.73676 0 1.13556 0.249025 0.692293 0.692293C0.249025 1.13556 0 1.73676 0 2.36364V28.3636C0 28.9905 0.249025 29.5917 0.692293 30.035C1.13556 30.4782 1.73676 30.7273 2.36364 30.7273H7.09091V28.3636Z" fill="#214F79" />
+                    <path d="M21.2727 11.8182H11.8181V2.36365H14.1818L21.2727 9.45456V11.8182ZM21.2727 11.8182H23.6363V14.1818H21.2727V11.8182Z" fill="#214F79" />
+                </svg>
+                <span>Search Client</span>
+            </a>
+            <a href="invoice-search" class="single-btn">
+                <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 20.4444V23.2222C26 23.9589 25.7073 24.6655 25.1864 25.1864C24.6655 25.7073 23.9589 26 23.2222 26H3.77778C3.04107 26 2.33453 25.7073 1.81359 25.1864C1.29266 24.6655 1 23.9589 1 23.2222V20.4444M26 6.55556V3.77778C26 3.04107 25.7073 2.33453 25.1864 1.81359C24.6655 1.29266 23.9589 1 23.2222 1H3.77778C3.04107 1 2.33453 1.29266 1.81359 1.81359C1.29266 2.33453 1 3.04107 1 3.77778V6.55556" stroke="#214F79" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M13.5001 14.8889C14.2672 14.8889 14.889 14.2671 14.889 13.5C14.889 12.7329 14.2672 12.1111 13.5001 12.1111C12.733 12.1111 12.1112 12.7329 12.1112 13.5C12.1112 14.2671 12.733 14.8889 13.5001 14.8889Z" stroke="#214F79" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M23.1445 13.9583C23.2483 13.6616 23.2483 13.3384 23.1445 13.0417C22.3626 11.1256 21.0276 9.48586 19.3099 8.33162C17.5922 7.17738 15.5696 6.56094 13.5001 6.56094C11.4306 6.56094 9.40799 7.17738 7.69028 8.33162C5.97257 9.48586 4.6376 11.1256 3.85564 13.0417C3.7519 13.3384 3.7519 13.6616 3.85564 13.9583C4.6376 15.8744 5.97257 17.5141 7.69028 18.6684C9.40799 19.8226 11.4306 20.4391 13.5001 20.4391C15.5696 20.4391 17.5922 19.8226 19.3099 18.6684C21.0276 17.5141 22.3626 15.8744 23.1445 13.9583Z" stroke="#214F79" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>View Invoice</span>
+            </a>
+        </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

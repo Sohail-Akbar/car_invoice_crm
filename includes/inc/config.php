@@ -31,6 +31,10 @@ define('EMAILS', [
         'filename' => 'set_password.html',
         'subject' => 'Set Your Account Password'
     ],
+    'sendOtp' => [
+        'filename' => 'sendOtp.html',
+        'subject'  => 'Your OTP Code: _:TC_OTP_VAR:_'
+    ],
 ]);
 
 define('SMTP_HOST', 'smtp.hostinger.com');

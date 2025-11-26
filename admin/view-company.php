@@ -24,11 +24,11 @@ $company_admin_data = $db->query($company_admin_sql, ["select_query" => true]);
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content view-company-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
-                    <p>Companies</p>
+                    <p class="text-white">Companies</p>
                     <a href="add-company">Add New Company</a>
                 </div>
             </div>
@@ -104,7 +104,7 @@ $company_admin_data = $db->query($company_admin_sql, ["select_query" => true]);
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

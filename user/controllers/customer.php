@@ -349,6 +349,7 @@ if (isset($_POST['addCustomerNotes'])) {
         "agency_id"   => LOGGED_IN_USER['agency_id'],
         "customer_id" => $customer_id,
         "note"        => $note,
+        "created_at" => CREATED_AT
     ]);
 
     if ($save) {

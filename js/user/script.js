@@ -94,3 +94,78 @@ $(document).on("click", ".sidebar .nav .dropdown-toggle", function (e) {
 
 
 if ($('.dataTable').length) $('.dataTable').DataTable();
+
+
+$(document).ready(function () {
+    var $sidebar = $('#sidebar');
+    var $overlay = $('#overlay'); // Make sure this exists in your HTML
+    var $toggleSidebar = $('#toggleSidebar'); // Your actual toggle button
+    var $userSidebar = $('#userSidebar');
+    var $userProfile = $('#userProfile');
+
+    // Toggle left sidebar on mobile
+    $toggleSidebar.on('click', function () {
+        if ($(window).width() <= 768) {
+            $sidebar.toggleClass('mobile-open');
+            $overlay.toggleClass('active');
+            $userSidebar.removeClass('open'); // Close user sidebar if open
+        }
+    });
+
+    // Toggle user sidebar
+    $userProfile.on('click', function () {
+        $userSidebar.toggleClass('open');
+        if ($(window).width() <= 768) {
+            $overlay.toggleClass('active');
+            $sidebar.removeClass('mobile-open'); // Close left sidebar if open
+        }
+    });
+
+    // Close sidebars when clicking overlay
+    $overlay.on('click', function () {
+        $sidebar.removeClass('mobile-open');
+        $userSidebar.removeClass('open');
+        $overlay.removeClass('active');
+    });
+
+    // Toggle submenus
+    $('.has-submenu > .menu-item').on('click', function (e) {
+        e.preventDefault();
+        var $submenu = $(this).next('.submenu');
+        $submenu.toggleClass('open');
+        $(this).parent().toggleClass('open');
+    });
+
+    // Close sidebars when clicking outside on mobile
+    $(document).on('click', function (e) {
+        if ($(window).width() <= 768) {
+            if (!$sidebar.is(e.target) && $sidebar.has(e.target).length === 0 &&
+                !$toggleSidebar.is(e.target) && $sidebar.hasClass('mobile-open')) {
+                $sidebar.removeClass('mobile-open');
+                $overlay.removeClass('active');
+            }
+
+            if (!$userSidebar.is(e.target) && $userSidebar.has(e.target).length === 0 &&
+                !$userProfile.is(e.target) && $userSidebar.hasClass('open')) {
+                $userSidebar.removeClass('open');
+                $overlay.removeClass('active');
+            }
+        }
+    });
+
+    // Highlight active menu item including parent main menu
+    var currentUrl = window.location.href;
+    $('.sidebar .menu-item, .sidebar .submenu-item').each(function () {
+        if (this.href === currentUrl) {
+            $(this).addClass('active');
+
+            // If inside submenu, open parent submenu and mark main menu active
+            var $parentSubmenu = $(this).closest('.submenu');
+            if ($parentSubmenu.length) {
+                $parentSubmenu.addClass('open');
+                $parentSubmenu.prev('.menu-item').addClass('active');
+                $parentSubmenu.closest('.has-submenu').addClass('open');
+            }
+        }
+    });
+});

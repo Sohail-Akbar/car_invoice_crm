@@ -7,94 +7,119 @@
     }
     ?>
 
-   <div class="sidebar">
-       <div class="user-info text-center">
-           <div class="user-image-container">
-               <img src="<?= $user_img; ?>" alt="user-img" class="user-img">
-               <label class="overlay"><i class="fas fa-camera"></i>
-                   <input type="file" class="user-img-file d-none" accept="image/*">
-               </label>
+   <!-- Left Sidebar -->
+   <aside class="sidebar" id="sidebar">
+       <div class="sidebar-menu">
+           <div class="branch-log">
+               <img src="<?= $user_img ?>" alt="Branch Logo Img">
            </div>
-           <button class="save-img btn bg_pink"><i class="fas fa-save"></i> Save Image</button>
-           <div>
-               <p class="user-name" style="text-transform: capitalize;"><?= LOGGED_IN_USER['name']; ?></p>
+           <div class="sidebar-option-menu">
+               <a href="dashboard" class="menu-item">
+                   <i class="fas fa-home"></i>
+                   <span class="menu-text">Dashboard</span>
+               </a>
+               <?php if (LOGGED_IN_USER["type"] === "main_admin") { ?>
+                   <div class="has-submenu">
+                       <a href="#" class="menu-item" id="customerMenu">
+                           <i class="fas fa-user"></i>
+                           <span class="menu-text">Companies</span>
+                       </a>
+                       <div class="submenu" id="customerMenu">
+                           <a href="add-company" class="submenu-item">Add Company</a>
+                           <a href="view-company" class="submenu-item">View Company</a>
+                       </div>
+                   </div>
+               <?php } ?>
+               <?php if (LOGGED_IN_USER["type"] === "admin") { ?>
+                   <div class="has-submenu">
+                       <a href="#" class="menu-item" id="customerMenu">
+                           <i class="fas fa-user"></i>
+                           <span class="menu-text">Branches</span>
+                       </a>
+                       <div class="submenu" id="customerMenu">
+                           <a href="add-agency" class="submenu-item">Add Branch</a>
+                           <a href="view-agency" class="submenu-item">View Branch</a>
+                       </div>
+                   </div>
+               <?php } ?>
            </div>
        </div>
-       <ul class="nav">
-           <li class="nav-item">
-               <a href="dashboard" class="nav-link">
-                   <i class="fas fa-th-large"></i>
-                   <span class="text">Dashboard</span>
-               </a>
-           </li>
-           <?php if (LOGGED_IN_USER["type"] === "main_admin") { ?>
-               <li class="nav-item with-sub-menu">
-                   <a href="#" class="nav-link">
-                       <span>
-                           <i class="fas fa-building"></i>
-                           <span class="text">Companies</span>
-                       </span>
-                       <i class="fas fa-angle-down"></i>
-                   </a>
-                   <ul class="sub-menu">
-                       <li class="nav-item">
-                           <a href="add-company" class="nav-link">
-                               <span class="text">Add Company</span>
-                           </a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="view-company" class="nav-link">
-                               <span class="text">View Company</span>
-                           </a>
-                       </li>
-                   </ul>
-               </li>
-           <?php } ?>
-           <?php if (LOGGED_IN_USER["type"] === "admin") { ?>
-               <li class="nav-item with-sub-menu">
-                   <a href="#" class="nav-link">
-                       <span>
-                           <i class="fas fa-building"></i>
-                           <span class="text">Branches</span>
-                       </span>
-                       <i class="fas fa-angle-down"></i>
-                   </a>
-                   <ul class="sub-menu">
-                       <li class="nav-item">
-                           <a href="add-agency" class="nav-link">
-                               <span class="text">Add Branch</span>
-                           </a>
-                       </li>
-                       <li class="nav-item">
-                           <a href="view-agency" class="nav-link">
-                               <span class="text">View Branch</span>
-                           </a>
-                       </li>
-                   </ul>
-               </li>
-           <?php } ?>
-           <li class="nav-item">
-               <a href="setting" class="nav-link" target="_blank">
-                   <i class="fas fa-cog"></i>
-                   <span class="text">Profile Setting
-                       <i class="fas fa-external-link-alt ml-1" style="font-size: 13px"></i>
-                   </span>
-               </a>
-           </li>
-       </ul>
-   </div>
+   </aside>
+
+   <!-- Navbar -->
    <nav class="navbar">
-       <a class="logo page-name" href="dashboard">
-           Admin Dashboard
-       </a>
-       <div class="menu">
+       <div class="navbar-left">
+           <button class="toggle-sidebar" id="toggleSidebar">
+               <i class="fas fa-bars"></i>
+           </button>
+           <div class="logo">
+               <i class="fas fa-cube"></i>
+               <span>Dashboard</span>
+           </div>
+       </div>
+
+       <div class="navbar-right">
            <div class="dropdown">
                <button class="dropdown-toggle menu-item no-arrow-icon" type="button" data-toggle="dropdown">
-                   <img src="<?= $user_img ?> ?>" alt="user-img" class="user-img">
+                   <h5 class="mb-0 cp text-dark"><i class="fas fa-cog"></i></h5>
                </button>
-               <div class="dropdown-menu">
-                   <a href="<?= _DIR_ ?>logout" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+               <div class="dropdown-menu" style="min-width: 18rem;">
+                   <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+                       <a href="add-staff" class="dropdown-item">
+                           <i class="fas fa-user pt-1"></i>
+                           <span class="text">Add Staff</span>
+                       </a>
+                       <a href="view-staff" class="dropdown-item">
+                           <i class="fas fa-user pt-1"></i>
+                           <span class="text">View Staff</span>
+                       </a>
+                       <a href="add-role" class="dropdown-item">
+                           <i class="fas fa-plus-circle pt-1"></i>
+                           Add Role
+                       </a>
+                       <a href="add-services" class="dropdown-item">
+                           <i class="fas fa-plus-circle pt-1"></i>
+                           Add Services
+                       </a>
+                       <a href="settings" class="dropdown-item">
+                           <i class="fas fa-cog pt-1"></i>
+                           Branch Settings
+                       </a>
+                   <?php } ?>
+                   <a href="setting" class="dropdown-item">
+                       <i class="fas fa-cog pt-1"></i>
+                       <span class="text">Profile Setting</span>
+                   </a>
                </div>
+           </div>
+           <div class="user-profile" id="userProfile">
+               <div class="user-avatar"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
+               <div class="user-name"><?= LOGGED_IN_USER['name'] ?></div>
+               <i class="fas fa-chevron-down"></i>
            </div>
        </div>
    </nav>
+
+   <!-- Right Sidebar - User Info -->
+   <aside class="user-sidebar" id="userSidebar">
+       <div class="user-header">
+           <div class="user-avatar-large"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
+           <div class="user-name-large"><?= LOGGED_IN_USER['name'] ?></div>
+           <div class="user-role"><?= ucfirst(LOGGED_IN_USER['type']) === "Agency" ? "Branch" : ucfirst(LOGGED_IN_USER['type']) ?></div>
+       </div>
+
+       <div class="user-menu">
+           <a href="setting" class="user-menu-item">
+               <i class="fas fa-user"></i>
+               <span>My Profile</span>
+           </a>
+       </div>
+
+       <a href="<?= _DIR_ . "logout" ?>" class="logout-btn">
+           <i class="fas fa-sign-out-alt"></i>
+           <span>Logout</span>
+       </a>
+   </aside>
+
+   <!-- Overlay for mobile -->
+   <div class="overlay" id="overlay"></div>

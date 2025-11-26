@@ -27,7 +27,7 @@ $staff_data = $db->select_one("users", "*", [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content add-staff-container" id="mainContent">
         <div class="card">
             <div class="card-body">
                 <h3 class="heading mb-4">Create staff </h3>
@@ -118,11 +118,10 @@ $staff_data = $db->select_one("users", "*", [
                             <button class="btn" type="submit"><i class="fas fa-save"></i> Save</button>
                         </div>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
-    </div>
-    </div>
+    </main>
     <script>
         var placeSearch, autocomplete;
 

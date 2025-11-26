@@ -84,7 +84,8 @@ if (isset($_POST['assign_staff'])) {
                 "staff_id" => $staff_id,
                 "assigned_by" => LOGGED_IN_USER['id'],
                 "is_active" => 1,
-                "invoice_id" => $invoice_id
+                "invoice_id" => $invoice_id,
+                "assignment_date" => CREATED_AT
             ]);
 
             if ($save) {

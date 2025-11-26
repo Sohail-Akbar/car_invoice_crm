@@ -13,7 +13,7 @@ $JS_FILES_ = [];
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content profile-setting-container" id="mainContent">
         <div class="card">
             <div class="card-body">
                 <h3 class="heading">Personal Information</h3>
@@ -72,7 +72,7 @@ $JS_FILES_ = [];
                 </form>
             </div>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

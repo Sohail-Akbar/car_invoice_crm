@@ -18,7 +18,7 @@ $agency = $db->select_one("agencies", "*", [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content setting-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 Branch VAT
@@ -95,7 +95,7 @@ $agency = $db->select_one("agencies", "*", [
                 </form>
             </div>
         </div>
-    </div>
+    </main>
 
     <?php require_once('./includes/js.php'); ?>
 </body>

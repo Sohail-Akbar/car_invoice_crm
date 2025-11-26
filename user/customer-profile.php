@@ -103,7 +103,7 @@ $cars = $db->select("customer_car_history", "*", [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content customer-profile-container" id="mainContent">
         <div class="container">
             <?php
             // Header
@@ -126,7 +126,7 @@ $cars = $db->select("customer_car_history", "*", [
             require_once "./components/customer-profile/notes.php";
             ?>
         </div>
-    </div>
+    </main>
 
     <!-- View Work Carried -->
 

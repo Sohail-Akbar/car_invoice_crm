@@ -27,11 +27,11 @@ if (!$mot_history) $mot_history = [];
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <main class="main-content view-reg-vehicle-container" id="mainContent">
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
-                    <p>View Registeration Vehicle</p>
+                    <p class="text-white">View Registeration Vehicle</p>
                     <a href="registration-vehicle">Add New Register Vehicle</a>
                 </div>
             </div>
@@ -55,7 +55,7 @@ if (!$mot_history) $mot_history = [];
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

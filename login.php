@@ -4,162 +4,166 @@ require_once('includes/db.php');
 $page_name = 'Login';
 
 $CSS_FILES_ = [
-    "login.css"
+    "login.css",
+    _DIR_ . "/css/mdb.min.css"
 ];
-$JS_FILES_ = [];
+$JS_FILES_ = [
+    _DIR_ . "/js/mdb.min.js"
+];
+
+
+// if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
+
+//     list($user_id, $token) = explode(":", $_COOKIE['Garage_Remember_Me']);
+
+//     $user = $db->select_one("users", "*", ["id" => $user_id]);
+
+//     if ($user && $user['remember_token']) {
+
+//         $token_hash = hash("sha256", $token);
+
+//         // Validate hash
+//         if ($user['remember_token'] === $token_hash) {
+//             // SUCCESS → Auto Login
+//             $_SESSION['user_id'] = $user_id;
+//             $url = "user/dashboard";
+//             if ($user['type'] === "main_admin") {
+//                 $url = "admin/dashboard";
+//             } else if ($user['type'] === "admin") {
+//                 $url = "admin/dashboard";
+//             }
+//             echo success('logged in successfully', [
+//                 'redirect' => $url,
+//             ]);
+//         }
+//     }
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <?php require_once('./includes/head.php'); ?>
+    <style>
+        .form-outline .form-control.active~.form-label,
+        .form-outline .form-control:focus~.form-label {
+            transform: translateY(-1.3rem) translateY(.1rem) scale(.8);
+        }
+
+        input,
+        label {
+            font-size: 20px !important;
+        }
+
+        input {
+            padding: 10px !important;
+        }
+
+        label {
+            padding-top: 10px !important;
+        }
+    </style>
 </head>
 
 <body>
-
     <div class="login-container">
-        <!-- Left Panel -->
-        <div class="left-panel">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-car-side"></i>
+        <div class="row mx-0 main-container">
+            <div class="col-lg-7 pb-5 col-md-12">
+                <div class="header">
+                    <h3>Auto Pro</h3>
+                    <h6>Vegicle Management System</h6>
                 </div>
-                <div class="logo-text">
-                    <h1>AutoPro</h1>
-                    <p>Vehicle Management System</p>
-                </div>
-            </div>
+                <div class="row mx-0">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-6 sm-content-center">
+                        <div class="single-item">
+                            <i>
+                                <svg width="38" height="40" viewBox="0 0 38 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 0L30.596 4.56C31.0031 4.68709 31.3589 4.94096 31.6115 5.28458C31.864 5.62819 32.0002 6.04354 32 6.47V10H36C36.5304 10 37.0391 10.2107 37.4142 10.5858C37.7893 10.9609 38 11.4696 38 12V16H12V12C12 11.4696 12.2107 10.9609 12.5858 10.5858C12.9609 10.2107 13.4696 10 14 10H28V7.94L16 4.188L4 7.94V22.748C3.99971 23.9725 4.2805 25.1806 4.82073 26.2795C5.36096 27.3783 6.14621 28.3385 7.116 29.086L7.494 29.358L16 35.158L23.564 30H14C13.4696 30 12.9609 29.7893 12.5858 29.4142C12.2107 29.0391 12 28.5304 12 28V20H38V28C38 28.5304 37.7893 29.0391 37.4142 29.4142C37.0391 29.7893 36.5304 30 36 30L29.56 30.002C28.786 31.022 27.846 31.922 26.76 32.662L16 40L5.24 32.664C3.62504 31.5629 2.3035 30.084 1.39028 28.3558C0.477056 26.6277 -0.000202446 24.7026 6.44197e-08 22.748V6.47C0.000241212 6.04388 0.136573 5.62898 0.389124 5.28577C0.641676 4.94256 0.997243 4.68898 1.404 4.562L16 0Z" fill="white" />
+                                </svg>
+                            </i>
+                            <span>Secure & Reliable Platform</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-6 sm-content-center">
+                        <div class="single-item">
+                            <i>
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M33.4286 11.5711C33.0624 11.5727 32.7007 11.6524 32.3679 11.8051L29.358 9.65557C29.4924 9.23555 29.5643 8.79806 29.5714 8.35713C29.5643 7.91619 29.4924 7.4787 29.358 7.05868L32.3679 4.90918C32.8734 5.13767 33.4393 5.19639 33.9809 5.07656C34.5226 4.95674 35.0109 4.66481 35.3728 4.24443C35.7347 3.82405 35.9509 3.29782 35.9888 2.74442C36.0268 2.19102 35.8846 1.64021 35.5835 1.17434C35.2823 0.708473 34.8385 0.352595 34.3183 0.159925C33.798 -0.0327447 33.2294 -0.0518519 32.6975 0.105461C32.1655 0.262774 31.6987 0.588053 31.367 1.03265C31.0353 1.47725 30.8564 2.01728 30.8571 2.57198C30.8571 2.65426 30.8739 2.73139 30.8816 2.81239L27.9347 4.91561C27.1344 4.23726 26.1206 3.86264 25.0714 3.85757C23.878 3.85757 22.7334 4.33163 21.8894 5.17546C21.0455 6.01929 20.5714 7.16377 20.5714 8.35713C20.5714 9.55048 21.0455 10.695 21.8894 11.5388C22.7334 12.3826 23.878 12.8567 25.0714 12.8567C26.1206 12.8516 27.1344 12.477 27.9347 11.7986L30.8816 13.9032C30.8739 13.9829 30.8571 14.06 30.8571 14.1423C30.8571 14.6508 31.008 15.1479 31.2905 15.5707C31.5731 15.9936 31.9747 16.3231 32.4445 16.5177C32.9144 16.7123 33.4314 16.7633 33.9302 16.664C34.429 16.5648 34.8872 16.32 35.2468 15.9604C35.6065 15.6008 35.8514 15.1426 35.9506 14.6439C36.0498 14.1451 35.9989 13.6281 35.8043 13.1583C35.6096 12.6885 35.28 12.2869 34.8572 12.0044C34.4343 11.7219 33.9371 11.5711 33.4286 11.5711ZM25.0714 10.2855C24.69 10.2855 24.3171 10.1724 24 9.96052C23.6828 9.74862 23.4356 9.44745 23.2897 9.09509C23.1437 8.74272 23.1055 8.35499 23.1799 7.98092C23.2543 7.60685 23.438 7.26324 23.7077 6.99355C23.9774 6.72387 24.3211 6.5402 24.6952 6.4658C25.0693 6.39139 25.4571 6.42958 25.8095 6.57553C26.1619 6.72149 26.4631 6.96865 26.675 7.28577C26.8869 7.6029 27 7.97573 27 8.35713C27 8.86856 26.7968 9.35906 26.4351 9.7207C26.0735 10.0823 25.5829 10.2855 25.0714 10.2855ZM35.1489 23.0565L25.2077 19.4839L21.0523 14.267C20.691 13.8252 20.2358 13.4695 19.7199 13.2256C19.2039 12.9816 18.6401 12.8556 18.0694 12.8567H7.78886C7.16014 12.8567 6.54096 13.0104 5.98522 13.3044C5.42949 13.5983 4.95404 14.0237 4.60029 14.5434L1.11343 19.6639C0.388067 20.73 0.000123816 21.9895 0 23.2789V30.8549C0 31.1959 0.135459 31.5229 0.376577 31.764C0.617695 32.0051 0.944722 32.1405 1.28571 32.1405H4.03971C4.3194 33.2438 4.95904 34.2224 5.85743 34.9214C6.75581 35.6205 7.86166 36 9 36C10.1383 36 11.2442 35.6205 12.1426 34.9214C13.041 34.2224 13.6806 33.2438 13.9603 32.1405H22.0397C22.3194 33.2438 22.959 34.2224 23.8574 34.9214C24.7558 35.6205 25.8617 36 27 36C28.1383 36 29.2442 35.6205 30.1426 34.9214C31.041 34.2224 31.6806 33.2438 31.9603 32.1405H34.7143C35.0553 32.1405 35.3823 32.0051 35.6234 31.764C35.8645 31.5229 36 31.1959 36 30.8549V24.2663C36 24.0015 35.9182 23.7433 35.7658 23.5268C35.6135 23.3102 35.398 23.146 35.1489 23.0565ZM9 33.4261C8.49142 33.4261 7.99426 33.2753 7.57139 32.9928C7.14852 32.7102 6.81893 32.3087 6.62431 31.8389C6.42968 31.369 6.37876 30.8521 6.47798 30.3533C6.5772 29.8545 6.8221 29.3964 7.18172 29.0368C7.54135 28.6772 7.99953 28.4324 8.49834 28.3331C8.99715 28.2339 9.51417 28.2849 9.98404 28.4795C10.4539 28.6741 10.8555 29.0036 11.1381 29.4264C11.4206 29.8493 11.5714 30.3464 11.5714 30.8549C11.5704 31.5365 11.2992 32.1899 10.8171 32.6719C10.3351 33.1539 9.68167 33.4251 9 33.4261ZM27 33.4261C26.4914 33.4261 25.9943 33.2753 25.5714 32.9928C25.1485 32.7102 24.8189 32.3087 24.6243 31.8389C24.4297 31.369 24.3788 30.8521 24.478 30.3533C24.5772 29.8545 24.8221 29.3964 25.1817 29.0368C25.5413 28.6772 25.9995 28.4324 26.4983 28.3331C26.9971 28.2339 27.5142 28.2849 27.984 28.4795C28.4539 28.6741 28.8555 29.0036 29.1381 29.4264C29.4206 29.8493 29.5714 30.3464 29.5714 30.8549C29.5704 31.5365 29.2992 32.1899 28.8171 32.6719C28.3351 33.1539 27.6817 33.4251 27 33.4261ZM33.4286 29.5693H31.9603C31.6806 28.466 31.041 27.4874 30.1426 26.7884C29.2442 26.0894 28.1383 25.7098 27 25.7098C25.8617 25.7098 24.7558 26.0894 23.8574 26.7884C22.959 27.4874 22.3194 28.466 22.0397 29.5693H13.9603C13.6806 28.466 13.041 27.4874 12.1426 26.7884C11.2442 26.0894 10.1383 25.7098 9 25.7098C7.86166 25.7098 6.75581 26.0894 5.85743 26.7884C4.95904 27.4874 4.3194 28.466 4.03971 29.5693H2.57143V23.2789C2.57145 22.5049 2.8044 21.7488 3.24 21.1089L6.72557 15.9909C6.84343 15.8175 7.00194 15.6755 7.18727 15.5774C7.37261 15.4792 7.57914 15.4279 7.78886 15.4279H18.0694C18.2565 15.4279 18.4413 15.4687 18.611 15.5476C18.7806 15.6264 18.931 15.7413 19.0517 15.8842L23.4231 21.3711C23.5718 21.5577 23.7695 21.6993 23.994 21.7799L33.4286 25.17V29.5693Z" fill="white" />
+                                </svg>
 
-            <ul class="features">
-                <li>
-                    <i class="fas fa-shield-alt"></i>
-                    Secure & Reliable Platform
-                </li>
-                <li>
-                    <i class="fas fa-tachometer-alt"></i>
-                    Real-time Vehicle Tracking
-                </li>
-                <li>
-                    <i class="fas fa-cogs"></i>
-                    Advanced Management Tools
-                </li>
-                <li>
-                    <i class="fas fa-chart-line"></i>
-                    Performance Analytics
-                </li>
-            </ul>
-        </div>
+                            </i>
+                            <span>Secure & Reliable Platform</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-6 sm-content-center">
+                        <div class="single-item">
+                            <i>
+                                <svg width="40" height="37" viewBox="0 0 40 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.1786 23.7857H9.25C8.1986 23.7857 7.19027 24.2033 6.44683 24.9468C5.70338 25.6902 5.28571 26.6986 5.28571 27.75V30.3928H7.92857V27.75C7.92857 27.3995 8.06779 27.0634 8.31561 26.8156C8.56342 26.5678 8.89953 26.4285 9.25 26.4285H17.1786C17.529 26.4285 17.8651 26.5678 18.113 26.8156C18.3608 27.0634 18.5 27.3995 18.5 27.75V30.3928H21.1429V27.75C21.1429 26.6986 20.7252 25.6902 19.9817 24.9468C19.2383 24.2033 18.23 23.7857 17.1786 23.7857ZM13.2143 22.4643C14.2597 22.4643 15.2816 22.1543 16.1509 21.5735C17.0201 20.9926 17.6976 20.1671 18.0976 19.2013C18.4977 18.2355 18.6024 17.1727 18.3984 16.1473C18.1945 15.122 17.6911 14.1802 16.9518 13.441C16.2126 12.7018 15.2708 12.1983 14.2455 11.9944C13.2201 11.7904 12.1574 11.8951 11.1915 12.2952C10.2257 12.6952 9.40018 13.3727 8.81937 14.242C8.23857 15.1112 7.92857 16.1331 7.92857 17.1785C7.92857 18.5804 8.48546 19.9248 9.47672 20.9161C10.468 21.9074 11.8124 22.4643 13.2143 22.4643ZM13.2143 14.5357C13.737 14.5357 14.248 14.6907 14.6826 14.9811C15.1172 15.2715 15.4559 15.6842 15.656 16.1672C15.856 16.6501 15.9083 17.1815 15.8064 17.6941C15.7044 18.2068 15.4527 18.6777 15.0831 19.0473C14.7135 19.4169 14.2425 19.6686 13.7299 19.7706C13.2172 19.8726 12.6858 19.8203 12.2029 19.6202C11.72 19.4202 11.3072 19.0814 11.0168 18.6468C10.7264 18.2122 10.5714 17.7012 10.5714 17.1785C10.5714 16.4776 10.8499 15.8054 11.3455 15.3098C11.8411 14.8141 12.5134 14.5357 13.2143 14.5357Z" fill="white" />
+                                    <path d="M34.3571 22.4643V34.3572H2.64286V7.92862H18.5V5.28577H2.64286C1.94193 5.28577 1.26971 5.56421 0.774075 6.05984C0.278443 6.55547 0 7.22769 0 7.92862V34.3572C0 35.0581 0.278443 35.7303 0.774075 36.226C1.26971 36.7216 1.94193 37.0001 2.64286 37.0001H34.3571C35.0581 37.0001 35.7303 36.7216 36.2259 36.226C36.7216 35.7303 37 35.0581 37 34.3572V22.4643H34.3571Z" fill="white" />
+                                    <path d="M23.7857 22.4643H31.7143V25.1071H23.7857V22.4643ZM26.4286 27.75H31.7143V30.3929H26.4286V27.75ZM39.6429 10.5714V7.92857H36.8665C36.6951 7.1017 36.3667 6.31535 35.8992 5.61211L37.8682 3.64318L35.9997 1.77468L34.0307 3.74361C33.3275 3.27611 32.5412 2.94775 31.7143 2.77632V0H29.0714V2.77632C28.2446 2.94775 27.4582 3.27611 26.755 3.74361L24.786 1.77468L22.9175 3.64318L24.8865 5.61211C24.419 6.31535 24.0906 7.1017 23.9192 7.92857H21.1429V10.5714H23.9192C24.0906 11.3983 24.419 12.1846 24.8865 12.8879L22.9175 14.8568L24.786 16.7253L26.755 14.7564C27.4582 15.2239 28.2446 15.5522 29.0714 15.7237V18.5H31.7143V15.7237C32.5412 15.5522 33.3275 15.2239 34.0307 14.7564L35.9997 16.7253L37.8682 14.8568L35.8992 12.8879C36.3667 12.1846 36.6951 11.3983 36.8665 10.5714H39.6429ZM30.3929 13.2143C29.6088 13.2143 28.8423 12.9818 28.1904 12.5462C27.5385 12.1106 27.0304 11.4914 26.7303 10.7671C26.4303 10.0427 26.3518 9.2456 26.5047 8.47661C26.6577 7.70761 27.0353 7.00124 27.5897 6.44683C28.1441 5.89241 28.8505 5.51485 29.6195 5.36189C30.3885 5.20892 31.1855 5.28743 31.9099 5.58748C32.6343 5.88753 33.2534 6.39564 33.689 7.04756C34.1246 7.69948 34.3571 8.46594 34.3571 9.25C34.3561 10.3011 33.9381 11.3088 33.1949 12.052C32.4517 12.7952 31.4439 13.2132 30.3929 13.2143Z" fill="white" />
+                                </svg>
 
-        <!-- Right Panel -->
-        <div class="right-panel">
-            <div class="login-header">
-                <h2>Welcome Back</h2>
-                <p>Sign in to access your vehicle management dashboard</p>
-            </div>
-
-            <form action="authorize" method="POST" class="mt-5 ajax_form">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address"
-                            required>
+                            </i>
+                            <span>Secure & Reliable Platform</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-6 sm-content-center">
+                        <div class="single-item">
+                            <i>
+                                <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2.42857 21.8571V24.2857H7.99729L0 32.283L1.717 34L9.71429 26.0027V31.5714H12.1429V21.8571H2.42857ZM34 2.42857H25.5V4.85714H29.8544L20.6429 14.0687L15.4299 8.85579C15.2022 8.62814 14.8934 8.50026 14.5714 8.50026C14.2494 8.50026 13.9406 8.62814 13.7129 8.85579L7.28571 15.283L9.00271 17L14.5714 11.4313L19.7844 16.6442C20.0121 16.8719 20.3209 16.9997 20.6429 16.9997C20.9648 16.9997 21.2736 16.8719 21.5014 16.6442L31.5714 6.57414V10.9286H34V2.42857ZM17 31.5714H34V34H17V31.5714ZM0 0H2.42857V17H0V0Z" fill="white" />
+                                </svg>
+                            </i>
+                            <span>Secure & Reliable Platform</span>
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password"
-                            required>
-                        <button type="button" class="password-toggle" id="togglePassword">
-                            <i class="fas fa-eye" style="left: -18px;"></i>
-                        </button>
+            </div>
+            <div class="col-lg-5 col-md-12 login-form">
+                <div class="login-form-container">
+                    <div class="logo-img-head">
+                        <img src="./images/logo_img.png" class="logo-img" alt="Logo Img">
                     </div>
+                    <div class="heading">
+                        <h3>Sign in</h3>
+                        <p>Please Sign in to access your vehicle management dashboard.</p>
+                    </div>
+                    <form action="authorize" method="POST" class="mt-5 ajax_form">
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input type="email" id="email" name="email" class="form-control" />
+                                <label class="form-label" for="email">Email</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-outline">
+                                <input type="password" id="password" name="password" class="form-control" />
+                                <label class="form-label" for="password">Password</label>
+                            </div>
+                        </div>
+                        <div class="form-group pull-away">
+                            <input type="checkbox" class="tc-checkbox" data-label="Remember me" name="remember_me">
+                            <div class="forgot-password">
+                                <a href="forgot">Forgot your password?</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="login" value="<?php echo md5(time()); ?>">
+                            <button type="submit" class="login-btn">
+                                <i class="fas fa-sign-in-alt"></i> Sign In
+                            </button>
+                        </div>
+                    </form>
+                    <p class="foot-param">© 2024 AutoPro Vehicle Management System.
+                        All rights reserved.</p>
                 </div>
-                <input type="hidden" name="login" value="<?php echo md5(time()); ?>">
-                <button type="submit" class="login-btn">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
-                </button>
-
-                <div class="forgot-password">
-                    <a href="forgot">Forgot your password?</a>
-                </div>
-            </form>
-
-            <div class="footer">
-                <p>&copy; 2024 AutoPro Vehicle Management System. All rights reserved.</p>
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const togglePassword = document.getElementById('togglePassword');
-            const passwordInput = document.getElementById('password');
-            const loginForm = document.getElementById('loginForm');
 
-            // Toggle password visibility
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.innerHTML = type === 'password' ? '<i class="fas fa-eye" style="left: -18px;"></i>' : '<i class="fas fa-eye-slash" style="left: -18px;"></i>';
-            });
 
-            // Form submission
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
-                // Simulate login process
-                if (email && password) {
-                    // Add loading state
-                    const submitBtn = this.querySelector('.login-btn');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
-                    submitBtn.disabled = true;
-
-                    // Simulate API call
-                    setTimeout(() => {
-                        alert('Login successful! Redirecting to dashboard...');
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }, 1500);
-                }
-            });
-
-            // Add focus effects
-            const inputs = document.querySelectorAll('.form-control');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.parentElement.classList.add('focused');
-                });
-
-                input.addEventListener('blur', function() {
-                    this.parentElement.parentElement.classList.remove('focused');
-                });
-            });
-        });
-    </script>
     <?php require_once('./includes/js.php'); ?>
-    <script>
-        <?php
-        // Verify User
-        if (isset($_GET['verify']) && isset($_GET['token']) && isset($_GET['email'])) {
-            $token = $_GET['token'];
-            $email = $_GET['email'];
-
-            $res = verifyUserWithToken($email, $token);
-            $res = json_decode($res, true);
-            echo js_msg($res['status'], $res['data']);
-        }
-        if (isset($_GET['success'])) {
-            echo 'sAlert("' . $_GET['success'] . '", "Congratulations")';
-        }
-        ?>
-    </script>
 </body>
 
 </html>
