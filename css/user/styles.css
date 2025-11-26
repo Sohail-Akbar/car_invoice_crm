@@ -17,7 +17,7 @@ select.form-control:not([size]):not([multiple]) {
 .dashboard-container .action-buttons,
 .dashboard-container .header {
     position: relative;
-    z-index: 999;
+    z-index: 99;
 }
 
 .dashboard-container .header h5 {
