@@ -1,10 +1,18 @@
    <?php
     $user_img = "";
-    if (LOGGED_IN_USER['image'] == "avatar.png") {
-        $user_img =  _DIR_ . "images/users/" . LOGGED_IN_USER['image'];
+
+    $uploaded_img = _DIR_ . "uploads/" . LOGGED_IN_USER['image'];
+
+    // If no custom image OR file doesn't exist → fallback to default
+    if (
+        LOGGED_IN_USER['image'] == "avatar.png" ||
+        !file_exists($uploaded_img)
+    ) {
+        $user_img = _DIR_ . "images/logo_img.png";
     } else {
-        $user_img = _DIR_ . "uploads/" . LOGGED_IN_USER['image'];
+        $user_img = $uploaded_img;
     }
+
     ?>
 
    <!-- Left Sidebar -->
