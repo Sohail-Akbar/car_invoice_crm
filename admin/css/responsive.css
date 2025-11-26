@@ -11,6 +11,10 @@
      body {
          overflow-x: hidden !important;
      }
+
+     .dashboard-container .action-buttons {
+         bottom: 20px;
+     }
  }
 
  /* Desktop Styles */
