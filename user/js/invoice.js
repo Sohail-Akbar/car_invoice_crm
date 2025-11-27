@@ -59,12 +59,12 @@ function getServiceOptions() {
 function addInvoiceRow() {
     const newRow = `
         <div class="row mx-0">
-            <div class="col-md-6 px-0 mb-2 col-6">
+            <div class="col-md-6 px-0 mb-2 col-12">
                 <select  class="form-control service_id select2-list invoice-select-box" data-type="service" data-tags="tags" name="services_id[]">
                     ${getServiceOptions()}
                 </select>
             </div>
-            <div class="col-md-6 px-0 col-6">
+            <div class="col-md-6 px-0 col-12">
                 <div class="d-flex">
                     <input type="number" class="form-control service_quantity invoice-input-item ml-2" step="1" min="1" name="service_quantity[]" value="1">
                     <input type="number" class="form-control service_amount invoice-input-item" step="any" name="service_amount[]" value="0">
@@ -75,7 +75,7 @@ function addInvoiceRow() {
                     </button>
                 </div>
             </div>
-        </div>`;
+        </div> <hr class="mt-1">`;
     $(".invoice-services-container").prepend(newRow);
     select2();
 }

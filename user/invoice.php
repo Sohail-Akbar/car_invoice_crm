@@ -177,10 +177,10 @@ if ($get_invoice_id) {
                                         </div>
                                         <div class="services-header">
                                             <div class="row mx-0">
-                                                <div class="col-md-6 px-0 col-6">
+                                                <div class="col-md-6 px-0 col-sm-12">
                                                     <h5>Service...</h5>
                                                 </div>
-                                                <div class="col-md-6 px-0 col-6">
+                                                <div class="col-md-6 px-0 col-sm-12">
                                                     <div class="d-flex">
                                                         <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 12px;">Quantity</span>
                                                         <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 14px;">Amount</span>
