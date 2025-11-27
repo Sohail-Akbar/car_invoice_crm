@@ -95,7 +95,7 @@ $(document).on("click", ".sidebar .nav .dropdown-toggle", function (e) {
 
 if ($('.dataTable').length) $('.dataTable').DataTable();
 
-
+//#region Sidebar
 $(document).ready(function () {
     var $sidebar = $('#sidebar');
     var $overlay = $('#overlay'); // Make sure this exists in your HTML
@@ -169,3 +169,22 @@ $(document).ready(function () {
         }
     });
 });
+
+//#region Sidebar
+
+$(document).ready(function () {
+    // Use event delegation to handle dropdowns inside scrollBody
+    $('.table-responsive').on('show.bs.dropdown', '.dropdown', function () {
+        $(this).closest('.dataTables_scrollBody').css("overflow", "visible");
+        $(this).closest('.table-responsive').css("overflow", "visible");
+        $(this).closest('.table-responsive').css("overflow-x", "visible");
+    });
+
+    $('.table-responsive').on('hide.bs.dropdown', '.dropdown', function () {
+        $(this).closest('.dataTables_scrollBody').css("overflow", "auto");
+        $(this).closest('.table-responsive').css("overflow", "auto");
+        $(this).closest('.table-responsive').css("overflow-x", "auto");
+        console.log(this);
+
+    });
+})

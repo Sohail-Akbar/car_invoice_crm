@@ -24,7 +24,7 @@ $CSS_FILES_ = [
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             padding: 10px 0;
             min-width: 250px;
-            transform: translate3d(0px, 37.0909px, 0px) !important;
+            transform: translate3d(-127px, 0px, 0px) !important;
         }
 
         .dropdown-item {
