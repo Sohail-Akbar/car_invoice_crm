@@ -49,4 +49,18 @@
      .heading-sm-w {
          width: 320px !important;
      }
+
+     .user-info h4 {
+         font-size: 15px;
+         padding-top: 0px;
+         margin-bottom: 2px;
+         font-weight: bold;
+         color: #04091E;
+     }
+
+     .user-info p {
+         font-size: 10px;
+         color: #747681;
+         font-weight: normal;
+     }
  }

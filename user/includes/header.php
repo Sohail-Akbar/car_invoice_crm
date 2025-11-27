@@ -131,7 +131,10 @@ if (!empty($result)) {
             <i class="fas fa-bars"></i>
         </button>
         <a href="dashboard" class="logo">
-            <img src="<?= $user_img ?>" width="50px" alt="Logo">
+            <div class="user-info">
+                <h4>Hi,<?= LOGGED_IN_USER['fname'] . " " . LOGGED_IN_USER['lname'] ?></h4>
+                <p>Let’s check your Garage today</p>
+            </div>
         </a>
     </div>
 

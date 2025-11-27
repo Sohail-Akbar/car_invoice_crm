@@ -163,3 +163,17 @@ select.form-control:not([size]):not([multiple]) {
 .modal {
     z-index: 99999 !important;
 }
+
+.user-info h4 {
+    font-size: 20px;
+    padding-top: 0px;
+    margin-bottom: 3px;
+    font-weight: bold;
+    color: #04091E;
+}
+
+.user-info p {
+    font-size: 12px;
+    color: #747681;
+    font-weight: normal;
+}
