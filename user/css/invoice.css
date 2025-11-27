@@ -1,5 +1,5 @@
 /* Make Select2 look like Bootstrap .form-control */
-.select2-container--default .select2-selection--single {
+/* .select2-container--default .select2-selection--single {
     height: calc(2.25rem + 2px);
     padding: .375rem .75rem;
     border: 1px solid #ced4da;
@@ -30,16 +30,16 @@
     outline: 0;
     border-color: #86b7fe;
     box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
-}
+} */
 
-.select2-container--default .select2-selection--multiple {
+/* .select2-container--default .select2-selection--multiple {
     min-height: calc(2.25rem + 2px);
     padding: .25rem .5rem;
     border: 1px solid #ced4da;
     border-radius: .375rem;
-}
+} */
 
-.select2-container--default .select2-selection--multiple .select2-selection__choice {
+/* .select2-container--default .select2-selection--multiple .select2-selection__choice {
     background: #0d6efd;
     color: #fff;
     border: none;
@@ -48,19 +48,19 @@
     margin-right: .25rem;
     border-radius: .375rem;
     font-size: .85em;
-}
+} */
 
-.select2-container .select2-dropdown {
+/* .select2-container .select2-dropdown {
     border-radius: .375rem;
     border: 1px solid rgba(0, 0, 0, .15);
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
-}
+} */
 
-.select2-container {
+/* .select2-container {
     width: 100% !important;
-}
+} */
 
-.select2-container--default .select2-search--dropdown .select2-search__field {
+/* .select2-container--default .select2-search--dropdown .select2-search__field {
     border: 1px solid #ced4da;
     border-radius: .25rem;
     padding: .375rem .75rem;
@@ -82,4 +82,147 @@
     height: calc(2.75rem + 2px);
     padding: .5rem 1rem;
     border-radius: .5rem;
+} */
+
+.invoice-heading {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 20px;
+    margin-bottom: 14px;
+}
+
+.invoice-heading svg {
+    transform: scale(1.2);
+}
+
+.invoice-heading h3 {
+    margin-bottom: 0px !important;
+    margin-left: 15px;
+    color: var(--webMainColor);
+    font-size: 22px;
+}
+
+.invoice-text {
+    font-size: 25px;
+    margin-bottom: 20px;
+    color: var(--webMainColor);
+}
+
+.invoice-items-container {
+    padding: 14px;
+    background: #F9F9F9;
+    margin-top: 20px;
+}
+
+.invoice-items-container .services-header {
+    background: #f2f2f7;
+    border-radius: 10px;
+    padding: 10px 20px;
+    padding-top: 12px;
+    color: var(--webMainColor);
+    margin-top: 10px;
+}
+
+.invoice-items-container .invoice-select-box {
+    padding: 7px 8px;
+    border: none;
+    background: #ededf3;
+    outline: none;
+    border-radius: 0;
+}
+
+.invoice-items-container .invoice-select-box:focus,
+.invoice-items-container .invoice-input-item:focus {
+    background: #ededf3;
+}
+
+.invoice-items-container .invoice-input-item {
+    padding: 10px 8px;
+    height: 36px;
+    width: 60px;
+    border-radius: 0;
+    background: #f2f2f7;
+    border: none;
+    outline: none;
+    margin-left: 20px;
+}
+
+.invoice-items-container .remove-row {
+    height: 35px;
+    width: 35px;
+    margin-left: 20px;
+    background: #ededf3;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.invoice-services-container {
+    max-height: 300px;
+    overflow: auto;
+}
+
+.invoice-right-container {
+    background: #F9F9F9;
+    padding: 15px 15px;
+    border-radius: 10px;
+    padding-bottom: 36px;
+}
+
+.invoice-right-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.services-amount-details {
+    margin-top: 15px;
+    color: #AEAEB2;
+}
+
+.services-amount-details .single-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.services-amount-details .due-amount-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+textarea.form-control.notes-input {
+    border: none;
+    outline: none;
+    background: #ededf3;
+    font-size: 14px;
+}
+
+input#paid_amount {
+    padding: 0;
+    background: #F0F0F0;
+    border: none;
+    outline: none;
+    padding-left: 25px;
+    border-radius: 0px;
+}
+
+.invoice-items-container .select2-container .select2-selection--single {
+    height: 36px !important;
+}
+
+.invoice-items-container .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 18px;
+}
+
+.invoice-items-container .select2-container .select2-selection__arrow {
+    height: 35px !important;
+}
+
+.invoice-items-container .select2-container--default .select2-selection--single .select2-selection__clear {
+    position: relative;
+    top: -6px;
 }

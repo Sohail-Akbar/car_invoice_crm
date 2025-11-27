@@ -168,6 +168,11 @@ if (isset($_POST['saveInvoice'])) {
             "due_date" => $due_date,
             "write_off" => $write_off,
             "discount" => $discount_amount,
+            "subtotal" => $subtotal,
+            "tax_amount" => $tax_amount,
+            "discount_percentage" => $discount_percentage,
+            "total_amount" => $total_amount,
+            "due_amount" => $due_amount,
         ];
 
         $pdf = saveInvoicePDF($invoice_data);
@@ -317,12 +322,20 @@ if (isset($_POST['fetchCustomerMotHistory'])) {
         "is_active" => 1
     ]);
 
+    $customers = $db->select_one("users", "id,title,fname,lname,address,contact", [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "is_active" => 1,
+        "type" => "customer",
+        "id" => $customer_id
+    ], ["select_query" => true]);
+
     if (empty($mot_history)) {
         returnError("No Vehicle history found for the selected customer.");
         exit;
     }
 
-    returnSuccess($mot_history);
+    returnSuccess($mot_history, $customers);
 }
 
 

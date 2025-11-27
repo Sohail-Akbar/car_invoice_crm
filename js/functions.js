@@ -174,7 +174,7 @@ $(document).ready(refreshFns);
 
 function select2() {
     $('.select2-list').select2({
-        tags: true,
+        tags: $('.select2-list').data("tags") ? true : false,
         placeholder: 'Select or add option',
         allowClear: true
     });

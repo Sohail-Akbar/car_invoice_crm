@@ -2,7 +2,7 @@
 function calculateTotals() {
     let subtotal = 0;
 
-    $("#invoice_table tbody tr").each(function () {
+    $(".invoice-services-container .row").each(function () {
         let amount = parseFloat($(this).find(".service_amount").val()) || 0;
         let qty = parseInt($(this).find(".service_quantity").val()) || 1;
         subtotal += amount * qty;
@@ -58,17 +58,25 @@ function getServiceOptions() {
 // Add a new row dynamically
 function addInvoiceRow() {
     const newRow = `
-        <tr>
-            <td>
-                <select class="form-control service_id select2-list" data-type="service" name="services_id[]">
+        <div class="row mx-0">
+            <div class="col-md-6 px-0 mb-2 col-6">
+                <select  class="form-control service_id select2-list invoice-select-box" data-type="service" data-tags="tags" name="services_id[]">
                     ${getServiceOptions()}
                 </select>
-            </td>
-            <td><input type="number" class="form-control service_quantity" step="1" min="1" name="service_quantity[]" value="1"></td>
-            <td><input type="number" class="form-control service_amount" step="any" name="service_amount[]" value="0"></td>
-            <td><button type="button" class="btn btn-danger btn-sm remove-row">&times;</button></td>
-        </tr>`;
-    $("#invoice_table tbody").append(newRow);
+            </div>
+            <div class="col-md-6 px-0 col-6">
+                <div class="d-flex">
+                    <input type="number" class="form-control service_quantity invoice-input-item ml-2" step="1" min="1" name="service_quantity[]" value="1">
+                    <input type="number" class="form-control service_amount invoice-input-item" step="any" name="service_amount[]" value="0">
+                    <button type="button" class="btn btn-sm remove-row">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.0638 0.506144L7.00014 4.56991C5.64566 3.2159 4.29075 1.86059 2.93606 0.506144C1.36892 -1.06096 -1.06026 1.36904 0.505569 2.93658C1.86048 4.29015 3.21583 5.64568 4.56921 7.00013C3.21521 8.35519 1.86066 9.70971 0.505569 11.0637C-1.06026 12.6303 1.36914 15.0597 2.93606 13.4941C4.29075 12.139 5.64537 10.7844 6.99992 9.43013L11.0636 13.4941C12.6307 15.0608 15.0605 12.6306 13.494 11.0637C12.1394 9.70887 10.7844 8.35421 9.42932 6.99969C10.7842 5.64474 12.1391 4.28993 13.494 2.93527C15.0608 1.36904 12.6309 -1.06096 11.0636 0.507018" fill="#EC1C24" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    $(".invoice-services-container").prepend(newRow);
     select2();
 }
 
@@ -76,7 +84,7 @@ function addInvoiceRow() {
 // Event: Service change updates amount
 $(document).on("change", ".service_id", function () {
     const amount = parseFloat($(this).find("option:selected").data("amount")) || 0;
-    $(this).closest("tr").find(".service_amount").val(amount);
+    $(this).closest(".row").find(".service_amount").val(amount);
     calculateTotals();
 });
 // Event: Tax or Paid input changes
@@ -89,7 +97,7 @@ $("#add_row").click(function () {
 
 // Event: Remove row
 $(document).on("click", ".remove-row", function () {
-    $(this).closest("tr").remove();
+    $(this).closest(".row").remove();
     calculateTotals();
 });
 
@@ -103,10 +111,11 @@ $(document).ready(function () {
 
     // ✅ Load invoice items automatically if available
     if (typeof INVOICE_ITEMS !== "undefined" && INVOICE_ITEMS.length > 0) {
-        INVOICE_ITEMS.forEach(item => {
+
+        INVOICE_ITEMS.reverse().forEach(item => {
             addInvoiceRow();
 
-            const $lastRow = $("#invoice_table tbody tr:last");
+            const $lastRow = $(".invoice-services-container .row:first");
 
             const $select = $lastRow.find(".service_id");
 
@@ -118,7 +127,6 @@ $(document).ready(function () {
         // Add one empty row if no invoice items exist
         addInvoiceRow();
     }
-
     // Initial total calculation
     calculateTotals();
 });
@@ -148,6 +156,11 @@ $(document).on("change", "#customerSelectBox", function () {
                     if (_GET.vehicle_id) {
                         $("#motHistorySelectBox").val(_GET.vehicle_id).trigger("change");
                     }
+
+                    $(".customer-name").text(data.fname + " " + data.lname);
+                    $(".customer-address").text(data.address);
+                    $(".customer-phone .contact").text(data.contact);
+
                 } else {
                     sAlert(data.data, data.status);
                     motHistorySelect.empty();
@@ -202,7 +215,7 @@ $(document).on('select2:select', '.select2-list', function (e) {
 $(document).on("focusout", ".service_amount", function () {
     let $input = $(this);
     let amount = $input.val().trim();
-    let id = $input.closest("tr").find(".service_id").val();
+    let id = $input.closest(".row").find(".service_id").val();
 
     if (!id) {
         sAlert("Please select a service properly.", "warning");

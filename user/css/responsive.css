@@ -42,6 +42,15 @@
      .custom-heading::before {
          left: 100%;
      }
+
+     .invoice-container .card {
+         padding-top: 20px;
+         padding-bottom: 21px;
+     }
+
+     .invoice-items-container .services-header {
+         overflow-x: auto;
+     }
  }
 
  /* Desktop Styles */
