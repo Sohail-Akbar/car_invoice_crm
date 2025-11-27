@@ -3,7 +3,8 @@
     --fontFamily: 'Roboto', sans-serif;
     --pinkColor: #e91e63;
     --primaryColor: #007bff;
-    --blueColor: var(--primaryColor);
+    --webMainColor: #214f79;
+    --blueColor: var(--webMainColor);
     --blueColorLow: #007bff77;
     --orangeColor: #fe6f02;
     --lightOrangeColor: #F4B716;
@@ -576,15 +577,18 @@ select:focus {
     border-bottom: none;
     -webkit-border-radius: 0;
     border-radius: 0;
-    background: #f4f8f7;
-    padding: 15px 10px;
+    /* background: #f4f8f7; */
+    padding: 12px 10px;
     color: #555;
     font-family: var(--fontFamily);
+    border: 2px solid #214f797a;
+    border-radius: 10px;
+    background: transparent;
 }
 
 .form-control:focus {
     background: #f4f8f7;
-    border-color: var(--infoColor);
+    border-color: var(--webMainColor);
     outline: none;
     -webkit-box-shadow: none;
     box-shadow: none;

@@ -32,16 +32,14 @@ if ($role_id) {
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-role-container" id="mainContent">
         <div class="card">
-            <div class="card-header">
-                Add Role
-            </div>
             <div class="card-body">
+                <h3 class="heading mb-5 custom-heading">Add New Role</h3>
                 <form action="role" method="POST" class="ajax_form reset" data-reset="reset">
                     <div class="row mt-4">
                         <div class="col-md-8">
                             <div class="form-group">
-                                <span class="label">Role</span>
-                                <input type="text" class="form-control" value="<?= arr_val($role_data, "text", "") ?>" name="text" required data-length="[1,250]">
+                                <span class="label">Role:</span>
+                                <input type="text" class="form-control" value="<?= arr_val($role_data, "text", "") ?>" name="text" placeholder="Add New Role" required data-length="[1,250]">
                             </div>
                         </div>
                         <div class="col-12 mt-2">
@@ -57,7 +55,7 @@ if ($role_id) {
         </div>
         <div class="table-responsive mt-5">
             <table class="table table-striped dataTable">
-                <thead class="thead-dark">
+                <thead style="background: var(--webMainColor);color: white;">
                     <tr>
                         <th>#</th>
                         <th>Text</th>

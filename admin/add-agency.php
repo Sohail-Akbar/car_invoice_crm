@@ -30,18 +30,12 @@ if (count($agency_data)) $agency_data = $agency_data[0];
 <body>
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-agency-container" id="mainContent">
-        <div class="col-md-12 px-0 card">
-            <div class="box-content px-4 py-3">
-                <h4 class="box-title text-style">Add Branch</h4>
-                <span class="bottom-text">Please Enter Branch and user details</span>
-            </div>
-        </div>
-        <div class="col-lg-12 mb-0 mt-4 card">
-            <h2 class="box-title text-style"><b>Branch's Details</b></h2>
-        </div>
         <div class="col-xs-12 mt-3 card">
             <div class="box-content p-2">
                 <form action="agency" method="POST" class="mt-4 ajax_form">
+                    <div class="col-lg-12">
+                        <h3 class="heading mb-5 custom-heading">Branch's Details</h3>
+                    </div>
                     <!-- Branch Name -->
                     <div class="form-group">
                         <div class="col-lg-12">
@@ -95,7 +89,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
 
                     <!-- User Details -->
                     <div class="col-lg-12">
-                        <h4 class="box-title text-style">User's Details</h4>
+                        <h4 class="box-title text-style my-5 custom-heading">User's Details</h4>
                     </div>
 
                     <!-- Title / Gender -->

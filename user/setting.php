@@ -16,18 +16,18 @@ $JS_FILES_ = [];
     <main class="main-content profile-setting-container" id="mainContent">
         <div class="card">
             <div class="card-body">
-                <h3 class="heading">Personal Information</h3>
+                <h3 class="heading custom-heading mb-5">Personal Information</h3>
                 <form action="user" method="POST" class="ajax_form reset" data-reset="reset">
                     <div class="row mt-4">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <span class="label">First Name</span>
+                                <span class="label">First Name:</span>
                                 <input type="text" class="form-control" name="fname" value="<?= LOGGED_IN_USER['fname']; ?>" required data-length="[1,250]">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <span class="label">Last Name</span>
+                                <span class="label">Last Name:</span>
                                 <input type="text" class="form-control" name="lname" value="<?= LOGGED_IN_USER['lname']; ?>" required data-length="[1,250]">
                             </div>
                         </div>
@@ -41,7 +41,7 @@ $JS_FILES_ = [];
         </div>
         <div class="card mt-5">
             <div class="card-body">
-                <h3 class="heading">Change Password</h3>
+                <h3 class="heading custom-heading mb-5">Change Password</h3>
                 <form action="user" method="POST" class="ajax_form reset" data-reset="reset">
                     <div class="row mt-4">
                         <div class="col-md-6">

@@ -32,10 +32,8 @@ if ($service_id) {
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-services-container" id="mainContent">
         <div class="card">
-            <div class="card-header">
-                Add Services
-            </div>
             <div class="card-body">
+                <h3 class="heading mb-5 custom-heading">Add New Service</h3>
                 <form action="services" method="POST" class="ajax_form reset" data-reset="reset">
                     <div class="row mt-4">
                         <div class="col-md-6">
@@ -63,7 +61,7 @@ if ($service_id) {
         </div>
         <div class="table-responsive mt-5">
             <table class="table table-striped dataTable">
-                <thead class="thead-dark">
+                <thead style="background: var(--webMainColor);color: white;">
                     <tr>
                         <th>#</th>
                         <th>Text</th>

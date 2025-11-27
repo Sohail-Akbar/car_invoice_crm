@@ -34,6 +34,14 @@
      .dashboard-container .action-buttons {
          bottom: 20px;
      }
+
+     .custom-heading::after {
+         width: 100%;
+     }
+
+     .custom-heading::before {
+         left: 100%;
+     }
  }
 
  /* Desktop Styles */

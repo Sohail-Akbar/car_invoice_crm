@@ -30,12 +30,16 @@ $staff_data = $db->select_one("users", "*", [
     <main class="main-content add-staff-container" id="mainContent">
         <div class="card">
             <div class="card-body">
-                <h3 class="heading mb-4">Create staff </h3>
+                <div class="row mx-0">
+                    <div class="col-md-12">
+                        <h3 class="heading mb-3 custom-heading">Add New Staff</h3>
+                    </div>
+                </div>
                 <form action="staff" method="POST" class="mt-4 ajax_form reset" data-reset="reset">
                     <div class="form-group has-error has-danger">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">Title</label>
+                                <label class="label">Title:</label>
                                 <select name="title" class="form-control" required="">
                                     <option <?= arr_val($staff_data, "title", "") == "" ? 'selected' : '' ?> value="">Select Title</option>
                                     <option <?= arr_val($staff_data, "title", "") == "Mr" ? 'selected' : '' ?> value="Mr">Mr</option>
@@ -45,7 +49,7 @@ $staff_data = $db->select_one("users", "*", [
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="label">Gender</label>
+                                <label class="label">Gender:</label>
                                 <select name="gender" class="form-control" required="">
                                     <option <?= arr_val($staff_data, "gender", "") == "" ? 'selected' : '' ?> value="">Select Gender</option>
                                     <option <?= arr_val($staff_data, "gender", "") == "Male" ? 'selected' : '' ?> value="Male">Male</option>
@@ -57,11 +61,11 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">First Name</label>
+                                <label class="label">First Name:</label>
                                 <input type="text" name="fname" class="form-control" placeholder="Enter Your First Name" required="required" value="<?= arr_val($staff_data, "fname", "") ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class=" label">Last Name</label>
+                                <label class=" label">Last Name:</label>
                                 <input type="text" name="lname" class="form-control" placeholder="Enter Your Last Name" required="required" value="<?= arr_val($staff_data, "lname", "") ?>">
                             </div>
                         </div>
@@ -69,11 +73,11 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label for="inputEmail" class="label">Email</label>
+                                <label for="inputEmail" class="label">Email:</label>
                                 <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" required="" value="<?= arr_val($staff_data, "email", "") ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class="label">Contact</label>
+                                <label class="label">Contact:</label>
                                 <input type="text" name="contact" class="form-control" placeholder="Enter contact" required="required" value="<?= arr_val($staff_data, "contact", "") ?>">
                             </div>
                         </div>
@@ -81,7 +85,7 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">Role</label>
+                                <label class="label">Role:</label>
                                 <select name="role_id" class="form-control" required="">
                                     <option value="">Select Role</option>
                                     <?php foreach ($roles_data as $role) { ?>
@@ -90,7 +94,7 @@ $staff_data = $db->select_one("users", "*", [
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class=" label">Address</label>
+                                <label class=" label">Address:</label>
                                 <input type="text" class="form-control pac-target-input" placeholder="Enter Address" onfocusout="checkBlackList(this)" name="address" autocomplete="off" aria-describedby="basic-addon1" id="autocomplete" onfocus="geolocate()" required="required" value="<?= arr_val($staff_data, "address", "") ?>">
                                 <input type="hidden" id="lat" name="lat">
                                 <input type="hidden" id="lng" name="lng">
@@ -100,11 +104,11 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">Postcode</label>
+                                <label class="label">Postcode:</label>
                                 <input type="text" class="form-control" placeholder="Postcode" name="postcode" aria-describedby="basic-addon1" id="postal_code" readonly required="" value="<?= arr_val($staff_data, "postcode", "") ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class="label">City</label>
+                                <label class="label">City:</label>
                                 <input type="text" class="form-control" placeholder="City" id="locality" name="city" aria-describedby="basic-addon1" readonly required="" value="<?= arr_val($staff_data, "city", "") ?>">
                             </div>
                         </div>

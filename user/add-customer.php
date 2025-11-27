@@ -26,7 +26,11 @@ $customer_data = $db->select_one("users", "*", [
     <main class="main-content add-customer-container" id="mainContent">
         <div class="card">
             <div class="card-body">
-                <h3 class="heading mb-4">Create Customer </h3>
+                <div class="row mx-0">
+                    <div class="col-md-12">
+                        <h3 class="heading mb-3 custom-heading">Add New Customer</h3>
+                    </div>
+                </div>
                 <?php
                 $callback = "";
                 require_once('./components/customer-form.php'); ?>

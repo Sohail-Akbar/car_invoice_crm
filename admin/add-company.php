@@ -29,20 +29,12 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
 <body>
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-company-container" id="mainContent">
-        <div class="col-md-12 px-0 card">
-            <div class="box-content px-4 py-3">
-                <h4 class="box-title text-style">Add Company</h4>
-                <span class="bottom-text">Please Enter Company and user details</span>
-            </div>
-        </div>
-
-        <div class="col-lg-12 mb-0 mt-4 card">
-            <h2 class="box-title text-style"><b>Company's Details</b></h2>
-        </div>
-
         <div class="col-xs-12 mt-3 card">
             <div class="box-content p-2">
                 <form action="company" method="POST" class="mt-4 ajax_form">
+                    <div class="col-lg-12">
+                        <h3 class="heading mb-5 custom-heading">Company's Details</h3>
+                    </div>
                     <!-- Company Details -->
                     <div class="form-group">
                         <div class="col-lg-12">
@@ -92,8 +84,8 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
                     </div>
 
                     <!-- User Details -->
-                    <div class="col-lg-12">
-                        <h4 class="box-title text-style">User's Details</h4>
+                    <div class="col-lg-12 mt-4">
+                        <h3 class="heading mb-5 custom-heading">User's Details</h3>
                     </div>
 
                     <div class="form-group row m-0">

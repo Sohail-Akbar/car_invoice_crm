@@ -21,7 +21,7 @@ $agency = $db->select_one("agencies", "*", [
     <main class="main-content setting-container" id="mainContent">
         <div class="card">
             <div class="card-header">
-                Branch VAT
+                Branch VAT%
             </div>
             <div class="card-body">
                 <form action="settings" method="POST" class="ajax_form">

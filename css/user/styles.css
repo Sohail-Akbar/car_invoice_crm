@@ -5,9 +5,7 @@ select.form-control:not([size]):not([multiple]) {
 .dashboard-container {
     background: url(../../images/vehicle.png) no-repeat center center;
     background-size: cover;
-    /* covers full area */
     width: 100%;
-    /* full page height */
     padding-left: 80px;
     padding-top: 50px;
     position: relative;
@@ -84,4 +82,80 @@ select.form-control:not([size]):not([multiple]) {
     position: absolute;
     top: 7px;
     left: 10px;
+}
+
+/* Remove borders, make modern */
+.select2-container .select2-selection--single {
+    height: 48px !important;
+    border-radius: 8px !important;
+    border: 1px solid #ccc !important;
+    padding: 8px 12px !important;
+    display: flex;
+    align-items: center;
+}
+
+/* Placeholder & text style */
+.select2-container .select2-selection__rendered {
+    font-size: 15px;
+    color: #333;
+}
+
+/* Arrow styling */
+.select2-container .select2-selection__arrow {
+    height: 48px !important;
+}
+
+/* Dropdown menu style */
+.select2-dropdown {
+    border-radius: 8px !important;
+    border: 1px solid #ccc !important;
+}
+
+.select2-results__option {
+    padding: 10px !important;
+    font-size: 15px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    height: 27px;
+    margin-right: 0px;
+    padding-right: 0px;
+    font-size: 18px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 26px;
+    position: absolute;
+    top: 1px;
+    right: 6px;
+    width: 20px;
+}
+
+/* Remove borders, make modern */
+.custom-heading {
+    position: relative;
+}
+
+.custom-heading::after {
+    content: "";
+    width: 35%;
+    height: 2px;
+    background: var(--webMainColor);
+    position: absolute;
+    left: 0;
+    bottom: -9px;
+}
+
+.custom-heading::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: absolute;
+    left: 35%;
+    background: var(--webMainColor);
+    bottom: -12px;
 }
