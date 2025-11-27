@@ -159,3 +159,7 @@ select.form-control:not([size]):not([multiple]) {
     background: var(--webMainColor);
     bottom: -12px;
 }
+
+.modal {
+    z-index: 99999 !important;
+}
