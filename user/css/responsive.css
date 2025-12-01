@@ -68,6 +68,10 @@
          justify-content: center;
          align-items: center;
      }
+
+     .customer-note-container {
+         max-height: 400px !important;
+     }
  }
 
  /* Desktop Styles */

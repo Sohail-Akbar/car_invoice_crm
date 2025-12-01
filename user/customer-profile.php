@@ -191,7 +191,7 @@ $cars = $db->select("customer_car_history", "*", [
                                 Save
                             </button>
                         </div>
-                        <div class="view-customer-note">
+                        <div class="view-customer-note d-none">
                             <div id="notesContainer" class="mt-3"></div>
                             <div class="text-center mt-3">
                                 <button id="loadMoreNotes" class="btn btn-outline-secondary btn-sm">Load More</button>
