@@ -176,8 +176,9 @@
 
     .tab {
         flex: 1;
-        min-width: 120px;
+        min-width: 150px;
         justify-content: center;
+        margin-bottom: 10px;
     }
 }
 
@@ -230,6 +231,10 @@
 .staff-actions {
     display: flex;
     gap: 10px;
+}
+
+#carsInfoContainer .card {
+    padding: 0 !important;
 }
 
 #viewInvoicesContainer .card,

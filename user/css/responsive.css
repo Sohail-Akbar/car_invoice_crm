@@ -132,4 +132,16 @@
          color: #747681;
          font-weight: normal;
      }
+
+     .vehicle-list-container .pull-away {
+         flex-direction: column;
+     }
+
+     .vehicle-list-container .buttons {
+         text-align: right;
+     }
+
+     .vehicle-list-container .buttons .btn {
+         margin-bottom: 5px;
+     }
  }
