@@ -5848,7 +5848,8 @@ fieldset:disabled .btn {
     padding: var(--mdb-modal-header-padding);
     border-bottom: var(--mdb-modal-header-border-width) solid var(--mdb-modal-header-border-color);
     border-top-left-radius: var(--mdb-modal-inner-border-radius);
-    border-top-right-radius: var(--mdb-modal-inner-border-radius)
+    border-top-right-radius: var(--mdb-modal-inner-border-radius);
+    background: var(--webMainColor) !important;
 }
 
 .modal-header .btn-close {

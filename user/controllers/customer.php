@@ -391,17 +391,27 @@ if (isset($_POST['fetchCustomerNotes'])) {
     $notes = $db->query($sql, ['select_query' => true]);
 
     if ($notes) {
+
+        // Loop and decode HTML for each note
+        foreach ($notes as &$note) {
+            if (isset($note['note'])) {
+                $note['note'] = htmlspecialchars_decode($note['note'], ENT_QUOTES);
+                // OR:
+                // $note['note'] = html_entity_decode($note['note'], ENT_QUOTES, 'UTF-8');
+            }
+        }
+
         echo json_encode([
             'status' => 'success',
             'notes'  => $notes
         ]);
     } else {
+
         echo json_encode([
             'status' => 'error',
             'notes'  => []
         ]);
     }
-    exit;
 }
 
 

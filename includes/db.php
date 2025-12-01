@@ -21,3 +21,5 @@ if (!is_null(LOGGED_IN_USER) && $VERIFY_LOGIN)
 	redirectTo('user/dashboard');
 
 define('IS_ADMIN', is_admin());
+
+// print_r($_COOKIE);

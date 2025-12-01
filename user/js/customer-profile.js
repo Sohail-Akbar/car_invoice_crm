@@ -94,7 +94,7 @@ $(document).on("click", ".view-invoices-btn", function () {
     let car_id = $(this).data("vehicle-id");
     let $container = $("#viewInvoicesContainer");
     showVehicleDetails(car_id, _GET.id, $container);
-    $(this).parents(".table-container").addClass("d-none");
+    $(this).parents(".vehicle-list-container").addClass("d-none");
     $(".invoices-container").removeClass("d-none");
 });
 
@@ -134,7 +134,7 @@ function loadNotes(reset = false) {
                         <div class="notes-container mb-3 border rounded p-2">
                             <div class="text-muted small mb-1">
                                 <span><i class="far fa-calendar-alt"></i> ${note.created_at}</span>
-                                <i class="fas fa-trash text-danger cp tc-delete-btn" title="Delete" data-parent=".notes-container" data-target="${note.id}" data-action="customer_notes"></i>
+                                <i class="fas fa-trash text-danger cp tc-delete-btn ml-5" title="Delete" data-parent=".notes-container" data-target="${note.id}" data-action="customer_notes"></i>
                             </div>
                             <div>${note.note}</div>
                         </div>
@@ -335,4 +335,82 @@ $(document).ready(function () {
             "drawCallback": function () { this.api().columns.adjust(); }
         });
     }
+});
+
+// Add Customer note
+$(document).on("click", ".customer-note-container .add-note", function () {
+    $(".customer-note-tinymce").removeClass("d-none");
+    $(".view-note").removeClass("d-none");
+    $(".view-customer-note").addClass("d-none");
+});
+// View Customer note
+$(document).on("click", ".customer-note-container .view-note", function () {
+    $(".customer-note-tinymce").addClass("d-none");
+    $(".view-customer-note").removeClass("d-none");
+    $(".view-note").addClass("d-none");
+});
+
+
+$(document).ready(function () {
+    tinymce.init({
+        selector: '#customerNote',
+        height: 170,
+        menubar: false,
+        plugins: ['lists link', 'textcolor'],
+        toolbar: 'alignleft aligncenter alignright alignjustify | bold italic underline',
+        font_formats: 'Serif=serif; Sans-serif=sans-serif; Arial=arial,helvetica,sans-serif; Courier New=courier,courier new,monospace;',
+        content_style: "body { font-family: 'Serif', sans-serif; }",
+        setup: function (editor) {
+            const placeholderText = "Start typing to leave a note...";
+
+            function setPlaceholder() {
+                if (editor.getContent() === '') {
+                    editor.setContent(`<p style="color:#888;">${placeholderText}</p>`);
+                }
+            }
+
+            editor.on('init', setPlaceholder);
+            editor.on('focus', function () {
+                if (editor.getContent().includes(placeholderText)) {
+                    editor.setContent('');
+                }
+            });
+            editor.on('blur', setPlaceholder);
+        }
+    });
+});
+
+// jQuery form submit validation
+$(document).on('click', ".save-customer-note", function (e) {
+    let editorContent = tinymce.get('customerNote').getContent().trim();
+
+    if (editorContent === '' || editorContent === '<p style="color: #888;">Start typing to leave a note...</p>') {
+        e.preventDefault();
+        sAlert('Note cannot be empty!', "warning");
+        tinymce.get('customerNote').focus();
+        return false;
+    }
+
+    $.ajax({
+        url: "controllers/customer",
+        method: "POST",
+        data: {
+            note: editorContent,
+            customer_id: _GET.id,
+            addCustomerNotes: true
+        },
+        dataType: "json",
+        success: function (res) {
+            if (res.status === "success") {
+                sAlert(res.data, "success");
+                tinymce.get('customerNote').setContent('');
+                setTimeout(() => {
+                    location.reload();
+                }, 200);
+            } else {
+                sAlert(res.message, "error");
+            }
+        },
+        error: makeError
+    });
 });

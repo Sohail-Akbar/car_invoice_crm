@@ -33,7 +33,7 @@
      align-items: center;
      justify-content: space-between;
      padding: 0 20px;
-     z-index: 1000;
+     z-index: 100;
      padding-left: 320px;
  }
 
@@ -161,7 +161,7 @@
      z-index: 999;
      overflow-y: hidden;
      top: 0;
-     z-index: 99999;
+     z-index: 999;
      height: 100vh;
  }
 

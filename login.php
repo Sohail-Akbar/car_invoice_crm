@@ -11,33 +11,36 @@ $JS_FILES_ = [
     _DIR_ . "/js/mdb.min.js"
 ];
 
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
 
-// if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
+    list($user_id, $token) = explode(":", $_COOKIE['Garage_Remember_Me']);
 
-//     list($user_id, $token) = explode(":", $_COOKIE['Garage_Remember_Me']);
+    $user = $db->select_one("users", "*", ["id" => $user_id]);
 
-//     $user = $db->select_one("users", "*", ["id" => $user_id]);
+    if ($user && $user['remember_token']) {
 
-//     if ($user && $user['remember_token']) {
+        $token_hash = hash("sha256", $token);
 
-//         $token_hash = hash("sha256", $token);
+        // Validate hash
+        if ($user['remember_token'] === $token_hash) {
+            // SUCCESS → Auto Login
+            $_SESSION['user_id'] = $user_id;
 
-//         // Validate hash
-//         if ($user['remember_token'] === $token_hash) {
-//             // SUCCESS → Auto Login
-//             $_SESSION['user_id'] = $user_id;
-//             $url = "user/dashboard";
-//             if ($user['type'] === "main_admin") {
-//                 $url = "admin/dashboard";
-//             } else if ($user['type'] === "admin") {
-//                 $url = "admin/dashboard";
-//             }
-//             echo success('logged in successfully', [
-//                 'redirect' => $url,
-//             ]);
-//         }
-//     }
-// }
+            $url = "user/dashboard";
+            if ($user['type'] === "main_admin" || $user['type'] === "admin") {
+                $url = "admin/dashboard";
+            }
+
+            // JavaScript redirect
+            echo "<script>
+                    window.location.href = '$url';
+                  </script>";
+            exit;
+        }
+    }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

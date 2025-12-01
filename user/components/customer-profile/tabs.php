@@ -12,8 +12,8 @@
         <div class="tab" data-tab="invoicesEmailHistory">
             <i class="fas fa-file-invoice"></i> Invoice Email History
         </div>
-        <div class="tab" data-tab="notes">
+        <!-- <div class="tab" data-tab="notes">
             <i class="fas fa-sticky-note"></i> Notes
-        </div>
+        </div> -->
     <?php  } ?>
 </div>
