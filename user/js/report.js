@@ -1,3 +1,5 @@
+let reportTable = null;
+
 class IncomeReport {
     constructor() {
         this.apiUrl = 'controllers/reports.php';
@@ -134,7 +136,7 @@ class IncomeReport {
             $('#reportTable').DataTable().destroy();
         }
 
-        $('#reportTable').DataTable({
+        reportTable = $('#reportTable').DataTable({
             pageLength: 25,
             order: [[1, 'desc']],
             dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>tip',
@@ -181,3 +183,15 @@ class IncomeReport {
 
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => { new IncomeReport(); });
+
+
+// 2️⃣ Bind custom search input
+$('.search-input').on('keyup', function () {
+    reportTable.search(this.value).draw();
+});
+
+
+$('.dropdown-item').on('click', function () {
+    var length = parseInt($(this).text());
+    reportTable.page.len(length).draw();
+});

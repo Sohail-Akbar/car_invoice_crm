@@ -69,12 +69,12 @@
        </div>
 
        <div class="navbar-right">
-           <div class="dropdown">
-               <button class="dropdown-toggle menu-item no-arrow-icon" type="button" data-toggle="dropdown">
-                   <h5 class="mb-0 cp text-dark"><i class="fas fa-cog"></i></h5>
-               </button>
-               <div class="dropdown-menu" style="min-width: 18rem;">
-                   <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+           <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+               <div class="dropdown">
+                   <button class="dropdown-toggle menu-item no-arrow-icon" type="button" data-toggle="dropdown">
+                       <h5 class="mb-0 cp text-dark"><i class="fas fa-cog"></i></h5>
+                   </button>
+                   <div class="dropdown-menu" style="min-width: 18rem;">
                        <a href="add-staff" class="dropdown-item">
                            <i class="fas fa-user pt-1"></i>
                            <span class="text">Add Staff</span>
@@ -95,13 +95,13 @@
                            <i class="fas fa-cog pt-1"></i>
                            Branch Settings
                        </a>
-                   <?php } ?>
-                   <a href="setting" class="dropdown-item">
-                       <i class="fas fa-cog pt-1"></i>
-                       <span class="text">Profile Setting</span>
-                   </a>
+                       <a href="setting" class="dropdown-item">
+                           <i class="fas fa-cog pt-1"></i>
+                           <span class="text">Profile Setting</span>
+                       </a>
+                   </div>
                </div>
-           </div>
+           <?php } ?>
            <div class="user-profile" id="userProfile">
                <div class="user-avatar"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
                <div class="user-name"><?= LOGGED_IN_USER['name'] ?></div>

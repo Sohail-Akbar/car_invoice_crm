@@ -1,3 +1,29 @@
+ @media (max-width: 1024px) {
+     .customer-info-status {
+         flex-direction: column;
+     }
+
+     .customer-info-status button {
+         margin-bottom: 10px;
+     }
+
+     .profile-info .head .badge {
+         margin-bottom: 10px;
+     }
+
+     .profile-info .single-info {
+         word-break: break-all;
+     }
+
+     #viewInvoicesContainer .single-header {
+         flex-direction: column;
+     }
+
+     #viewInvoicesContainer .single-invoice-card {
+         padding-inline: 0 !important;
+     }
+ }
+
  @media (max-width: 768px) {
 
      .profile-setting-container .card,
@@ -6,17 +32,11 @@
      .add-role-container .card,
      .add-staff-container .card,
      .view-staff-container .card,
-     .income-report-container .card,
      .view-reg-vehicle-container .card,
-     .reg-vehicle-container .card,
-     .view-customer-container .card,
      .add-customer-container .card,
      .view-reg-vehicle-container .card-body,
-     .view-customer-container .card-body,
-     .invoice-search-container .card-body,
-     .invoice-search-container .card,
      .invoice-container .card {
-         padding: 0;
+         padding: 20px 5px;
      }
 
      .dataTable-container .table-responsive {
@@ -71,6 +91,14 @@
 
      .customer-note-container {
          max-height: 400px !important;
+     }
+
+     .navbar {
+         z-index: 9999 !important;
+     }
+
+     #viewInvoicesContainer .pull-away {
+         flex-direction: column;
      }
  }
 
@@ -143,5 +171,80 @@
 
      .vehicle-list-container .buttons .btn {
          margin-bottom: 5px;
+     }
+
+     .navbar .toggle-sidebar {
+         margin-right: 3px !important;
+     }
+
+     .custom-table-header {
+         flex-direction: column;
+     }
+
+     .custom-table-header .search-container {
+         width: 100% !important;
+         margin-bottom: 10px;
+     }
+
+     .custom-table-header .content-center {
+         justify-content: flex-start;
+     }
+
+     .table-custom-design {
+         margin-top: 20px !important;
+     }
+
+     .financial-btns {
+         flex-direction: column;
+     }
+
+     .financial-btns button {
+         margin: 0px !important;
+         margin-bottom: 10px !important;
+     }
+
+     #viewInvoicesContainer .single-header {
+         font-size: 12px;
+     }
+
+     #viewInvoicesContainer .single-header .action-btns {
+         flex-direction: column;
+         display: flex;
+         justify-content: start;
+         align-items: flex-start;
+     }
+
+     #viewInvoicesContainer .single-header .action-btns .update-payment {
+         margin-left: 0 !important;
+     }
+
+     .modal-title {
+         font-size: 16px !important;
+     }
+ }
+
+ @media (max-width: 330px) {
+     .user-info p {
+         display: none;
+     }
+
+     .custom-table-header .content-center {
+         flex-direction: column;
+     }
+
+     .add-customer-btn {
+         margin-top: 10px;
+     }
+
+     #resetBtn {
+         margin-top: 10px;
+     }
+
+     .dashboard-container .header h2 {
+         font-size: 35px !important;
+     }
+
+     .heading-sm-w {
+         width: 280px !important;
      }
  }

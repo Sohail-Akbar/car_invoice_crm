@@ -29,10 +29,10 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
 <body>
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-company-container" id="mainContent">
-        <div class="col-xs-12 mt-3 card">
+        <div class="col-md-12 card">
             <div class="box-content p-2">
-                <form action="company" method="POST" class="mt-4 ajax_form">
-                    <div class="col-lg-12">
+                <form action="company" method="POST" class="ajax_form">
+                    <div class="col-md-12">
                         <h3 class="heading mb-5 custom-heading">Company's Details</h3>
                     </div>
                     <!-- Company Details -->
@@ -166,7 +166,7 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
                                 <input type="hidden" name="user_id" value="<?= arr_val($company_admin_data, "id", "") ?>">
                                 <input type="hidden" name="company_id" value="<?= arr_val($company_admin_data, "company_id", "") ?>">
                             <?php } ?>
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+                            <button type="submit" class="btn waves-effect waves-light"><i class="fas fa-save    "></i> Submit</button>
                         </div>
                     </div>
                 </form>

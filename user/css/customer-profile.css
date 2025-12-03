@@ -485,7 +485,7 @@
 }
 
 .customer-note-container {
-    max-height: 280px;
+    min-height: 280px;
 }
 
 .view-customer-note {
@@ -514,3 +514,7 @@
 }
 
 /* ENd */
+
+.customer-login .tc-delete-btn {
+    display: none !important;
+}

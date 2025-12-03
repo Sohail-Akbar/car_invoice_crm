@@ -1,5 +1,4 @@
 <div class="tab-content" id="invoices">
-    <h3 class="section-title">Invoice History</h3>
     <div class="dataTable-container">
         <div class="table-responsive">
             <table id="invoiceTable" class="display" style="width:100%">

@@ -48,16 +48,14 @@ if (empty($customer)) $customer = [];
             </div>
             <div class="main-content-">
                 <div class="sms-card">
-                    <div class="card-header">
-                        <i class="fas fa-sms me-2"></i> Send Service SMS
-                    </div>
-                    <div class="card-body">
+                    <div class="card">
+                        <h3 class="heading mb-3 custom-heading text-clr mb-5"><i class="fas fa-sms me-2"></i> Send Service SMS</h3>
                         <form action="customer" method="POST" class="ajax_form reset" data-reset="reset">
-                            <div class="row mt-4">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="form-label">
-                                            <i class="fas fa-users"></i>Select Customers for Service SMS
+                                            <i class="fas fa-users"></i>Select Customers
                                         </label>
                                         <!-- multiple="multiple" -->
                                         <select class="form-select" name="customer_id" id="customerSelect" required>
@@ -67,7 +65,7 @@ if (empty($customer)) $customer = [];
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-label">
-                                            <i class="fas fa-sticky-note"></i>Service SMS Templates
+                                            <i class="fas fa-sticky-note"></i>SMS Templates
                                         </label>
                                         <select name="service_template" class="form-control">
                                             <option value="">--- Select Template ----</option>
@@ -82,10 +80,10 @@ if (empty($customer)) $customer = [];
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="form-label">
-                                            <i class="fas fa-comment"></i>Service SMS Message
+                                            <i class="fas fa-comment"></i>SMS Message
                                         </label>
                                         <textarea class="form-control" name="message" id="smsMessage" rows="4"
-                                            placeholder="Type your service SMS message here..." required></textarea>
+                                            placeholder="Type your SMS message here..." required></textarea>
                                     </div>
                                 </div>
                                 <!-- Message Preview -->
@@ -103,7 +101,6 @@ if (empty($customer)) $customer = [];
                                         <i class="fas fa-paper-plane me-2"></i>Send Service SMS
                                     </button>
                                 </div>
-                            </div>
                         </form>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Dropdown with Direction Control</title>
+    <title>Customer Management Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,248 +15,277 @@
         }
 
         body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             padding: 20px;
         }
 
         .container {
+            max-width: 1200px;
             width: 100%;
-            max-width: 900px;
+        }
+
+        .dashboard-card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 10px;
-            color: #2c3e50;
+            color: #1e293b;
+            font-size: 2.8rem;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        .subtitle {
-            text-align: center;
+        .tagline {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            color: #334155;
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 30px;
-            color: #7f8c8d;
-            font-size: 16px;
-        }
-
-        .dropdowns-demo {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .demo-section {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .demo-section h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Custom Dropdown Styles */
-        .custom-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .dropdown-toggle:hover {
-            background: #34495e;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .dropdown-toggle.active {
-            background: #3498db;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            min-width: 220px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.95);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            margin: 8px 0;
-            overflow: hidden;
-        }
-
-        /* Dropdown Directions */
-        .dropdown-menu.dropdown-start {
-            left: 0;
-            right: auto;
-        }
-
-        .dropdown-menu.dropdown-end {
-            left: auto;
-            right: 0;
-        }
-
-        .dropdown-menu.dropdown-down {
-            top: 100%;
-            bottom: auto;
-        }
-
-        .dropdown-menu.dropdown-up {
-            top: auto;
-            bottom: 100%;
-        }
-
-        .dropdown-menu.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            text-decoration: none;
-            color: #2c3e50;
-            border-bottom: 1px solid #f1f2f6;
-            transition: all 0.2s ease;
-            font-size: 14px;
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover {
-            background: #f8f9fa;
-            padding-left: 20px;
-        }
-
-        .dropdown-item i {
-            width: 16px;
             text-align: center;
+            position: relative;
+            padding-bottom: 15px;
         }
 
-        .text-primary {
-            color: #3498db;
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            border-radius: 2px;
         }
 
-        .text-success {
-            color: #2ecc71;
-        }
-
-        .text-warning {
-            color: #f39c12;
-        }
-
-        .text-danger {
-            color: #e74c3c;
-        }
-
-        .no-btn-styles {
-            background: none;
-            border: none;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .direction-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .direction-btn {
-            padding: 8px 12px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background 0.2s ease;
-        }
-
-        .direction-btn:hover {
-            background: #2980b9;
-        }
-
-        .direction-btn.active {
-            background: #2c3e50;
-        }
-
-        .features {
+        .buttons-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
         }
 
-        .feature {
+        .btn-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .btn-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: #e0e7ff;
+        }
+
+        .btn-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+        }
+
+        .btn-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 32px;
+            color: white;
         }
 
-        .feature i {
-            margin-right: 10px;
-            color: #3498db;
-            font-size: 18px;
+        .btn-card:nth-child(1) .btn-icon {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
         }
 
-        .code-example {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-family: monospace;
-            font-size: 14px;
-            overflow-x: auto;
+        .btn-card:nth-child(2) .btn-icon {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .btn-card:nth-child(3) .btn-icon {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .btn-card:nth-child(4) .btn-icon {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-card h3 {
+            color: #1e293b;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .btn-card p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .redirect-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .redirect-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .redirect-btn:active {
+            transform: translateY(0);
+        }
+
+        .redirect-btn.register {
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+        }
+
+        .redirect-btn.customer {
+            background: linear-gradient(to right, #10b981, #059669);
+        }
+
+        .redirect-btn.phone {
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+        }
+
+        .redirect-btn.payment {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            min-width: 150px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
         }
 
         @media (max-width: 768px) {
-            .dropdowns-demo {
+            .dashboard-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .buttons-grid {
                 grid-template-columns: 1fr;
             }
 
-            .direction-controls {
-                justify-content: center;
+            .btn-card {
+                padding: 25px;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -264,274 +293,153 @@
 
 <body>
     <div class="container">
-        <h1>Custom Dropdown with Direction Control</h1>
-        <p class="subtitle">Like Bootstrap, but better - control dropdown direction</p>
-
-        <div class="dropdowns-demo">
-            <div class="demo-section">
-                <h3><i class="fas fa-arrow-down"></i> Dropdown Down</h3>
-                <div class="custom-dropdown">
-                    <button class="dropdown-toggle" type="button" data-dropdown="dropdown1">
-                        <i class="fas fa-cog"></i> Actions (Down)
-                    </button>
-                    <ul class="dropdown-menu dropdown-down dropdown-start" id="dropdown1">
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-edit text-primary"></i>Edit
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-eye text-success"></i>View Profile
-                            </a>
-                        </li>
-                        <li>
-                            <button class="no-btn-styles dropdown-item text-danger">
-                                <i class="fas fa-trash-alt"></i> Delete
-                            </button>
-                        </li>
-                    </ul>
+        <div class="dashboard-card">
+            <header>
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h1>Customer Management</h1>
                 </div>
-                <div class="direction-controls">
-                    <button class="direction-btn active" data-direction="down">Down</button>
-                    <button class="direction-btn" data-direction="up">Up</button>
-                    <button class="direction-btn" data-direction="start">Start</button>
-                    <button class="direction-btn" data-direction="end">End</button>
+                <p class="tagline">
+                    Streamline your customer operations with our dedicated management tools.
+                    Click any button below to navigate to the specific section you need.
+                </p>
+            </header>
+
+            <div class="section-title">Customer Management Sections</div>
+
+            <div class="buttons-grid">
+                <!-- Registration Button -->
+                <div class="btn-card">
+                    <div class="btn-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3>Registration Number</h3>
+                    <p>
+                        Manage customer registration IDs, create new registrations,
+                        and view existing registration records.
+                    </p>
+                    <a href="registration-management.html" class="redirect-btn register">
+                        <i class="fas fa-external-link-alt"></i>
+                        Go to Registration
+                    </a>
+                </div>
+
+                <!-- Customer Name Button -->
+                <div class="btn-card">
+                    <div class="btn-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>Customer Name</h3>
+                    <p>
+                        Access customer profiles, edit personal information,
+                        and manage customer name records.
+                    </p>
+                    <a href="customer-name-management.html" class="redirect-btn customer">
+                        <i class="fas fa-external-link-alt"></i>
+                        Go to Customer Names
+                    </a>
+                </div>
+
+                <!-- Customer Phone Button -->
+                <div class="btn-card">
+                    <div class="btn-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Customer Phone</h3>
+                    <p>
+                        Manage phone numbers, contact preferences,
+                        and communication settings for customers.
+                    </p>
+                    <a href="customer-phone-management.html" class="redirect-btn phone">
+                        <i class="fas fa-external-link-alt"></i>
+                        Go to Phone Management
+                    </a>
+                </div>
+
+                <!-- Payment Button -->
+                <div class="btn-card">
+                    <div class="btn-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Payment Processing</h3>
+                    <p>
+                        Process payments, view transaction history,
+                        and manage billing information securely.
+                    </p>
+                    <a href="payment-processing.html" class="redirect-btn payment">
+                        <i class="fas fa-external-link-alt"></i>
+                        Go to Payments
+                    </a>
                 </div>
             </div>
 
-            <div class="demo-section">
-                <h3><i class="fas fa-arrow-up"></i> Dropdown Up</h3>
-                <div class="custom-dropdown">
-                    <button class="dropdown-toggle" type="button" data-dropdown="dropdown2">
-                        <i class="fas fa-user"></i> Profile (Up)
-                    </button>
-                    <ul class="dropdown-menu dropdown-up dropdown-end" id="dropdown2">
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-user-circle text-primary"></i>My Account
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-cog text-success"></i>Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-sign-out-alt text-warning"></i>Logout
-                            </a>
-                        </li>
-                    </ul>
+            <!-- Quick Stats -->
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value">1,247</div>
+                    <div class="stat-label">Total Customers</div>
                 </div>
-                <div class="direction-controls">
-                    <button class="direction-btn" data-direction="down">Down</button>
-                    <button class="direction-btn active" data-direction="up">Up</button>
-                    <button class="direction-btn" data-direction="start">Start</button>
-                    <button class="direction-btn" data-direction="end">End</button>
+                <div class="stat-item">
+                    <div class="stat-value">892</div>
+                    <div class="stat-label">Active Registrations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Satisfaction Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Support Available</div>
                 </div>
             </div>
-        </div>
 
-        <div class="demo-section">
-            <h3><i class="fas fa-code"></i> Implementation</h3>
-            <p>This custom dropdown can be positioned in any direction like Bootstrap:</p>
-            <div class="code-example">
-                // Set dropdown direction programmatically<br>
-                setDropdownDirection(dropdownElement, 'up', 'end');<br><br>
-                // Or use data attributes<br>
-                &lt;ul class="dropdown-menu dropdown-up dropdown-end"&gt;...&lt;/ul&gt;
-            </div>
-
-            <div class="direction-controls">
-                <button class="direction-btn" data-direction="down">Down</button>
-                <button class="direction-btn" data-direction="up">Up</button>
-                <button class="direction-btn" data-direction="start">Start</button>
-                <button class="direction-btn" data-direction="end">End</button>
-                <button class="direction-btn" data-direction="down-start">Down + Start</button>
-                <button class="direction-btn" data-direction="down-end">Down + End</button>
-                <button class="direction-btn" data-direction="up-start">Up + Start</button>
-                <button class="direction-btn" data-direction="up-end">Up + End</button>
-            </div>
-        </div>
-
-        <div class="features">
-            <div class="feature">
-                <i class="fas fa-arrows-alt-v"></i>
-                <span>Up/Down direction</span>
-            </div>
-            <div class="feature">
-                <i class="fas fa-arrows-alt-h"></i>
-                <span>Start/End alignment</span>
-            </div>
-            <div class="feature">
-                <i class="fas fa-brain"></i>
-                <span>Auto-positioning</span>
-            </div>
-            <div class="feature">
-                <i class="fas fa-palette"></i>
-                <span>Custom styling</span>
-            </div>
+            <footer>
+                <p>Customer Management Portal &copy; 2023 | All rights reserved</p>
+                <p style="margin-top: 5px;">Click any button above to navigate to the corresponding management section
+                </p>
+            </footer>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize all dropdowns
-            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        // Add hover effects and click feedback
+        document.querySelectorAll('.redirect-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                // For demo purposes - in a real app, the href will handle navigation
+                // This just adds visual feedback
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting...';
+                this.style.opacity = '0.8';
 
-            dropdownToggles.forEach(toggle => {
-                const dropdownId = toggle.getAttribute('data-dropdown');
-                const dropdownMenu = document.getElementById(dropdownId);
+                // Simulate loading delay
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.opacity = '1';
 
-                // Toggle dropdown
-                toggle.addEventListener('click', function (e) {
-                    e.stopPropagation();
+                    // Show a success message (in real app, remove this)
+                    const pageName = this.closest('.btn-card').querySelector('h3').textContent;
+                    alert(`In a real application, this would redirect to the ${pageName} page.\n\nFor this demo, the redirect is simulated.`);
+                }, 800);
 
-                    // Close all other dropdowns
-                    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                        if (menu !== dropdownMenu) {
-                            menu.classList.remove('active');
-                        }
-                    });
-
-                    // Toggle current dropdown
-                    dropdownMenu.classList.toggle('active');
-                    toggle.classList.toggle('active');
-
-                    // Auto-position if needed
-                    autoPositionDropdown(dropdownMenu);
-                });
-
-                // Handle menu item clicks
-                const menuItems = dropdownMenu.querySelectorAll('.dropdown-item, .no-btn-styles');
-                menuItems.forEach(item => {
-                    item.addEventListener('click', function (e) {
-                        if (this.classList.contains('no-btn-styles')) {
-                            e.preventDefault();
-                            if (confirm('Are you sure you want to delete?')) {
-                                alert('Delete action triggered!');
-                            }
-                        } else {
-                            e.preventDefault();
-                            alert(`Navigation to: ${this.getAttribute('href') || '#'}`);
-                        }
-
-                        // Close dropdown
-                        dropdownMenu.classList.remove('active');
-                        toggle.classList.remove('active');
-                    });
-                });
+                // Prevent actual navigation for demo
+                e.preventDefault();
             });
+        });
 
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', function () {
-                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                    menu.classList.remove('active');
-                });
-                document.querySelectorAll('.dropdown-toggle.active').forEach(toggle => {
-                    toggle.classList.remove('active');
-                });
-            });
+        // Add subtle animation to cards on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.btn-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
 
-            // Direction controls
-            const directionButtons = document.querySelectorAll('.direction-btn');
-            directionButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const direction = this.getAttribute('data-direction');
-                    const demoSection = this.closest('.demo-section');
-                    const dropdownMenu = demoSection.querySelector('.dropdown-menu');
-
-                    // Update active state
-                    directionButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-
-                    // Set new direction
-                    setDropdownDirection(dropdownMenu, direction);
-                });
-            });
-
-            // Set dropdown direction
-            function setDropdownDirection(dropdownMenu, direction) {
-                // Remove all direction classes
-                dropdownMenu.classList.remove(
-                    'dropdown-down', 'dropdown-up',
-                    'dropdown-start', 'dropdown-end'
-                );
-
-                // Add new direction classes
-                if (direction.includes('down')) {
-                    dropdownMenu.classList.add('dropdown-down');
-                }
-                if (direction.includes('up')) {
-                    dropdownMenu.classList.add('dropdown-up');
-                }
-                if (direction.includes('start')) {
-                    dropdownMenu.classList.add('dropdown-start');
-                }
-                if (direction.includes('end')) {
-                    dropdownMenu.classList.add('dropdown-end');
-                }
-
-                // Default to down-start if no specific direction
-                if (!direction.includes('down') && !direction.includes('up')) {
-                    dropdownMenu.classList.add('dropdown-down');
-                }
-                if (!direction.includes('start') && !direction.includes('end')) {
-                    dropdownMenu.classList.add('dropdown-start');
-                }
-            }
-
-            // Auto-position dropdown based on viewport
-            function autoPositionDropdown(dropdownMenu) {
-                const rect = dropdownMenu.getBoundingClientRect();
-                const viewportHeight = window.innerHeight;
-                const viewportWidth = window.innerWidth;
-
-                // Check if dropdown would go off-screen
-                if (dropdownMenu.classList.contains('dropdown-down')) {
-                    const spaceBelow = viewportHeight - rect.bottom;
-                    if (spaceBelow < 100) {
-                        dropdownMenu.classList.remove('dropdown-down');
-                        dropdownMenu.classList.add('dropdown-up');
-                    }
-                }
-
-                if (dropdownMenu.classList.contains('dropdown-up')) {
-                    const spaceAbove = rect.top;
-                    if (spaceAbove < 100) {
-                        dropdownMenu.classList.remove('dropdown-up');
-                        dropdownMenu.classList.add('dropdown-down');
-                    }
-                }
-
-                if (dropdownMenu.classList.contains('dropdown-end')) {
-                    const spaceRight = viewportWidth - rect.right;
-                    if (spaceRight < 50) {
-                        dropdownMenu.classList.remove('dropdown-end');
-                        dropdownMenu.classList.add('dropdown-start');
-                    }
-                }
-
-                if (dropdownMenu.classList.contains('dropdown-start')) {
-                    const spaceLeft = rect.left;
-                    if (spaceLeft < 50) {
-                        dropdownMenu.classList.remove('dropdown-start');
-                        dropdownMenu.classList.add('dropdown-end');
-                    }
-                }
-            }
-
-            // Keyboard accessibility
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                        menu.classList.remove('active');
-                    });
-                    document.querySelectorAll('.dropdown-toggle.active').forEach(toggle => {
-                        toggle.classList.remove('active');
-                    });
-                }
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
             });
         });
     </script>

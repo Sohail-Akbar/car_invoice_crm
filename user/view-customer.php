@@ -17,66 +17,51 @@ $CSS_FILES_ = [
 
 <head>
     <?php require_once('./includes/head.php'); ?>
-    <style>
-        .dropdown-menu {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            padding: 10px 0;
-            min-width: 250px;
-            transform: translate3d(-127px, 0px, 0px) !important;
-        }
-
-        .dropdown-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .dropdown-item:hover {
-            background: #f8f9fa;
-            border-left-color: #667eea;
-            padding-left: 25px;
-        }
-
-        .dropdown-item i {
-            width: 20px;
-            text-align: center;
-            font-size: 16px;
-        }
-    </style>
 </head>
 
 <body>
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content view-customer-container" id="mainContent">
         <div class="card">
-            <div class="card-header">
-                <div class="pull-away">
-                    <p>Customers</p>
-                    <a href="add-customer">Add New Customer</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="dataTable-container">
-                    <div class="table-responsive">
-                        <table class="table table-striped" id="customersTable" style="width:100%">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Customer Details</th>
-                                    <th>Address</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+            <div class="custom-table-header pull-away">
+                <div class="search-container">
+                    <input type="text" class="search-input search-minimal form-control" placeholder="Type to search...">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
                     </div>
                 </div>
+                <div class="d-flex content-center">
+                    <div class="btn-group dropleft content-center br-5">
+                        <button type="button" class="btn dropdown-toggle table-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Entries
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 7H20M6.99994 12H16.9999M10.9999 17H12.9999" stroke="#454545" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">5</a>
+                            <a class="dropdown-item" href="#">25</a>
+                            <a class="dropdown-item" href="#">50</a>
+                            <a class="dropdown-item" href="#">100</a>
+                        </div>
+                    </div>
+                    <a href="add-customer" class="btn ml-3 add-customer-btn br-5">+ &nbsp;Add New Customer</a>
+                </div>
+            </div>
+            <div class="table-responsive table-custom-design mt-5">
+                <table class="table table-striped" id="customersTable" style="width:100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Customer Details</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </main>

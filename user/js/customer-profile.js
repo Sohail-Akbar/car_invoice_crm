@@ -51,10 +51,10 @@ function showVehicleDetails(vehicle_id, customer_id, container) {
         success: function (res) {
             // show HTML directly in container
             container.html(res);
-            $('.select2').select2({
-                placeholder: "Select one or more options",
-                allowClear: true
-            });
+            // $('.select2').select2({
+            //     placeholder: "Select one or more options",
+            //     allowClear: true
+            // });
         },
         error: function (xhr) {
             console.error(xhr.responseText);
@@ -219,7 +219,7 @@ $(document).ready(function () {
                     "render": function (data) {
                         if (!data) return '<span class="text-muted">No file</span>';
                         return `<a class="btn btn-view text-white" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
-                                    <i class="fas fa-eye"></i> View
+                                    <i class="fas fa-eye"></i> View Invoice
                                 </a>`;
                     },
                     "orderable": false
@@ -279,8 +279,8 @@ $(document).ready(function () {
                                     <i class="fas fa-edit"></i> Edit
                                 </a>`;
                         }
-                        return `<a class="btn btn-view text-white" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
-                                    <i class="fas fa-eye"></i> View
+                        return `<a class="btn btn-view text-white mr-2" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
+                                    <i class="fas fa-eye"></i> View Invoice
                                 </a>${editBtn}`;
                     },
                     "orderable": false
@@ -324,7 +324,7 @@ $(document).ready(function () {
                     "render": function (data, type, row) {
                         if (!data) return '<span class="text-muted">No file</span>';
                         return `<a class="btn btn-view text-white" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
-                                    <i class="fas fa-eye"></i> View
+                                    <i class="fas fa-eye"></i> View Invoice
                                 </a>`;
                     },
                     "orderable": false

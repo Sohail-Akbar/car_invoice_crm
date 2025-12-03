@@ -30,9 +30,9 @@ if (count($agency_data)) $agency_data = $agency_data[0];
 <body>
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-agency-container" id="mainContent">
-        <div class="col-xs-12 mt-3 card">
+        <div class="col-md-12 card">
             <div class="box-content p-2">
-                <form action="agency" method="POST" class="mt-4 ajax_form">
+                <form action="agency" method="POST" class="ajax_form">
                     <div class="col-lg-12">
                         <h3 class="heading mb-5 custom-heading">Branch's Details</h3>
                     </div>
@@ -185,7 +185,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                                     <input type="hidden" name="agency_user_id" value="<?= arr_val($agency_data, "id", "") ?>">
                                 <?php  } ?>
                                 <input type="hidden" name="company_login_id" value="<?= LOGGED_IN_USER['company_id'] ?>">
-                                <button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+                                <button type="submit" class="btn waves-effect waves-light"><i class="fas fa-save    "></i> Submit</button>
                             </div>
                         </div>
                     </div>

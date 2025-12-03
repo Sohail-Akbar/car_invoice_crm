@@ -1,8 +1,9 @@
 $(document).ready(function () {
     if ($("#vehicleTable").length) {
-        $('#vehicleTable').DataTable({
+        let vehicleTable = $('#vehicleTable').DataTable({
             "processing": true,
             "serverSide": true,
+            "autoWidth": false,
             "ajax": {
                 "url": "controllers/mot-history?fetchVehicleData=true",
                 "type": "POST"
@@ -28,6 +29,16 @@ $(document).ready(function () {
                 { "data": "id", "visible": false }
             ],
             "order": [[0, "desc"]],
+        });
+        // 2️⃣ Bind custom search input
+        $('.search-input').on('keyup', function () {
+            vehicleTable.search(this.value).draw();
+        });
+
+
+        $('.dropdown-item').on('click', function () {
+            var length = parseInt($(this).text());
+            vehicleTable.page.len(length).draw();
         });
     }
 });

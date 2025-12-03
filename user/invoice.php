@@ -181,7 +181,7 @@ if ($get_invoice_id) {
                                                     <h5>Service...</h5>
                                                 </div>
                                                 <div class="col-md-6 px-0 col-sm-12">
-                                                    <div class="d-flex">
+                                                    <div class="d-flex justify-content-end">
                                                         <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 12px;">Quantity</span>
                                                         <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 14px;">Amount</span>
                                                         <span class="badge badge-white bg-white py-2 px-3" style="font-size: 14px;">#</span>

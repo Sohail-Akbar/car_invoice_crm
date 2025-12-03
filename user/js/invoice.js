@@ -65,7 +65,7 @@ function addInvoiceRow() {
                 </select>
             </div>
             <div class="col-md-6 px-0 col-12">
-                <div class="d-flex">
+                <div class="d-flex justify-content-end mr-4">
                     <input type="number" class="form-control service_quantity invoice-input-item ml-2" step="1" min="1" name="service_quantity[]" value="1">
                     <input type="number" class="form-control service_amount invoice-input-item" step="any" name="service_amount[]" value="0">
                     <button type="button" class="btn btn-sm remove-row">

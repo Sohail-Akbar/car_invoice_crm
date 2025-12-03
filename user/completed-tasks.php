@@ -60,11 +60,11 @@ $assigned_tasks = $db->query("
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <div class="main-content">
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
-                    <p>Completed Tasks</p>
+                    <p class="text-white">Completed Tasks</p>
                     <a href="assigned-vehicles">Back to Assigned Tasks</a>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     if ($("#customersTable").length) {
-        $('#customersTable').DataTable({
+        let customerTable = $('#customersTable').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
@@ -38,7 +38,7 @@ $(document).ready(function () {
                     "orderable": false,
                     "render": function (data, type, row) {
                         return `<div class="dropdown">
-                                    <button class="btn btn-outline-primary bg-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <button class="btn dropdown-toggle action-table-btn" type="button" data-bs-toggle="dropdown">
                                         <i class="fas fa-cog"></i> Action
                                     </button>
                                     <ul class="dropdown-menu">
@@ -67,6 +67,17 @@ $(document).ready(function () {
             "scrollX": true,
             "initComplete": function () { this.api().columns.adjust().draw(); },
             "drawCallback": function () { this.api().columns.adjust(); }
+        });
+
+        // 2️⃣ Bind custom search input
+        $('.search-input').on('keyup', function () {
+            customerTable.search(this.value).draw();
+        });
+
+
+        $('.dropdown-item').on('click', function () {
+            var length = parseInt($(this).text());
+            customerTable.page.len(length).draw();
         });
     }
 });

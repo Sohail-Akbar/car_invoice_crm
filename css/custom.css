@@ -578,11 +578,11 @@ select:focus {
     -webkit-border-radius: 0;
     border-radius: 0;
     /* background: #f4f8f7; */
-    padding: 12px 10px;
+    padding: 8px 10px;
     color: #555;
     font-family: var(--fontFamily);
     border: 2px solid #214f797a;
-    border-radius: 10px;
+    border-radius: 5px;
     background: transparent;
 }
 
@@ -985,7 +985,7 @@ a:hover {
 
 /* Button styling improvements */
 .dataTable-container .btn-view {
-    background-color: #3498db;
+    background-color: var(--webMainColor);
     border-radius: 4px;
     transition: all 0.3s;
 }

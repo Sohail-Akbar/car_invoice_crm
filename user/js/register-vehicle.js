@@ -594,3 +594,109 @@ $(document).on("click", ".change-customer-btn", function () {
     $parent.find(`.customer-vehicle-form`).append(`<input type="hidden" name="vehicle_id" value="${data.id}">`);
     $("#motFields").html("");
 });
+
+
+// Initialize Select2 with garage customers
+function initializeSelect2(data) {
+    const options = data.customers.map(customer =>
+        `<option value="${customer.id}" data-phone="${customer.contact}">
+            ${customer.fname + " " + customer.lname} (${customer.contact})
+        </option>`
+    ).join('');
+
+    $('#customerSelect').html(options).select2({
+        placeholder: "Select customers ...",
+        allowClear: true,
+        width: '100%'
+    });
+}
+
+// Search by
+$(document).on("change", `[name="search_by"]`, function () {
+    let val = $(this).val();
+    $(".customer-info-container, .register_no_container").addClass("d-none");
+    $("#registrationCarContainer").addClass("d-none");
+    // $(".customer-vehicle-form").addClass("d-none");
+    // Remove required from both inputs
+    $('input[name="reg"]').prop('required', false);
+    $('select[name="customer_id"]').prop('required', false);
+
+    if (!val) return false;
+
+    if (val === 'registration_no') {
+        $(".register_no_container").removeClass("d-none");
+        $('input[name="reg"]').prop('required', true); // only this one required
+    } else {
+        $(".customer-info-container").removeClass("d-none");
+        $('select[name="customer_id"]').prop('required', true); // only this one required
+
+        $.ajax({
+            url: "controllers/customer",
+            method: "POST",
+            data: { getCustomersData: true },
+            dataType: "json",
+            success: function (res) {
+                if (res.status === 'success') {
+                    initializeSelect2(res.data);
+                }
+            },
+            error: makeError
+        });
+    }
+});
+
+
+// get customer Vehicle information
+// get customer Vehicle information
+$(document).on("click", ".getCustomerVehicle", function () {
+    let $form = $(this).closest("form");
+    let customer_id = $form.find(`[name="customer_id"]`).val();
+    let $container = $(".customer-vehicle-data");
+
+    $.ajax({
+        url: "controllers/customer",
+        method: "POST",
+        data: { getCustomersVehicleData: true, customer_id: customer_id },
+        dataType: "json",
+        success: function (res) {
+            if (res.status === 'success') {
+                let customer = res.data.customers.find(c => c.id == customer_id);
+                let vehicles = res.data.customer_vehicles.filter(v => v.customer_id == customer_id);
+
+                // Clear previous data
+                $container.empty();
+
+                vehicles.forEach(vehicle => {
+                    let customerHtml = `
+                        <div class="single-line">
+                            <div class="customer">
+                                <div class="avatar">${customer.fname.charAt(0)}${customer.lname.charAt(0)}</div>
+                                <div class="info">
+                                    <div class="name">${customer.fname} ${customer.lname} <i class="fas fa-edit ml-3 cp ${vehicle.is_active == 1 ? '' : 'd-none'}"></i></div>
+                                    <div class="phone"><i class="fa fa-envelope" aria-hidden="true"></i> ${customer.email}</div>
+                                </div>
+                            </div>
+
+                            <div class="vehicle">
+                                <div class="car-icon">🚗</div>
+                                <div class="car-info">
+                                    <div class="model">${vehicle.make} ${vehicle.model} <span class="badge badge-${vehicle.is_active == 1 ? 'success' : 'secondary'} ml-2">${vehicle.is_active == 1 ? 'Active' : 'Inactive'}</span> <i class="fas fa-edit ml-3 cp ${vehicle.is_active == 1 ? '' : 'd-none'}"></i></div>
+                                    <div class="plate">${vehicle.reg_number}</div>
+                                </div>
+                            </div>
+
+                            <div class="actions ${vehicle.is_active == 1 ? '' : 'd-none'}">
+                                <button class="btn text-white edit-btn change-customer-btn toggle-edit" data-vehicle='${JSON.stringify(vehicle)} title="Change Customer" data-vehicle='${JSON.stringify(vehicle)}'><i class="fas fa-exchange-alt"></i> Change Customer</button>
+                                <a href="invoice?customer_id=${customer.id}&vehicle_id=${vehicle.id}" class="btn text-white" title="Generate Invoice"><i class="fa fa-file" aria-hidden="true"></i> Generate Invoice</a>
+                            </div>
+                        </div>
+                    `;
+
+                    $container.append(customerHtml);
+                    $("#registrationCarContainer").removeClass("d-none");
+                });
+            }
+        },
+        error: makeError
+    });
+});

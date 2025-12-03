@@ -1,5 +1,4 @@
 <div class="tab-content" id="invoicesEmailHistory">
-    <h3 class="section-title">Invoice Email History</h3>
     <div class="dataTable-container">
         <div class="table-responsive">
             <table id="invoicesEmailHistoryTable" class="display" style="width:100%">

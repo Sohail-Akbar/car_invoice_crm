@@ -44,8 +44,8 @@ if (isset($_POST['fetchCarInfo'])) {
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
         "type" => "staff",
+        "is_active" => 1
     ]);
-
     // Group invoices
     $grouped = [];
     foreach ($rows as $row) {
@@ -129,8 +129,8 @@ HTML;
 
 
         echo "
-        <div class='card mb-3 shadow-sm mt-5'>
-            <div class='card-header bg-info d-flex justify-content-between align-items-center'>
+        <div class='card mb-3 shadow-sm mt-5 single-invoice-card'>
+            <div class='card-header bg-info d-flex justify-content-between align-items-center single-header'>
                 <div><strong>{$car['make']} {$car['model']}</strong> ({$car['reg_number']})</div>
                 <div class='action-btns'>
                     {$add_staff_btn_html}
@@ -218,7 +218,7 @@ HTML;
                         <form action='assigned-staff' method='POST' class='ajax_form' data-callback='assignedStaffCB'>
                             <div class='form-group'>
                                 <label class='font-weight-bold'>Select Staff Member</label>
-                                <select name='staff_id[]' class='form-control select2' multiple='multiple' required>";
+                                <select name='staff_id[]' class='form-control' required>";
         foreach ($all_staff as $staff) {
             echo "<option  value='{$staff['id']}'>{$staff['title']} {$staff['fname']} {$staff['lname']} ({$staff['email']})</option>";
         }
@@ -283,7 +283,7 @@ HTML;
                             <input type='hidden' name='customer_id' value='{$customer_id}'>
                             <input type='hidden' name='updateInvoicePayment' value='true'>
                             <div class='text-right'>
-                                <button type='submit' class='btn btn-info'>
+                                <button type='submit' class='btn'>
                                     <i class='fas fa-check-circle mr-1'></i> Update Payment
                                 </button>
                             </div>
@@ -798,4 +798,59 @@ if (isset($_GET['fetchInvoiceEmailHistory'])) {
         "data" => $data
     ]);
     exit;
+}
+
+
+
+// Fetch customer info 
+if (isset($_POST['getCustomersData'])) {
+
+    $customer = $db->select("users", "fname,lname,id,contact", [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id"  => LOGGED_IN_USER['agency_id'],
+        "is_active"  => 1,
+        "type"       => "customer"
+    ], [
+        "order_by" => "id desc"
+    ]);
+
+    if ($customer) {
+        returnSuccess([
+            "customers" => $customer
+        ]);
+    } else {
+        returnError("No customers found.");
+    }
+}
+
+
+// Fetch all Customer vehicle
+if (isset($_POST['getCustomersVehicleData'])) {
+
+    $customer = $db->select("users", "fname,lname,id,contact,email", [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id"  => LOGGED_IN_USER['agency_id'],
+        "is_active"  => 1,
+        "type"       => "customer",
+        "id" => $_POST['customer_id']
+    ], [
+        "order_by" => "id desc"
+    ]);
+
+    $customer_vehicles = $db->select("customer_car_history", "*", [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id"  => LOGGED_IN_USER['agency_id'],
+        "customer_id"  => $_POST['customer_id'],
+    ], [
+        "order_by" => "id desc"
+    ]);
+
+    if ($customer) {
+        returnSuccess([
+            "customers" => $customer,
+            "customer_vehicles" => $customer_vehicles
+        ]);
+    } else {
+        returnError("No customers found.");
+    }
 }

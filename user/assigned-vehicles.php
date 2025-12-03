@@ -151,7 +151,7 @@ $assigned_tasks = $db->query("
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <div class="all-content">
+    <div class="main-content">
         <h1>Assigned Vehicles</h1>
         <div class="vehicles-list">
             <?php if (!empty($assigned_tasks)): ?>

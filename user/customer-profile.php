@@ -89,12 +89,16 @@ $cars = $db->select("customer_car_history", "*", [
             display: none;
         }
 
-        .all-content {
+        .main-content {
             margin-left: 0 !important;
         }
 
         .navbar {
             padding-left: 20px;
+        }
+
+        #toggleSidebar {
+            display: none !important;
         }
 
         <?php   }
@@ -107,7 +111,7 @@ $cars = $db->select("customer_car_history", "*", [
     <main class="main-content customer-profile-container" id="mainContent">
         <div class="profile-header">
             <div class="row mx-0">
-                <div class="col-lg-4 col-md-6 col-12">
+                <div class="col-lg-4 col-md-12 col-12">
                     <div class="profile-card">
                         <div class="profile-header">
                             <div class="d-flex justify-content-center">
@@ -145,7 +149,7 @@ $cars = $db->select("customer_car_history", "*", [
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-12 col-12">
-                    <div class="pull-away px-5">
+                    <div class="pull-away px-5 customer-info-status">
                         <button class="btn d-flex">
                             <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0 0V16.7143H10.4615V15.4286H1.30769V1.28571H7.84615V5.14286H11.7692V6.42857H13.0769V4.24286L12.8808 4.05L8.95769 0.192857L8.76154 0H0ZM9.15385 2.18571L10.8538 3.85714H9.15385V2.18571ZM2.61538 6.42857V7.71429H10.4615V6.42857H2.61538ZM13.7308 7.71429V9C12.6192 9.19286 11.7692 10.0929 11.7692 11.25C11.7692 12.5357 12.75 13.5 14.0577 13.5H14.7115C15.2346 13.5 15.6923 13.95 15.6923 14.4643C15.6923 14.9786 15.2346 15.4286 14.7115 15.4286H12.4231V16.7143H13.7308V18H15.0385V16.7143C16.15 16.5214 17 15.6214 17 14.4643C17 13.1786 16.0192 12.2143 14.7115 12.2143H14.0577C13.5346 12.2143 13.0769 11.7643 13.0769 11.25C13.0769 10.7357 13.5346 10.2857 14.0577 10.2857H16.3462V9H15.0385V7.71429H13.7308ZM2.61538 9.64286V10.9286H7.19231V9.64286H2.61538ZM8.5 9.64286V10.9286H10.4615V9.64286H8.5ZM2.61538 12.2143V13.5H7.19231V12.2143H2.61538ZM8.5 12.2143V13.5H10.4615V12.2143H8.5Z" fill="white" />
@@ -168,30 +172,32 @@ $cars = $db->select("customer_car_history", "*", [
                         </button>
                     </div>
                     <div class="card customer-note-container mb-0 p-3 mt-3">
-                        <h4 class="card-title mb-0 pull-away note-header">
-                            <div class="algin-center d-flex cp add-note">
-                                <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16.8552 2.08221H8.1308C4.34121 2.08221 2.08203 4.34139 2.08203 8.13098V16.845C2.08203 20.645 4.34121 22.9041 8.1308 22.9041H16.8448C20.6344 22.9041 22.8935 20.645 22.8935 16.8554V8.13098C22.9039 4.34139 20.6448 2.08221 16.8552 2.08221ZM16.6574 13.274H13.2738V16.6576C13.2738 17.0844 12.9198 17.4384 12.493 17.4384C12.0661 17.4384 11.7122 17.0844 11.7122 16.6576V13.274H8.32861C7.90176 13.274 7.54778 12.92 7.54778 12.4932C7.54778 12.0663 7.90176 11.7124 8.32861 11.7124H11.7122V8.32879C11.7122 7.90194 12.0661 7.54797 12.493 7.54797C12.9198 7.54797 13.2738 7.90194 13.2738 8.32879V11.7124H16.6574C17.0842 11.7124 17.4382 12.0663 17.4382 12.4932C17.4382 12.92 17.0842 13.274 16.6574 13.274Z" fill="#214F79" />
-                                </svg>
-                                <span>&nbsp;Add Note</span>
+                        <?php if (LOGGED_IN_USER['type']  !== "customer") { ?>
+                            <h4 class="card-title mb-0 pull-away note-header">
+                                <div class="algin-center d-flex cp add-note">
+                                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16.8552 2.08221H8.1308C4.34121 2.08221 2.08203 4.34139 2.08203 8.13098V16.845C2.08203 20.645 4.34121 22.9041 8.1308 22.9041H16.8448C20.6344 22.9041 22.8935 20.645 22.8935 16.8554V8.13098C22.9039 4.34139 20.6448 2.08221 16.8552 2.08221ZM16.6574 13.274H13.2738V16.6576C13.2738 17.0844 12.9198 17.4384 12.493 17.4384C12.0661 17.4384 11.7122 17.0844 11.7122 16.6576V13.274H8.32861C7.90176 13.274 7.54778 12.92 7.54778 12.4932C7.54778 12.0663 7.90176 11.7124 8.32861 11.7124H11.7122V8.32879C11.7122 7.90194 12.0661 7.54797 12.493 7.54797C12.9198 7.54797 13.2738 7.90194 13.2738 8.32879V11.7124H16.6574C17.0842 11.7124 17.4382 12.0663 17.4382 12.4932C17.4382 12.92 17.0842 13.274 16.6574 13.274Z" fill="#214F79" />
+                                    </svg>
+                                    <span>&nbsp;Add Note</span>
+                                </div>
+                                <button class="btn py-1 px-2 view-note">
+                                    <svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7002 5.95016C14.39 8.63232 11.1083 11.2 8.20002 11.2C5.29171 11.2 2.01004 8.63232 0.700195 5.94985" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7002 5.95016C14.39 3.268 11.1088 0.700012 8.20054 0.700012C5.29222 0.700012 2.01004 3.26737 0.700195 5.94985" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M10.4502 5.95001C10.4502 7.19265 9.44284 8.20001 8.2002 8.20001C6.95755 8.20001 5.9502 7.19265 5.9502 5.95001C5.9502 4.70737 6.95755 3.70001 8.2002 3.70001C9.44284 3.70001 10.4502 4.70737 10.4502 5.95001Z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    View Note
+                                </button>
+                            </h4>
+                            <div class="mt-3 customer-note-tinymce">
+                                <textarea class="customer-note form-control" id="customerNote" name="note" rows="8" placeholder="Start typing to leave a note..."></textarea>
+                                <button class="btn save-customer-note" type="submit">
+                                    <i class="fas fa-save"></i>
+                                    Save
+                                </button>
                             </div>
-                            <button class="btn py-1 px-2 view-note">
-                                <svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7002 5.95016C14.39 8.63232 11.1083 11.2 8.20002 11.2C5.29171 11.2 2.01004 8.63232 0.700195 5.94985" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7002 5.95016C14.39 3.268 11.1088 0.700012 8.20054 0.700012C5.29222 0.700012 2.01004 3.26737 0.700195 5.94985" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M10.4502 5.95001C10.4502 7.19265 9.44284 8.20001 8.2002 8.20001C6.95755 8.20001 5.9502 7.19265 5.9502 5.95001C5.9502 4.70737 6.95755 3.70001 8.2002 3.70001C9.44284 3.70001 10.4502 4.70737 10.4502 5.95001Z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                View Note
-                            </button>
-                        </h4>
-                        <div class="mt-3 customer-note-tinymce">
-                            <textarea class="customer-note form-control" id="customerNote" name="note" rows="8" placeholder="Start typing to leave a note..."></textarea>
-                            <button class="btn save-customer-note" type="submit">
-                                <i class="fas fa-save"></i>
-                                Save
-                            </button>
-                        </div>
-                        <div class="view-customer-note d-none">
+                        <?php } ?>
+                        <div class="view-customer-note <?= LOGGED_IN_USER['type']  !== "customer" ? 'd-none' : 'customer-login' ?>">
                             <div id="notesContainer" class="mt-3"></div>
                             <div class="text-center mt-3">
                                 <button id="loadMoreNotes" class="btn btn-outline-secondary btn-sm">Load More</button>

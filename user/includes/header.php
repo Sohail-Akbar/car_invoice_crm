@@ -147,12 +147,12 @@ if (!empty($result)) {
             <i class="far fa-envelope"></i>
             <span class="badge">3</span>
         </div> -->
-        <div class="dropdown">
-            <button class="dropdown-toggle menu-item no-arrow-icon" type="button" data-toggle="dropdown">
-                <h5 class="mb-0 cp text-dark"><i class="fas fa-cog"></i></h5>
-            </button>
-            <div class="dropdown-menu" style="min-width: 18rem;">
-                <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+        <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+            <div class="dropdown">
+                <button class="dropdown-toggle menu-item no-arrow-icon" type="button" data-toggle="dropdown">
+                    <h5 class="mb-0 cp text-dark"><i class="fas fa-cog"></i></h5>
+                </button>
+                <div class="dropdown-menu" style="min-width: 18rem;">
                     <a href="add-staff" class="dropdown-item">
                         <i class="fas fa-user pt-1"></i>
                         <span class="text">Add Staff</span>
@@ -173,13 +173,13 @@ if (!empty($result)) {
                         <i class="fas fa-cog pt-1"></i>
                         Branch Settings
                     </a>
-                <?php } ?>
-                <a href="setting" class="dropdown-item">
-                    <i class="fas fa-cog pt-1"></i>
-                    <span class="text">Profile Setting</span>
-                </a>
+                    <a href="setting" class="dropdown-item">
+                        <i class="fas fa-cog pt-1"></i>
+                        <span class="text">Profile Setting</span>
+                    </a>
+                </div>
             </div>
-        </div>
+        <?php } ?>
         <div class="user-profile" id="userProfile">
             <div class="user-avatar"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
             <div class="user-name"><?= LOGGED_IN_USER['name'] ?></div>
@@ -195,32 +195,32 @@ if (!empty($result)) {
         <div class="user-name-large"><?= LOGGED_IN_USER['name'] ?></div>
         <div class="user-role"><?= ucfirst(LOGGED_IN_USER['type']) === "Agency" ? "Branch" : ucfirst(LOGGED_IN_USER['type']) ?></div>
     </div>
-
-    <div class="user-stats">
-        <div class="stat-item">
-            <div class="stat-value"><?= $total_orders ?></div>
-            <div class="stat-label">Total Orders</div>
+    <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
+        <div class="user-stats">
+            <div class="stat-item">
+                <div class="stat-value"><?= $total_orders ?></div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><?= _CURRENCY_SYMBOL . $total_income ?></div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><?= _CURRENCY_SYMBOL . $total_paid ?></div>
+                <div class="stat-label">Total Paid</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><?= _CURRENCY_SYMBOL . $total_due ?></div>
+                <div class="stat-label">Total Due</div>
+            </div>
         </div>
-        <div class="stat-item">
-            <div class="stat-value"><?= _CURRENCY_SYMBOL . $total_income ?></div>
-            <div class="stat-label">Total Revenue</div>
+        <div class="user-menu">
+            <a href="setting" class="user-menu-item">
+                <i class="fas fa-user"></i>
+                <span>My Profile</span>
+            </a>
         </div>
-        <div class="stat-item">
-            <div class="stat-value"><?= _CURRENCY_SYMBOL . $total_paid ?></div>
-            <div class="stat-label">Total Paid</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value"><?= _CURRENCY_SYMBOL . $total_due ?></div>
-            <div class="stat-label">Total Due</div>
-        </div>
-    </div>
-
-    <div class="user-menu">
-        <a href="setting" class="user-menu-item">
-            <i class="fas fa-user"></i>
-            <span>My Profile</span>
-        </a>
-    </div>
+    <?php } ?>
 
     <a href="logout" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i>

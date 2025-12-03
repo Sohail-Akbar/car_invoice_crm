@@ -181,3 +181,299 @@ select.form-control:not([size]):not([multiple]) {
 .modal-header {
     background-color: var(--webMainColor) !important;
 }
+
+.text-clr {
+    color: var(--webMainColor) !important;
+}
+
+
+/* customer vehcile in oneline */
+.single-line {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+    gap: 20px;
+    max-width: 100%;
+    width: 100%;
+    border-bottom: 1px solid var(--webMainColor);
+}
+
+.single-line .customer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.single-line .avatar {
+    width: 45px;
+    height: 45px;
+    background: #4a6cf7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.single-line .info {
+    flex: 1;
+}
+
+.single-line .name {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+
+.single-line .phone {
+    color: #666;
+    font-size: 14px;
+}
+
+.single-line .separator {
+    color: #ddd;
+    font-size: 20px;
+    font-weight: 100;
+}
+
+.single-line .vehicle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.single-line .car-icon {
+    width: 45px;
+    height: 45px;
+    background: #10b981;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.single-line .car-info {
+    flex: 1;
+}
+
+.single-line .model {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+
+.single-line .plate {
+    background: #e9ecef;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #495057;
+}
+
+.single-line .actions {
+    display: flex;
+    gap: 10px;
+}
+
+.single-line .action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #666;
+    font-size: 16px;
+}
+
+.single-line .action-btn:hover {
+    background: #e9ecef;
+}
+
+/* customer vehcile in oneline */
+
+/* Table custom */
+.table-custom-design .table td,
+.table-custom-design .table th {
+    background: #f2f2f2 !important;
+}
+
+.table-custom-design .dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border-bottom: none !important;
+}
+
+.table-custom-design .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: var(--webMainColor) !important;
+    color: white !important;
+}
+
+.table-custom-design .action-table-btn {
+    background-color: var(--webMainColor) !important;
+}
+
+.table-custom-design .table-custom-design .table tr th:first-child {
+    border-radius: 10px 0 0 0 !important;
+}
+
+.table-custom-design #invoiceTable_length,
+.table-custom-design #invoiceTable_filter,
+.table-custom-design #reportTable_filter,
+.table-custom-design #reportTable_length,
+.table-custom-design #vehicleTable_filter,
+.table-custom-design #customersTable_filter,
+.table-custom-design #vehicleTable_length,
+.table-custom-design #customersTable_length {
+    display: none !important;
+}
+
+table.dataTable tbody th,
+table.dataTable tbody td {
+    padding: 8px 10px;
+    white-space: nowrap;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: var(--webMainColor) !important;
+    color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: var(--webMainColor) !important;
+    color: white !important;
+}
+
+.paginate_button.current {
+    color: white !important;
+}
+
+/* Table custom */
+/* Dropdown */
+
+.table-custom-design .dropdown-menu {
+    transform: translate3d(-127px, 0px, 0px) !important;
+}
+
+.dropdown-menu {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 10px 0;
+    min-width: 250px;
+}
+
+.dropdown-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+    border-left-color: #667eea;
+}
+
+.dropdown-item i {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+
+/* Dropdown */
+
+/* Basic Search Input Styles */
+.search-container {
+    position: relative;
+    width: 45%;
+}
+
+.search-input {
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #f9f9f9;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--webMainColor);
+    background: white;
+    box-shadow: 0 5px 15px rgba(74, 108, 247, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 18px;
+    pointer-events: none;
+    transition: color 0.3s ease;
+}
+
+.search-input:focus+.search-icon {
+    color: var(--webMainColor);
+}
+
+/* Basic Search Input Styles */
+
+.custom-table-header .dropdown-menu {
+    transform: translate3d(-102px, 8px, 0px) !important;
+    min-width: 20px;
+}
+
+.dropdown-toggle.table-filter {
+    background: transparent;
+    box-shadow: 0;
+    border-radius: 5px;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: unset !important;
+    border: 1px solid #c0bfbf;
+    padding: 5px 10px;
+}
+
+.dropdown-toggle.table-filter svg {
+    margin-left: 10px;
+}
+
+.dropleft .dropdown-toggle.table-filter::before {
+    display: none;
+}
+
+.add-customer-btn:hover {
+    color: white;
+}
+
+.br-5 {
+    border-radius: 5px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: white !important;
+}

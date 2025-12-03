@@ -63,11 +63,11 @@ if (!$services_data) $services_data = [];
 <body>
     <?php require_once('./includes/header.php'); ?>
 
-    <div class="all-content">
+    <div class="main-content">
         <div class="card">
             <div class="card-header">
                 <div class="pull-away">
-                    <p>Invoice Services</p>
+                    <p class="text-white">Invoice Services</p>
                     <a href="assigned-vehicles">Back to Assigned Vehicles</a>
                 </div>
             </div>

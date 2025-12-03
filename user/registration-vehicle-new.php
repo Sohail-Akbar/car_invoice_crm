@@ -76,7 +76,7 @@ $existing_customers = $db->select("users", "*", [
             <div class="card">
                 <form action="mot-history" method="POST" class="ajax_form" data-callback="motHistoryCB">
                     <div class="row">
-                        <div class="col-md-6 d-none">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="label text-clr">Search By</label>
                                 <select name="search_by" class="form-control">
@@ -87,7 +87,7 @@ $existing_customers = $db->select("users", "*", [
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6 register_no_container">
+                        <div class="col-md-6 register_no_container d-none">
                             <div class="form-group">
                                 <label class="label text-clr">Registration Number</label>
                                 <input type="text" class="form-control" name="reg" data-length="[1,250]" placeholder="Reg No ...">

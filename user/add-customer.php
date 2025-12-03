@@ -25,16 +25,14 @@ $customer_data = $db->select_one("users", "*", [
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-customer-container" id="mainContent">
         <div class="card">
-            <div class="card-body">
-                <div class="row mx-0">
-                    <div class="col-md-12">
-                        <h3 class="heading mb-3 custom-heading">Add New Customer</h3>
-                    </div>
+            <div class="row mx-0">
+                <div class="col-md-12">
+                    <h3 class="heading mb-4 custom-heading text-clr">Add New Customer</h3>
                 </div>
-                <?php
-                $callback = "";
-                require_once('./components/customer-form.php'); ?>
             </div>
+            <?php
+            $callback = "";
+            require_once('./components/customer-form.php'); ?>
         </div>
     </main>
     <script>

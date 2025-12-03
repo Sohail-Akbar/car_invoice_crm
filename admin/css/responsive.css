@@ -5,7 +5,7 @@
      .setting-container .card,
      .add-company-container .card,
      .view-company-container .card {
-         padding: 0;
+         padding: 20px 5px;
      }
 
      body {
@@ -22,6 +22,10 @@
 
      .custom-heading::before {
          left: 100%;
+     }
+
+     .navbar {
+         z-index: 9999 !important;
      }
  }
 
@@ -62,5 +66,35 @@
          font-size: 10px;
          color: #747681;
          font-weight: normal;
+     }
+
+     .navbar .toggle-sidebar {
+         margin-right: 3px !important;
+     }
+ }
+
+ @media (max-width: 330px) {
+     .user-info p {
+         display: none;
+     }
+
+     .custom-table-header .content-center {
+         flex-direction: column;
+     }
+
+     .add-customer-btn {
+         margin-top: 10px;
+     }
+
+     #resetBtn {
+         margin-top: 10px;
+     }
+
+     .dashboard-container .header h2 {
+         font-size: 35px !important;
+     }
+
+     .heading-sm-w {
+         width: 280px !important;
      }
  }
