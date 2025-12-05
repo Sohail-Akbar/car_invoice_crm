@@ -130,7 +130,7 @@ if (!empty($result)) {
         </button>
         <a href="dashboard" class="logo">
             <div class="user-info">
-                <h4>Hi,<?= LOGGED_IN_USER['fname'] . " " . LOGGED_IN_USER['lname'] ?></h4>
+                <h4>Hi,<?= substr(LOGGED_IN_USER['fname'], 0, 20) ?></h4>
                 <p>Let’s check your Garage today</p>
             </div>
         </a>
