@@ -26,7 +26,6 @@
 
  @media (max-width: 768px) {
 
-     .profile-setting-container .card,
      .setting-container .card,
      .add-services-container .card,
      .add-role-container .card,
@@ -221,6 +220,24 @@
      .modal-title {
          font-size: 16px !important;
      }
+
+     .invoice-items-container .services-header,
+     .invoice-services-container {
+         flex-direction: column;
+     }
+
+     .invoice-text {
+         font-size: 22px !important;
+     }
+
+     .sm-pull-away {
+         flex-direction: column;
+         display: flex;
+     }
+
+     .sm-pull-away .transparent-btn {
+         margin-top: 10px;
+     }
  }
 
  @media (max-width: 330px) {
@@ -246,5 +263,14 @@
 
      .heading-sm-w {
          width: 280px !important;
+     }
+
+     .sm-pull-away {
+         flex-direction: column;
+         display: flex;
+     }
+
+     .sm-pull-away .transparent-btn {
+         margin-top: 10px;
      }
  }

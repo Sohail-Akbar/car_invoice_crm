@@ -318,3 +318,30 @@ if (isset($_POST['updatePassword'])) {
 
 	exit;
 }
+
+// Set Password
+if (isset($_POST['set_password'])) {
+	$password = $_POST['password'] ?? '';
+	$token = $_POST['token'] ?? '';
+	$confirm = $_POST['confirm_password'] ?? '';
+
+	$user = $db->select_one("users", "*", ["verify_token" => $token, "is_active" => 1]);
+
+	if (!$user) echo error("Invalid or expired token");
+
+	if ($password !== $confirm) {
+		echo error("Passwords do not match");
+	} elseif (strlen($password) < 6) {
+		echo error("Password must be at least 6 characters");
+	} else {
+		$db->update("users", [
+			"password" => password_hash($password, PASSWORD_DEFAULT),
+			"verify_token" => null
+		], [
+			"id" => $user['id']
+		]);
+		echo success("Password set successfully! You can now login", [
+			"redirect" => "login"
+		]);
+	}
+}

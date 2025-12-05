@@ -39,7 +39,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <!-- Branch Name -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputName" class="control-label">Branch's Name</label>
+                            <label for="inputName" class="label">Branch's Name</label>
                             <input type="text" class="form-control" id="inputName" name="agency_name" value="<?= arr_val($agency_data, "agency_name", "") ?>" placeholder="Enter New Company" required="">
                         </div>
                     </div>
@@ -47,7 +47,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <!-- Branch Address -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Branch's Address</label>
+                            <label class="label">Branch's Address</label>
                             <input type="text" class="form-control" name="agency_address" value="<?= arr_val($agency_data, "agency_address", "") ?>" placeholder="Enter Company Address" id="branch_autocomplete" required>
                             <input type="hidden" name="branch_city" id="branch_city" value="<?= arr_val($agency_data, "branch_city", "") ?>">
                             <input type="hidden" name="branch_postcode" id="branch_postcode" value="<?= arr_val($agency_data, "branch_postcode", "") ?>">
@@ -66,7 +66,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <!-- Branch Contact -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputPhone" class="control-label">Branch's Contact</label>
+                            <label for="inputPhone" class="label">Branch's Contact</label>
                             <input type="text" class="form-control" id="inputPhone" name="agency_contact" value="<?= arr_val($agency_data, "agency_contact", "") ?>" placeholder="Enter Company Contact" required="">
                         </div>
                     </div>
@@ -74,7 +74,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <!-- Branch Email -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label for="inputEmail" class="control-label">Branch's Email</label>
+                            <label for="inputEmail" class="label">Branch's Email</label>
                             <input type="text" class="form-control" id="inputEmail" name="agency_email" value="<?= arr_val($agency_data, "agency_email", "") ?>" placeholder="Enter Company Email" required="">
                         </div>
                     </div>
@@ -82,7 +82,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <!-- Branch Logo -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Branch's Logo</label>
+                            <label class="label">Branch's Logo</label>
                             <input type="file" name="agency_logo" class="form-control">
                         </div>
                     </div>
@@ -96,7 +96,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="control-label">Title</label>
+                                <label class="label">Title</label>
                                 <select name="title" class="form-control" required="">
                                     <option <?= arr_val($agency_data, "title", "") == "" ? "selected" : '' ?> value="">Select Title</option>
                                     <option <?= arr_val($agency_data, "title", "") == "Mr" ? "selected" : '' ?> value="Mr">Mr</option>
@@ -105,7 +105,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="control-label">Gender</label>
+                                <label class="label">Gender</label>
                                 <select name="gender" class="form-control" required="">
                                     <option <?= arr_val($agency_data, "gender", "") == "" ? "selected" : '' ?> value="">Select Gender</option>
                                     <option <?= arr_val($agency_data, "gender", "") == "Male" ? "selected" : '' ?> value="Male">Male</option>
@@ -119,11 +119,11 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="control-label">First Name</label>
+                                <label class="label">First Name</label>
                                 <input type="text" name="first_name" value="<?= arr_val($agency_data, "fname", "") ?>" class="form-control" placeholder="Enter Your First Name" required="required">
                             </div>
                             <div class="col-md-6">
-                                <label class="control-label">Last Name</label>
+                                <label class="label">Last Name</label>
                                 <input type="text" name="last_name" value="<?= arr_val($agency_data, "lname", "") ?>" class="form-control" placeholder="Enter Your Last Name" required="required">
                             </div>
                         </div>
@@ -133,11 +133,11 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="control-label">Contact</label>
+                                <label class="label">Contact</label>
                                 <input type="text" name="contact" value="<?= arr_val($agency_data, "contact", "") ?>" class="form-control" placeholder="Enter contact" required="required">
                             </div>
                             <div class="col-md-6">
-                                <label class="control-label">Email</label>
+                                <label class="label">Email</label>
                                 <input type="email" class="form-control" value="<?= arr_val($agency_data, "email", "") ?>" placeholder="Email" name="email" required="">
                             </div>
                         </div>
@@ -147,7 +147,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-12">
-                                <label class="control-label">Address</label>
+                                <label class="label">Address</label>
                                 <input type="text" class="form-control" name="address" value="<?= arr_val($agency_data, "user_address", "") ?>" placeholder="Enter Address" id="user_autocomplete" required>
                                 <input type="hidden" name="city" id="user_city" value="<?= arr_val($agency_data, "city", "") ?>">
                                 <input type="hidden" name="postcode" id="user_postcode" value="<?= arr_val($agency_data, "postcode", "") ?>">
@@ -168,7 +168,7 @@ if (count($agency_data)) $agency_data = $agency_data[0];
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-12">
-                                <label class="control-label">Password</label>
+                                <label class="label">Password</label>
                                 <input type="password" data-minlength="6" class="form-control" name="password" placeholder="Password" <?= arr_val($agency_data, "password", "") ? "" : 'required' ?>>
                                 <div class="help-block">Minimum of 6 characters</div>
                             </div>

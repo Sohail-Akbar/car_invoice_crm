@@ -154,7 +154,8 @@ $(document).ready(function () {
     });
 
     // Highlight active menu item including parent main menu
-    var currentUrl = window.location.href;
+    // var currentUrl = window.location.href;
+    var currentUrl = MAIN_PATH;
     $('.sidebar .menu-item, .sidebar .submenu-item').each(function () {
         if (this.href === currentUrl) {
             $(this).addClass('active');
@@ -172,19 +173,29 @@ $(document).ready(function () {
 
 //#region Sidebar
 
-$(document).ready(function () {
-    // Use event delegation to handle dropdowns inside scrollBody
-    $('.table-responsive').on('show.bs.dropdown', '.dropdown', function () {
-        $(this).closest('.dataTables_scrollBody').css("overflow", "visible");
-        $(this).closest('.table-responsive').css("overflow", "visible");
-        $(this).closest('.table-responsive').css("overflow-x", "visible");
-    });
+// $(document).ready(function () {
+//     // Use event delegation to handle dropdowns inside scrollBody
+//     $('.table-responsive').on('show.bs.dropdown', '.dropdown', function () {
+//         $(this).closest('.dataTables_scrollBody').css("overflow", "visible");
+//         $(this).closest('.table-responsive').css("overflow", "visible");
+//         $(this).closest('.table-responsive').css("overflow-x", "visible");
+//     });
 
-    $('.table-responsive').on('hide.bs.dropdown', '.dropdown', function () {
-        $(this).closest('.dataTables_scrollBody').css("overflow", "auto");
-        $(this).closest('.table-responsive').css("overflow", "auto");
-        $(this).closest('.table-responsive').css("overflow-x", "auto");
-        console.log(this);
+//     $('.table-responsive').on('hide.bs.dropdown', '.dropdown', function () {
+//         $(this).closest('.dataTables_scrollBody').css("overflow", "auto");
+//         $(this).closest('.table-responsive').css("overflow", "auto");
+//         $(this).closest('.table-responsive').css("overflow-x", "auto");
+//         console.log(this);
 
-    });
-})
+//     });
+// })
+
+// Hide ele
+$(document).on("click", ".target-element-to-hide", function () {
+    let showTarget = $(this).data("show-target"),
+        hideTarget = $(this).data("hide-target");
+    console.log(this);
+
+    $(showTarget).removeClass("d-none");
+    $(hideTarget).addClass("d-none");
+});

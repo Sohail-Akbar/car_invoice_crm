@@ -168,6 +168,7 @@ function refreshFns() {
     initTcJxElements('.tc-jx-element'); // Jx Elements
     tcFns(); // Custom Functions
     tcResImage(); // TC Responsive Image
+    select2();
 }
 $(document).ready(refreshFns);
 

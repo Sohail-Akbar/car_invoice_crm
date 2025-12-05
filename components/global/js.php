@@ -1,3 +1,16 @@
+<?php
+$_protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+$_host = $_SERVER['HTTP_HOST'];
+$_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$_fullPathUrl = $_protocol . $_host . $_path;
+
+?>
+
+<script>
+    const GLOBAL_GET = <?= json_encode($_GET) ?>;
+    const MAIN_PATH = <?= json_encode($_fullPathUrl) ?>;
+</script>
 <?php assets_file([
     "jquery.min.js",
     "popper.min.js",

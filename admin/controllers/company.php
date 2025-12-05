@@ -94,6 +94,10 @@ if (isset($_POST['addCompany'])) {
         "date_added" => CREATED_AT
     ];
 
+    if ($company_logo !== "") {
+        $user_data["image"] =  $company_logo;
+    }
+
     // Password hash only if provided
     if (!empty($password)) {
         $user_data["password"] =  password_hash($password, PASSWORD_BCRYPT);

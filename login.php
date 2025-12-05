@@ -27,9 +27,14 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
             $_SESSION['user_id'] = $user_id;
 
             $url = "user/dashboard";
-            if ($user['type'] === "main_admin" || $user['type'] === "admin") {
+            if ($user['type'] === "main_admin") {
+                $url = "admin/dashboard";
+            } else if ($user['type'] === "admin") {
                 $url = "admin/dashboard";
             }
+            echo success('logged in successfully', [
+                'redirect' => $url,
+            ]);
 
             // JavaScript redirect
             echo "<script>

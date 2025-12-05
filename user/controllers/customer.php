@@ -594,6 +594,8 @@ if (isset($_GET['fetchCustomers'])) {
 
 // Add Customer
 if (isset($_POST['createCustomer'])) {
+    $get_data = arr_val($_POST, "get_data", null);
+
     $id = isset($_POST['id']) ? intval($_POST['id']) : null;
 
     // ✅ Collect form data
@@ -669,6 +671,15 @@ if (isset($_POST['createCustomer'])) {
         ]);
 
         $token = bin2hex(random_bytes(16)); // 32-character token
+
+        // $redirect_url = "view-customer";
+        // if ($get_data) {
+        //     $get_data = json_decode($get_data, true);
+        //     $redirect_to = arr_val($get_data, "redirect_to", null);
+        //     $regNo = arr_val($get_data, "regNo", null);
+        //     if ($redirect_to) $redirect_url = $redirect_to;
+        //     if ($regNo) $redirect_url = $redirect_to . "?regNo=" . $regNo;
+        // }
 
         returnSuccess($message, [
             "redirect" => "view-customer",
@@ -823,11 +834,10 @@ if (isset($_POST['getCustomersData'])) {
     }
 }
 
+// Edit Customer data
+if (isset($_POST['editCustomerInfo'])) {
 
-// Fetch all Customer vehicle
-if (isset($_POST['getCustomersVehicleData'])) {
-
-    $customer = $db->select("users", "fname,lname,id,contact,email", [
+    $customer = $db->select_one("users", "*", [
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id"  => LOGGED_IN_USER['agency_id'],
         "is_active"  => 1,
@@ -837,18 +847,30 @@ if (isset($_POST['getCustomersVehicleData'])) {
         "order_by" => "id desc"
     ]);
 
-    $customer_vehicles = $db->select("customer_car_history", "*", [
+    if ($customer) {
+        returnSuccess([
+            "customer" => $customer
+        ]);
+    } else {
+        returnError("No customers found.");
+    }
+}
+
+
+// Edit Vehicle data
+if (isset($_POST['editVehicleInfo'])) {
+
+    $customer = $db->select_one("customer_car_history", "*", [
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id"  => LOGGED_IN_USER['agency_id'],
-        "customer_id"  => $_POST['customer_id'],
+        "id" => $_POST['vehicle_id']
     ], [
         "order_by" => "id desc"
     ]);
 
     if ($customer) {
         returnSuccess([
-            "customers" => $customer,
-            "customer_vehicles" => $customer_vehicles
+            "vehicle" => $customer
         ]);
     } else {
         returnError("No customers found.");

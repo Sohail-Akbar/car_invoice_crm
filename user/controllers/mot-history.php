@@ -84,6 +84,58 @@ function getMotErrorMessage($errorCode)
     return $errorData[$errorCode] ?? null;
 }
 
+
+// Fetch all Customer vehicle
+if (isset($_POST['getCustomersVehicleData'])) {
+    $customer_id = arr_val($_POST, 'customer_id', 0);
+    $reg = arr_val($_POST, 'reg', '');
+
+    // Vehicle
+    $condition = [
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id"  => LOGGED_IN_USER['agency_id'],
+    ];
+    if ($customer_id) {
+        $condition['customer_id'] = $customer_id;
+    }
+    if ($reg) {
+        $condition['reg_number'] = $reg;
+    }
+
+
+    $customer_vehicles = $db->select("customer_car_history", "*", $condition, [
+        "order_by" => "id desc"
+    ]);
+
+    $customer_data = [];
+    if ($customer_vehicles) {
+        foreach ($customer_vehicles as $vehicle) {
+            $customer = $db->select_one("users", "fname,lname,id,contact,email", [
+                "company_id" => LOGGED_IN_USER['company_id'],
+                "agency_id"  => LOGGED_IN_USER['agency_id'],
+                "is_active"  => 1,
+                "type"       => "customer",
+                "id" => $vehicle['customer_id']
+            ], [
+                "order_by" => "id desc"
+            ]);
+            array_push($customer_data, $customer);
+        }
+    }
+    if ($customer_vehicles) {
+        returnSuccess([
+            "customers" => $customer_data,
+            "customer_vehicles" => $customer_vehicles
+        ], [
+            "search_by" => true
+        ]);
+    } else {
+        returnError("No Vehicle Record found.");
+    }
+}
+
+
+
 // Fetch Registeration Car Data
 if (isset($_POST['fetchRegistrationCar'])) {
     if (isset($_POST['vehicle_id'])) {

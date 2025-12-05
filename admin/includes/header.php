@@ -12,7 +12,6 @@
     } else {
         $user_img = $uploaded_img;
     }
-
     ?>
 
    <!-- Left Sidebar -->
@@ -115,7 +114,7 @@
        <div class="user-header">
            <div class="user-avatar-large"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
            <div class="user-name-large"><?= LOGGED_IN_USER['name'] ?></div>
-           <div class="user-role"><?= ucfirst(LOGGED_IN_USER['type']) === "Agency" ? "Branch" : ucfirst(LOGGED_IN_USER['type']) ?></div>
+           <div class="user-role"><?= ucfirst(LOGGED_IN_USER['type']) === "Agency" ? "Branch" : ucwords(str_replace('_', ' ', LOGGED_IN_USER['type'])) ?></div>
        </div>
 
        <div class="user-menu">

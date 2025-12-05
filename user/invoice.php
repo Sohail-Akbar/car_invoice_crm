@@ -72,11 +72,17 @@ if ($get_invoice_id) {
 <body>
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content invoice-container" id="mainContent">
-        <h4 class="invoice-text">Create New Invoice</h4>
+        <div class="pull-away mb-3 sm-pull-away">
+            <h4 class="invoice-text mb-0">Create New Invoice</h4>
+            <a href="add-vehicle" class="btn content-center br-5 transparent-btn" data-bs-original-title="Go Back">
+                +
+                <span class="ml-2">Add Vehicle</span>
+            </a>
+        </div>
         <div class="card px-0">
             <form action="invoice" method="POST" class="ajax_form">
                 <div class="row mx-0">
-                    <div class="col-md-6">
+                    <div class="col-xl-6 col-md-12">
                         <div class="row mx-0">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -160,7 +166,7 @@ if ($get_invoice_id) {
                                 </div>
                             </div>
                             <!-- Invoice Items -->
-                            <div class="col-md-12">
+                            <div class="col-md-12 px-0">
                                 <div class="form-group">
                                     <div class="invoice-items-container">
                                         <div class="invoice-heading">
@@ -176,49 +182,26 @@ if ($get_invoice_id) {
                                             <h3>Invoice Items</h3>
                                         </div>
                                         <div class="services-header">
-                                            <div class="row mx-0">
-                                                <div class="col-md-6 px-0 col-sm-12">
-                                                    <h5>Service...</h5>
-                                                </div>
-                                                <div class="col-md-6 px-0 col-sm-12">
-                                                    <div class="d-flex justify-content-end">
-                                                        <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 12px;">Quantity</span>
-                                                        <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 14px;">Amount</span>
-                                                        <span class="badge badge-white bg-white py-2 px-3" style="font-size: 14px;">#</span>
-                                                    </div>
+                                            <div class="px-0 flex-1">
+                                                <h5>Service...</h5>
+                                            </div>
+                                            <div class="col-md-6 px-0 col-sm-12">
+                                                <div class="d-flex justify-content-end">
+                                                    <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 12px;">Quantity</span>
+                                                    <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 14px;">Amount</span>
+                                                    <span class="badge badge-white bg-white py-2 px-3" style="font-size: 14px;">#</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <button type="button" id="add_row" class="btn btn-sm mb-3 mt-3">+ Add Item</button>
                                         <div class="invoice-services-container">
-                                            <!-- <div class="row mx-0">
-                                                <div class="col-md-6 px-0 mb-2">
-                                                    <select name="" id="" class="form-control invoice-select-box">
-                                                        <option value="1">select 1</option>
-                                                        <option value="1">select 1</option>
-                                                        <option value="1">select 1</option>
-                                                        <option value="1">select 1</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6 px-0">
-                                                    <div class="d-flex">
-                                                        <input type="number" class="form-control service_quantity invoice-input-item" step="1" min="1" name="service_quantity[]" value="1">
-                                                        <input type="number" class="form-control service_amount invoice-input-item" step="any" name="service_amount[]" value="0">
-                                                        <button type="button" class="btn btn-sm remove-row">
-                                                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M11.0638 0.506144L7.00014 4.56991C5.64566 3.2159 4.29075 1.86059 2.93606 0.506144C1.36892 -1.06096 -1.06026 1.36904 0.505569 2.93658C1.86048 4.29015 3.21583 5.64568 4.56921 7.00013C3.21521 8.35519 1.86066 9.70971 0.505569 11.0637C-1.06026 12.6303 1.36914 15.0597 2.93606 13.4941C4.29075 12.139 5.64537 10.7844 6.99992 9.43013L11.0636 13.4941C12.6307 15.0608 15.0605 12.6306 13.494 11.0637C12.1394 9.70887 10.7844 8.35421 9.42932 6.99969C10.7842 5.64474 12.1391 4.28993 13.494 2.93527C15.0608 1.36904 12.6309 -1.06096 11.0636 0.507018" fill="#EC1C24" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-xl-6 col-md-12">
                         <div class="invoice-right-container">
                             <h4 class="invoice-text mb-0">Invoice</h4>
                             <hr class="mt-2">
@@ -229,11 +212,11 @@ if ($get_invoice_id) {
                                     <p class="customer-address"></p>
                                     <p class="customer-phone">Phone: <span class="contact"></span></p>
                                 </div>
-                                <div class="right-content">
+                                <div class="right-content text-right">
                                     <label class="mb-0">Invoice No.</label>
-                                    <p class="invoice-no">#<?= $invoice_no ?></p>
+                                    <p class="invoice-no text-dark"><b>#<?= $invoice_no ?></b></p>
                                     <p class="issue-on">Issue On</p>
-                                    <p class="issue-date"><?= date("M d, Y"); ?></p>
+                                    <p class="issue-date text-dark"><b><?= date("M d, Y"); ?></b></p>
                                 </div>
                             </div>
                             <h5 class="invoice-text mb-0 mt-4" style="font-size: 18px;">Services</h5>
@@ -260,15 +243,15 @@ if ($get_invoice_id) {
                                 <hr class="my-0">
                                 <div class="single-item">
                                     <span>Paid:</span>
-                                    <span><input type="number" name="paid_amount" id="paid_amount" class="form-control" step="any" value="0"></span>
+                                    <span><input type="number" name="paid_amount" id="paid_amount" class="form-control text-right text-clr" step="any" value="0"></span>
                                 </div>
                                 <hr class="my-0">
                                 <div class="due-amount-head">
-                                    <div class="single-item">
-                                        <span>Due:</span>
-                                        <span id="due_amount">0.00</span>
+                                    <div class="single-item w-50">
+                                        <span class="text-clr">Due:</span>
+                                        <span id="due_amount" class="text-clr">0.00</span>
                                     </div>
-                                    <div class="mt-3">
+                                    <div class="mt-3 text-clr">
                                         <input type="checkbox" class="tc-checkbox" <?= arr_val($invoiceData, "write_off", 0) == 1 ? "checked" : "" ?> data-label="Write off" name="write_off">
                                     </div>
                                 </div>
@@ -276,7 +259,7 @@ if ($get_invoice_id) {
                             </div>
                         </div>
                         <div class="notes-container mt-2">
-                            <div class="label">Notes:</div>
+                            <div class="label text-clr">Notes:</div>
                             <textarea name="notes" class="form-control notes-input" rows="3" placeholder="Optional notes"><?= arr_val($invoiceData, "notes", ""); ?></textarea>
                         </div>
                         <div class="d-flex mt-2">
@@ -296,7 +279,7 @@ if ($get_invoice_id) {
                                 <input type="hidden" name="customer_id" value="<?= $get_customer_id ?>">
                             <?php } ?>
                             <input type="hidden" name="saveInvoice" value="<?= bc_code(); ?>">
-                            <button type="submit" class="btn">Save Invoice</button>
+                            <button type="submit" class="btn"><i class="fas fa-save    "></i> Save Invoice</button>
                         </div>
                     </div>
                 </div>

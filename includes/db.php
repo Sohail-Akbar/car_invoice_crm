@@ -17,9 +17,18 @@ define('LOGGED_IN_USER', login_user([
 ]));
 define('LOGGED_IN_USER_ID', LOGGED_IN_USER ? LOGGED_IN_USER['id'] : null);
 
-if (!is_null(LOGGED_IN_USER) && $VERIFY_LOGIN)
-	redirectTo('user/dashboard');
+
+if (!is_null(LOGGED_IN_USER) && $VERIFY_LOGIN) {
+	$url = "user/dashboard";
+	if (LOGGED_IN_USER['type'] === "main_admin") {
+		$url = "admin/dashboard";
+	} else if (LOGGED_IN_USER['type'] === "admin") {
+		$url = "admin/dashboard";
+	}
+	redirectTo($url);
+}
 
 define('IS_ADMIN', is_admin());
 
-// print_r($_COOKIE);
+// print_r($timestamp);
+// die;

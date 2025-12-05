@@ -38,7 +38,7 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
                     <!-- Company Details -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Company Name</label>
+                            <label class="label">Company Name</label>
                             <input type="text" class="form-control" name="company_name" value="<?= arr_val($company_admin_data, "company_name", "") ?>" placeholder="Enter Company Name" required>
                         </div>
                     </div>
@@ -46,7 +46,7 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
                     <!-- Company Address (Autocomplete) -->
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Company Address</label>
+                            <label class="label">Company Address</label>
                             <input type="text" class="form-control autocomplete" id="company_address" name="company_address" value="<?= arr_val($company_admin_data, "company_address", "") ?>" placeholder="Enter Company Address" required>
                             <input type="hidden" id="company_lat" name="company_lat" value="<?= arr_val($company_admin_data, "company_lat", "") ?>">
                             <input type="hidden" id="company_lng" name="company_lng" value="<?= arr_val($company_admin_data, "company_lng", "") ?>">
@@ -64,21 +64,21 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
 
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Company Contact</label>
+                            <label class="label">Company Contact</label>
                             <input type="text" class="form-control" name="company_contact" value="<?= arr_val($company_admin_data, "company_contact", "") ?>" placeholder="Enter Company Contact" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Company Email</label>
+                            <label class="label">Company Email</label>
                             <input type="text" class="form-control" name="company_email" value="<?= arr_val($company_admin_data, "company_email", "") ?>" placeholder="Enter Company Email" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <label class="control-label">Company Logo</label>
+                            <label class="label">Company Logo</label>
                             <input type="file" name="company_logo" class="form-control">
                         </div>
                     </div>
@@ -90,7 +90,7 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
 
                     <div class="form-group row m-0">
                         <div class="col-md-6">
-                            <label class="control-label">Title</label>
+                            <label class="label">Title</label>
                             <select name="title" class="form-control" required>
                                 <option value="" <?= arr_val($company_admin_data, "title", "") == "" ? "selected" : "" ?>>Select Title</option>
                                 <option value="Mr" <?= arr_val($company_admin_data, "title", "") == "Mr" ? "selected" : "" ?>>Mr</option>
@@ -99,7 +99,7 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="control-label">Gender</label>
+                            <label class="label">Gender</label>
                             <select name="gender" class="form-control" required>
                                 <option value="" <?= arr_val($company_admin_data, "gender", "") == "" ? "selected" : "" ?>>Select Gender</option>
                                 <option value="Male" <?= arr_val($company_admin_data, "gender", "") == "Male" ? "selected" : "" ?>>Male</option>
@@ -110,22 +110,22 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
 
                     <div class="form-group row m-0 mt-3">
                         <div class="col-md-6">
-                            <label class="control-label">First Name</label>
+                            <label class="label">First Name</label>
                             <input type="text" name="first_name" value="<?= arr_val($company_admin_data, "fname", "") ?>" class="form-control" placeholder="Enter Your First Name" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="control-label">Last Name</label>
+                            <label class="label">Last Name</label>
                             <input type="text" name="last_name" value="<?= arr_val($company_admin_data, "lname", "") ?>" class="form-control" placeholder="Enter Your Last Name" required>
                         </div>
                     </div>
 
                     <div class="form-group row m-0 mt-3">
                         <div class="col-md-6">
-                            <label class="control-label">Contact</label>
+                            <label class="label">Contact</label>
                             <input type="text" name="contact" value="<?= arr_val($company_admin_data, "contact", "") ?>" class="form-control" placeholder="Enter Contact" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="control-label">Email</label>
+                            <label class="label">Email</label>
                             <input type="email" name="email" value="<?= arr_val($company_admin_data, "email", "") ?>" class="form-control" placeholder="Email" required>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
                     <!-- User Address (Autocomplete) -->
                     <div class="form-group mt-3">
                         <div class="col-md-12">
-                            <label class="control-label">Address</label>
+                            <label class="label">Address</label>
                             <input type="text" class="form-control autocomplete" id="user_address" name="address" value="<?= arr_val($company_admin_data, "address", "") ?>" placeholder="Enter Address" required>
                             <input type="hidden" id="user_lat" name="lat" value="<?= arr_val($company_admin_data, "lat", "") ?>">
                             <input type="hidden" id="user_lng" name="lng" value="<?= arr_val($company_admin_data, "lng", "") ?>">
@@ -152,7 +152,7 @@ if (count($company_admin_data)) $company_admin_data = $company_admin_data[0];
                     <!-- Password -->
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label class="control-label">Password</label>
+                            <label class="label">Password</label>
                             <input type="password" data-minlength="6" class="form-control" name="password" placeholder="Password" <?= arr_val($company_admin_data, "password", "") ? "" : 'required' ?>>
                             <div class="help-block">Minimum of 6 characters</div>
                         </div>

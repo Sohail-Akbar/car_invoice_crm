@@ -57,15 +57,14 @@ function getServiceOptions() {
 
 // Add a new row dynamically
 function addInvoiceRow() {
-    const newRow = `
-        <div class="row mx-0">
-            <div class="col-md-6 px-0 mb-2 col-12">
+    const newRow = `<div class="row mx-0 sm-pull-away">
+            <div class="px-0 mb-2 flex-1">
                 <select  class="form-control service_id select2-list invoice-select-box" data-type="service" data-tags="tags" name="services_id[]">
                     ${getServiceOptions()}
                 </select>
             </div>
-            <div class="col-md-6 px-0 col-12">
-                <div class="d-flex justify-content-end mr-4">
+            <div class="px-0">
+                <div class="d-flex justify-content-end mr-3">
                     <input type="number" class="form-control service_quantity invoice-input-item ml-2" step="1" min="1" name="service_quantity[]" value="1">
                     <input type="number" class="form-control service_amount invoice-input-item" step="any" name="service_amount[]" value="0">
                     <button type="button" class="btn btn-sm remove-row">
@@ -75,7 +74,7 @@ function addInvoiceRow() {
                     </button>
                 </div>
             </div>
-        </div> <hr class="mt-1">`;
+          </div><hr class="mt-1">`;
     $(".invoice-services-container").prepend(newRow);
     select2();
 }
@@ -162,6 +161,7 @@ $(document).on("change", "#customerSelectBox", function () {
                     $(".customer-phone .contact").text(data.contact);
 
                 } else {
+                    $("#motHistoryDiv").removeClass("d-none");
                     sAlert(data.data, data.status);
                     motHistorySelect.empty();
                 }

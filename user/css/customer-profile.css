@@ -307,7 +307,7 @@
     padding: .375rem .75rem;
     border: 1px solid #ced4da;
     border-radius: .375rem;
-    background-color: #fff;
+    background-color: transparent;
     box-shadow: none;
     line-height: 1.2;
 }

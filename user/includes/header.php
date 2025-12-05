@@ -17,8 +17,6 @@ if (
     $user_img = $uploaded_img;
 }
 
-
-
 $query = "
     SELECT 
         COUNT(*) AS total_orders,

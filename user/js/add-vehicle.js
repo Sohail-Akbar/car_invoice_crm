@@ -406,163 +406,29 @@ function renderCustomerAndVehicle(data) {
 
 // vehicle history
 tc.fn.cb.motHistoryCB = async (form, data) => {
-    // Search By
-    if (data.status === "success" && (_GET.search_by === "name" || _GET.search_by === "phone" || _GET.search_by === "reg_no")) {
-
-        let customer = data.data.customers; // single customer
-        let vehicles = data.data.customer_vehicles;
-        let regNo = $(`[name="reg"]`).val();
-
-        if (!vehicles || vehicles.length === 0) {
-            $(".customer-vehicle-data").html("<p>No vehicles found for this customer.</p>");
-            return;
-        }
-
-        // Show table container
-        $("#registrationCarContainer").removeClass("d-none");
-
-        // Destroy previous DataTable if exists
-        if ($.fn.DataTable.isDataTable('#vehicleHistoryTable')) {
-            $('#vehicleHistoryTable').DataTable().destroy();
-        }
-
-        // Clear tbody
-        $('#vehicleHistoryTable tbody').empty();
-
-        // Insert rows
-        let count = 0;
-
-        vehicles.forEach((vehicle, index) => {
-            count++;
-            let $editVehicleHtml = "";
-            if (vehicle.is_manual == "1") {
-                $editVehicleHtml = `<li>
-                                            <button class="cm-dropdown-item edit-vehicle-btn" data-prevent-click="true" data-vehicle-id="${vehicle.id}"><i class="fas fa-edit me-2 text-success"></i>Edit Vehicle</button>
-                                        </li>`;
-            }
-
-            // Find corresponding customer for this vehicle
-            let single_customer = customer[index];
-            if (!customer) return; // safety
-
-            let nameInitials = `${single_customer.fname.charAt(0)}${single_customer.lname.charAt(0)}`;
-            let isActive = vehicle.is_active == 1;
-
-
-            let $changeCustomerBtnHMTL = "";
-            if (vehicle.is_active == "1") {
-                $changeCustomerBtnHMTL = `<li>
-                                            <button class="cm-dropdown-item change-vehicle-customer-btn"  data-vehicle-id="${vehicle.id}" data-customer-id="${single_customer.id}" title="Change Customer">
-                                                <i class="fas fa-exchange-alt"></i> Change Customer
-                                            </button>
-                                        </li>`;
-            }
-
-            // Customer Details column
-            let customerDetails = `
-                <div>
-                    <strong class="text-clr">${single_customer.fname} ${single_customer.lname}</strong><br>
-                    <i class="fa fa-phone"></i> ${single_customer.contact}<br>
-                    <i class="fa fa-envelope"></i> ${single_customer.email}
-                </div>
-            `;
-
-            // Vehicle Details column
-            let vehicleDetails = `
-                <div>
-                    <i class="fa fa-car"></i> Reg: ${vehicle.reg_number}<br>
-                    Color: ${vehicle.primaryColour}<br>
-                    Engine: ${vehicle.engineSize}cc<br>
-                    Expiry: ${vehicle.expiryDate}
-                </div>
-            `;
-
-            let statusBadge = `<span class="badge badge-${isActive ? 'success' : 'secondary'}">${isActive ? 'Active' : 'Inactive'}</span>`;
-
-            let actions = `
-                <div class="dropdown">
-                                    <button class="btn dropdown-toggle action-table-btn" type="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-cog"></i> Action
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <button class="cm-dropdown-item edit-customer-btn" data-prevent-click="true" data-customer-id="${single_customer.id}"><i class="fas fa-edit me-2 text-success"></i>Edit Customer</button>
-                                        </li>
-                                        ${$editVehicleHtml}
-                                        <li>
-                                            <a class="cm-dropdown-item" href="customer-profile?id=${single_customer.id}"><i class="fa fa-eye text-success" aria-hidden="true"></i>View Profile</a>
-                                        </li> 
-                                        <li>
-                                            <a class="cm-dropdown-item" href="invoice?customer_id=${single_customer.id}&vehicle_id=${vehicle.id}"><i class="fas fa-file-alt text-success"></i>Generate Invoice</a>
-                                        </li> 
-                                        <li>
-                                            <a class="cm-dropdown-item" href="send-sms?customer_id=${single_customer.id}"><i class="fas fa-envelope me-2 text-warning"></i>Send Message</a>
-                                        </li>
-                                        ${$changeCustomerBtnHMTL}
-                                    </ul>
-                                </div>`;
-
-            // Insert row
-            let row = `
-                <tr>
-                    <td>${customerDetails}</td>
-                    <td>${vehicleDetails}</td>
-                    <td>${vehicle.make} ${vehicle.model}</td>
-                    <td>${statusBadge}</td>
-                    <td>${actions}</td>
-                </tr>
-            `;
-
-            $('#vehicleHistoryTable tbody').prepend(row);
-            $('#vehicleHistoryTable').removeClass("d-none");
-        });
-
-        // Initialize DataTable
-        let searchRegistrationVehicleTable = $('#vehicleHistoryTable').DataTable({
-            responsive: true,
-            pageLength: 10,
-            order: [[0, 'desc']]
-        });
-
-        // 2️⃣ Bind custom search input
-        $('.search-input').on('keyup', function () {
-            searchRegistrationVehicleTable.search(this.value).draw();
-        });
-
-
-        $('.dropdown-item').on('click', function () {
-            var length = parseInt($(this).text());
-            searchRegistrationVehicleTable.page.len(length).draw();
-        });
-        return false;
-    } else if (data.status === "error" && (_GET.search_by === "name" || _GET.search_by === "phone" || _GET.search_by === "reg_no")) {
-        sAlert(data.data, data.status);
-        return false;
-    }
-
-
-
     let $registerVehicleCon = $("#registrationCarContainer");
     // header
     $registerVehicleCon.find(".vehicle-information-header").removeClass("mb-4");
     $registerVehicleCon.addClass("d-none");
     // already register vehicle details
-    $(".already-register-details").addClass("d-none")
+    $(".already-register-details").addClass("d-none").html("");
 
     if (data.status === "success") {
         if (data.data.isExistingRecord) {
-            $registerVehicleCon.find("form").addClass("d-none");
-            // Generate HTML dynamically
-            const html = renderCustomerAndVehicle(data);
-            $(".already-register-details").html(html).removeClass("d-none");
-            $registerVehicleCon.removeClass("d-none");
+            // $registerVehicleCon.find("form").addClass("d-none");
+            // // Generate HTML dynamically
+            // const html = renderCustomerAndVehicle(data);
+            // $(".already-register-details").html(html).removeClass("d-none");
+            // $registerVehicleCon.removeClass("d-none");
 
-            if (data.data.existingRecord.is_manual == 1) {
-                $registerVehicleCon.find(".vehicle-information-header").addClass("d-none");
-            } else {
-                $registerVehicleCon.find(".vehicle-information-header").removeClass("d-none").addClass("mb-4");
-                if (data.data.vehicleInfo.motTests) await renderMotHistory(data.data.vehicleInfo.motTests);
-            }
+            // if (data.data.existingRecord.is_manual == 1) {
+            //     $registerVehicleCon.find(".vehicle-information-header").addClass("d-none");
+            // } else {
+            //     $registerVehicleCon.find(".vehicle-information-header").removeClass("d-none").addClass("mb-4");
+            //     if (data.data.vehicleInfo.motTests) await renderMotHistory(data.data.vehicleInfo.motTests);
+            // }
+            let customerName = data.data.customer.fname + " " + data.data.customer.lname;
+            sAlert('This Vehicle Is Already Linked to ' + customerName, "warning");
         } else {
             if (data.data.motTests) await renderMotHistory(data.data.motTests);
             // $(".mot-history-model").modal('show');
@@ -646,20 +512,20 @@ $(document).on("click", ".customer-edit-btn", function () {
 });
 
 // add customer btn
-// $(document).on("click", ".add-new-customer-btn", function () {
-//     let $modal = $(".add-new-customer-model");
-//     let $form = $modal.find("form");
-//     $form.find(`[name="customer_id"]`).remove();
-//     $form.find(`[name="updateCustomerInfo"]`).remove();
-//     $form.append(`<input type="hidden" name="createCustomer" value="true">`);
-//     $modal.find(".modal-title").text("Add Customer Information");
-//     $form.attr("action", "customer");
-//     $form.attr("data-callback", "addCustomerCB");
-//     $form.find(`[name="password"]`).attr("required", "true");
-//     $form.get(0).reset()
+$(document).on("click", ".add-new-customer-btn", function () {
+    let $modal = $(".add-new-customer-model");
+    let $form = $modal.find("form");
+    $form.find(`[name="customer_id"]`).remove();
+    $form.find(`[name="updateCustomerInfo"]`).remove();
+    $form.append(`<input type="hidden" name="createCustomer" value="true">`);
+    $modal.find(".modal-title").text("Add Customer Information");
+    $form.attr("action", "customer");
+    $form.attr("data-callback", "addCustomerCB");
+    $form.find(`[name="password"]`).attr("required", "true");
+    $form.get(0).reset()
 
-//     $modal.modal('show');
-// });
+    $modal.modal('show');
+});
 
 // update customer callback
 tc.fn.cb.updateCustomerInfoCB = async (form, data) => {
@@ -706,6 +572,18 @@ $(document).on("click", ".car-edit-btn", function () {
     $modal.modal('show');
 });
 
+// update customer callback
+tc.fn.cb.vehicleInformationUpdateCB = async (form, data) => {
+    if (data.status === 'success') {
+        // form reset 
+        form[0].reset();
+        // popup close
+        $('.update-vehicle-model').modal('hide');
+
+        $(`[action="mot-history"]`).first().submit()
+    }
+    sAlert(data.data, data.status);
+}
 
 // Change Customer
 $(document).on("click", ".change-customer-btn", function () {
@@ -752,137 +630,3 @@ $(document).ready(function () {
         });
     }
 });
-
-
-// Edit Customer information
-$(document).on("click", ".edit-customer-btn", function (e) {
-    e.preventDefault();
-    let customer_id = $(this).data("customer-id");
-    if (!customer_id) {
-        sAlert("Customer id is required", "error");
-        return false;
-    }
-
-    let $modal = $(".update-customer-model"),
-        $form = $modal.find("form");
-
-    $.ajax({
-        url: "controllers/customer",
-        method: "POST",
-        data: { editCustomerInfo: true, customer_id },
-        dataType: "json",
-        success: function (res) {
-            if (res.status === "success") {
-                let customer = res.data.customer;
-                fillFormValues($form, customer);
-                $modal.modal("show");
-            }
-        },
-        error: makeError
-    });
-
-});
-
-
-// Edit Vehicle information
-$(document).on("click", ".edit-vehicle-btn", function (e) {
-    e.preventDefault();
-    let vehicle_id = $(this).data("vehicle-id");
-    if (!vehicle_id) {
-        sAlert("vehicle id is required", "error");
-        return false;
-    }
-
-    let $modal = $(".update-vehicle-model"),
-        $form = $modal.find("form");
-
-    $.ajax({
-        url: "controllers/customer",
-        method: "POST",
-        data: { editVehicleInfo: true, vehicle_id },
-        dataType: "json",
-        success: function (res) {
-            if (res.status === "success") {
-                let vehicle = res.data.vehicle;
-                fillFormValues($form, vehicle);
-                $modal.modal("show");
-            }
-        },
-        error: makeError
-    });
-
-});
-
-// Update customer callback
-tc.fn.cb.updateCustomerData = async (form, data) => {
-    let $modal = $(".update-customer-model");
-
-    if (data.status === 'success') {
-        $(".getCustomerVehicle").click();
-
-        sAlert("Update Customer successfully", 'success');
-        form[0].reset();
-        $modal.modal('hide');
-    } else {
-        sAlert(data.message, 'error');
-    }
-};
-
-// update customer callback
-tc.fn.cb.vehicleInformationUpdateCB = async (form, data) => {
-    if (data.status === 'success') {
-        // form reset 
-        form[0].reset();
-        // popup close
-        $('.update-vehicle-model').modal('hide');
-        $(".getCustomerVehicle").click();
-
-    }
-    sAlert(data.data, data.status);
-}
-
-// Edit Vehicle information
-$(document).on("click", ".change-vehicle-customer-btn", function (e) {
-    e.preventDefault();
-    let vehicle_id = $(this).data("vehicle-id");
-    let customer_id = $(this).data("customer-id");
-
-
-    if (!vehicle_id) {
-        sAlert("vehicle id is required", "error");
-        return false;
-    }
-
-    let $modal = $(".change-vehicle-customer-model"),
-        $form = $modal.find("form");
-
-    $modal.modal("show");
-    $("#customersContainer").find(`[value="${customer_id}"]`).remove();
-    $(".existing-customer-container").find(`[name="vehicle_id"]`).val(vehicle_id)
-});
-
-// update customer callback
-tc.fn.cb.addCustomerData = async (form, data) => {
-    if (data.status === 'success') {
-        // Adjusted for correct structure
-        let customers = data.customer || data.data?.customer || [];
-
-        let $customerContainerSelList = $("#customersContainer");
-        $customerContainerSelList.empty();
-
-        customers.forEach(customer => {
-            $customerContainerSelList.append(
-                new Option(`${customer.title} ${customer.fname} ${customer.lname}`, customer.id)
-            );
-        });
-
-        $(".existing-customer-container").removeClass("d-none");
-        $(".add-new-customer-container").addClass("d-none");
-        $(".modal").modal("hide");
-        form[0].reset();
-    }
-    if (data.status === "error") {
-        $(".modal").modal("hide");
-        sAlert(data.data, 'error');
-    }
-}

@@ -118,10 +118,11 @@
 .invoice-items-container .services-header {
     background: #f2f2f7;
     border-radius: 10px;
-    padding: 10px 20px;
+    padding: 10px 15px;
     padding-top: 12px;
     color: var(--webMainColor);
     margin-top: 10px;
+    display: flex;
 }
 
 .invoice-items-container .invoice-select-box {

@@ -67,7 +67,7 @@
                     <input type="text" class="form-control" placeholder="City" id="locality" name="city" aria-describedby="basic-addon1" readonly required="" value="<?= arr_val($customer_data, "city", "") ?>">
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 mt-4">
                 <div class="form-group text-right mb-0">
                     <?php if ($id) { ?>
                         <input type="hidden" name="id" value="<?= $id; ?>">

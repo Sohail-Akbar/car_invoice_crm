@@ -88,7 +88,7 @@ select.form-control:not([size]):not([multiple]) {
 .select2-container .select2-selection--single {
     height: 48px !important;
     border-radius: 8px !important;
-    border: 1px solid #ccc !important;
+    border: 2px solid #214f797a !important;
     padding: 8px 12px !important;
     display: flex;
     align-items: center;
@@ -306,15 +306,19 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 /* customer vehcile in oneline */
+table.dataTable td {
+    overflow: visible !important;
+}
 
 /* Table custom */
-.table-custom-design .table td,
-.table-custom-design .table th {
+.table-custom-design table td,
+.table-custom-design table th {
     background: #f2f2f2 !important;
 }
 
 .table-custom-design .dataTables_wrapper.no-footer .dataTables_scrollBody {
     border-bottom: none !important;
+    overflow: unset !important;
 }
 
 .table-custom-design .dataTables_wrapper .dataTables_paginate .paginate_button.current {
@@ -330,6 +334,10 @@ select.form-control:not([size]):not([multiple]) {
     border-radius: 10px 0 0 0 !important;
 }
 
+.table-custom-design #DataTables_Table_0_filter,
+.table-custom-design #DataTables_Table_0_length,
+.table-custom-design #vehicleHistoryTable_filter,
+.table-custom-design #vehicleHistoryTable_length,
 .table-custom-design #invoiceTable_length,
 .table-custom-design #invoiceTable_filter,
 .table-custom-design #reportTable_filter,
@@ -476,4 +484,71 @@ table.dataTable tbody td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     color: white !important;
+}
+
+.transparent-btn {
+    background: transparent;
+    border: 1px solid var(--webMainColor);
+    color: var(--webMainColor);
+    box-shadow: unset;
+}
+
+.has-search-right {
+    position: relative;
+}
+
+.has-search-right .form-control {
+    padding-left: 2.875rem;
+    padding-block: 12px;
+    font-size: 18px;
+}
+
+.has-search-right .form-control-feedback {
+    position: absolute;
+    top: 7px;
+    left: 6px;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    color: #aaa;
+    font-size: 18px;
+}
+
+.dropdown-menu .cm-dropdown-item {
+    display: flex;
+    padding: 8px 15px;
+}
+
+.cm-dropdown-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.cm-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: .25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.cm-dropdown-item:hover {
+    background: #f8f9fa;
+    border-left-color: #667eea;
+}
+
+.flex-1 {
+    flex: 1 !important;
 }

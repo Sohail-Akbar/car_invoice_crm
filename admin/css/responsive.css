@@ -2,7 +2,6 @@
 
      .view-agency-container .card,
      .add-agency-container .card,
-     .setting-container .card,
      .add-company-container .card,
      .view-company-container .card {
          padding: 20px 5px;
@@ -71,6 +70,23 @@
      .navbar .toggle-sidebar {
          margin-right: 3px !important;
      }
+
+     .custom-table-header {
+         flex-direction: column;
+     }
+
+     .custom-table-header .search-container {
+         width: 100% !important;
+         margin-bottom: 10px;
+     }
+
+     .custom-table-header .content-center {
+         justify-content: flex-start;
+     }
+
+     .custom-heading {
+         font-size: 20px !important;
+     }
  }
 
  @media (max-width: 330px) {
@@ -97,4 +113,5 @@
      .heading-sm-w {
          width: 280px !important;
      }
+
  }

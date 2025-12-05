@@ -204,12 +204,29 @@ $JS_FILES_ = [];
 
             // Search invoices function
             function searchInvoices() {
+                let submitBtn = $('#searchForm').find(".search-btn"),
+                    btnText = submitBtn.html();
+
+                // Check if all fields are empty
+                let isAllEmpty = true;
+
+                $('#searchForm input, #searchForm select').each(function() {
+                    if ($(this).val().trim() !== '') {
+                        isAllEmpty = false;
+                        return false; // Exit loop
+                    }
+                });
+
+                if (isAllEmpty) {
+                    sAlert("Please fill at least one field!", "warning");
+                    return false; // Stop submission
+                }
+
                 // Show loading indicator
                 $('#loading').show();
                 $('#resultsSection').hide();
                 $('#noResults').hide();
-                let submitBtn = $('#searchForm').find(".search-btn"),
-                    btnText = submitBtn.html();
+
                 // Get form data
                 const formData = $('#searchForm').serialize();
                 disableBtn(submitBtn.get(0));

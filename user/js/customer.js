@@ -54,16 +54,16 @@ $(document).ready(function () {
                                         <li>
                                             <a class="dropdown-item" href="send-sms?customer_id=${row.id}"><i class="fas fa-envelope me-2 text-warning"></i>Send Message</a>
                                         </li>
-                                        <li>
-                                            <button class="no-btn-styles dropdown-item text-danger cp tc-delete-btn" title="Delete" data-target="${row.id}" data-action="customer">
-                                                <i class="fas fa-trash-alt"></i> Delete
-                                             </button>
-                                        </li>
-                                    </ul>
-                                </div>`;
+                                        </ul>
+                                        </div>`;
                     }
                 }
             ],
+            // <li>
+            //     <button class="no-btn-styles dropdown-item text-danger cp tc-delete-btn" title="Delete" data-target="${row.id}" data-action="customer">
+            //         <i class="fas fa-trash-alt"></i> Delete
+            //      </button>
+            // </li>
             "scrollX": true,
             "initComplete": function () { this.api().columns.adjust().draw(); },
             "drawCallback": function () { this.api().columns.adjust(); }
