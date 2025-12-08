@@ -46,11 +46,7 @@
      }
 
      .dashboard-container .header h2 {
-         font-size: 40px !important;
-     }
-
-     .heading-sm-w {
-         width: 320px !important;
+         font-size: 30px !important;
      }
 
      .user-info h4 {
@@ -87,6 +83,10 @@
      .custom-heading {
          font-size: 20px !important;
      }
+
+     .dashboard-container .header p {
+         font-size: 14px !important;
+     }
  }
 
  @media (max-width: 330px) {
@@ -104,14 +104,6 @@
 
      #resetBtn {
          margin-top: 10px;
-     }
-
-     .dashboard-container .header h2 {
-         font-size: 35px !important;
-     }
-
-     .heading-sm-w {
-         width: 280px !important;
      }
 
  }

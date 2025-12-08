@@ -4,6 +4,7 @@ $page_name = 'Dashboard';
 
 $JS_FILES_ = [
     _DIR_ . "js/select2.min.js",
+    _DIR_ . "js/tinymce/tinymce.min.js"
 ];
 $CSS_FILES_ = [
     _DIR_ . "css/select2.min.css",
@@ -16,6 +17,7 @@ $email_template_head = $db->select("email_template_head", "id,email_title", [
     "order_by" => "id desc"
 ]);
 if (empty($email_template_head)) $email_template_head = [];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +31,10 @@ if (empty($email_template_head)) $email_template_head = [];
 
         .custom-heading::before {
             left: 45%;
+        }
+
+        .tox-statusbar {
+            display: none !important;
         }
     </style>
 </head>
@@ -57,6 +63,10 @@ if (empty($email_template_head)) $email_template_head = [];
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="label">Detail</div>
+                            <textarea class="customer-note form-control" id="customerNote" rows="6.8" name="note" placeholder="Start typing to leave a note..."></textarea>
+                        </div>
                         <div class="col-12 mt-2">
                             <input type="hidden" name="saveRole" value="<?= bc_code(); ?>">
                             <button class="btn br-5" type="submit"><i class="fas fa-save"></i> Save</button>
@@ -66,7 +76,7 @@ if (empty($email_template_head)) $email_template_head = [];
             </div>
         </div>
         <div class="table-responsive mt-5">
-            <table class="table table-striped dataTable">
+            <table class="table table-striped">
                 <thead style="background: var(--webMainColor);color: white;">
                     <tr>
                         <th>#</th>
@@ -81,6 +91,44 @@ if (empty($email_template_head)) $email_template_head = [];
         </div>
     </main>
     <?php require_once('./includes/js.php'); ?>
+    <script>
+        $(document).ready(function() {
+            tinymce.init({
+                selector: '#customerNote',
+                height: 300, // thoda bada height better view ke liye
+                menubar: true, // menubar enable
+                plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount',
+                    'textcolor colorpicker'
+                ],
+                toolbar: 'undo redo | formatselect | ' +
+                    'bold italic underline strikethrough | forecolor backcolor | ' +
+                    'alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | removeformat | help',
+                font_formats: 'Serif=serif; Sans-serif=sans-serif; Arial=arial,helvetica,sans-serif; Courier New=courier,courier new,monospace;',
+                content_style: "body { font-family: 'Serif', sans-serif; line-height:1.5; }",
+                setup: function(editor) {
+                    const placeholderText = "Start typing to leave a note...";
+
+                    function setPlaceholder() {
+                        if (editor.getContent() === '') {
+                            editor.setContent(`<p style="color:#888;">${placeholderText}</p>`);
+                        }
+                    }
+
+                    editor.on('init', setPlaceholder);
+                    editor.on('focus', function() {
+                        if (editor.getContent().includes(placeholderText)) {
+                            editor.setContent('');
+                        }
+                    });
+                    editor.on('blur', setPlaceholder);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

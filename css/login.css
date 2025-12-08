@@ -15,6 +15,21 @@
        background-attachment: fixed;
        height: 100vh;
        width: 100vw;
+       font-family: var(--fontFamily) !important;
+   }
+
+   input,
+   label,
+   h1,
+   h2,
+   h3,
+   h4,
+   h5,
+   p,
+   span,
+   button,
+   a {
+       font-family: var(--fontFamily) !important;
    }
 
    .login-container {
