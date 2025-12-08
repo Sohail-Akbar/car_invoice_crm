@@ -10,7 +10,7 @@ $CSS_FILES_ = [
     _DIR_ . "css/select2.min.css",
 ];
 
-$email_template_head = $db->select("email_template_head", "id,email_title", [
+$email_template_head = $db->select("email_template", "id,email_title,email_body", [
     "agency_id" => LOGGED_IN_USER['agency_id'],
     "company_id" => LOGGED_IN_USER['company_id']
 ], [
@@ -50,17 +50,7 @@ if (empty($email_template_head)) $email_template_head = [];
                         <div class="col-md-8">
                             <div class="form-group">
                                 <span class="label">Email Template Head:</span>
-                                <div class="d-flex">
-                                    <select class="form-control select2-list" name="email_title">
-                                        <option value="23">234</option>
-                                        <?php foreach ($email_template_head as $head) { ?>
-                                            <option value="<?= $head['id'] ?>"><?= $head['email_title'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <div class="content-center">
-                                        <button type="button" class="btn text-white d-flex ml-3 br-5">+ &nbsp; Add</button>
-                                    </div>
-                                </div>
+                                <input type="text" name="email_title" class="form-control" placeholder="Email Title">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -108,7 +98,7 @@ if (empty($email_template_head)) $email_template_head = [];
                     'alignleft aligncenter alignright alignjustify | ' +
                     'bullist numlist outdent indent | removeformat | help',
                 font_formats: 'Serif=serif; Sans-serif=sans-serif; Arial=arial,helvetica,sans-serif; Courier New=courier,courier new,monospace;',
-                content_style: "body { font-family: 'Serif', sans-serif; line-height:1.5; }",
+                content_style: "body { font-family: 'Serif', sans-serif; line-height:0.5; }",
                 setup: function(editor) {
                     const placeholderText = "Start typing to leave a note...";
 
