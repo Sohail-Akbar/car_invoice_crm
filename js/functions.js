@@ -59,7 +59,7 @@ function sAlert(text, heading, options = {}) {
     Swal.fire(msgOptions);
 }
 // Handle Alert
-function handleAlert(res, showSuccessAlert = true) {
+function handleAlert(res, showSuccessAlert = false) {
     let success = false;
     if (typeof res === "string") {
         if (!isJson(res)) return false;
