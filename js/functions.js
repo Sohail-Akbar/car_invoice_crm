@@ -174,6 +174,7 @@ $(document).ready(refreshFns);
 
 
 function select2() {
+    if (!$(".select2-list").length) return false
     $('.select2-list').select2({
         tags: $('.select2-list').data("tags") ? true : false,
         placeholder: '--- Select ---',
