@@ -5,6 +5,7 @@ $page_name = 'Dashboard';
 $JS_FILES_ = [];
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
+$get_redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : null;
 
 
 $customer_data = $db->select_one("users", "*", [
@@ -27,7 +28,7 @@ $customer_data = $db->select_one("users", "*", [
         <div class="card">
             <div class="row mx-0">
                 <div class="col-md-12">
-                    <h3 class="heading mb-4 custom-heading text-clr">Add New Customer</h3>
+                    <h3 class="heading mb-4 custom-heading text-clr"><?= $id ? "Update" : "Add New"  ?> Customer</h3>
                 </div>
             </div>
             <?php

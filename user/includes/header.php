@@ -150,7 +150,7 @@ if (!empty($result)) {
                 <button class="dropdown-toggle menu-item no-arrow-icon" type="button" data-toggle="dropdown">
                     <h5 class="mb-0 cp text-dark"><i class="fas fa-cog"></i></h5>
                 </button>
-                <div class="dropdown-menu" style="min-width: 18rem;">
+                <div class="dropdown-menu animated flipInY" style="min-width: 15rem;">
                     <a href="add-staff" class="dropdown-item">
                         <i class="fas fa-user pt-1"></i>
                         <span class="text">Add Staff</span>
@@ -170,6 +170,10 @@ if (!empty($result)) {
                     <a href="settings" class="dropdown-item">
                         <i class="fas fa-cog pt-1"></i>
                         Branch Settings
+                    </a>
+                    <a href="email-template" class="dropdown-item">
+                        <i class="fas fa-cog pt-1"></i>
+                        Email Template
                     </a>
                     <a href="setting" class="dropdown-item">
                         <i class="fas fa-cog pt-1"></i>

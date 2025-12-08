@@ -6,7 +6,7 @@ $JS_FILES_ = [
     "customer-profile.js",
     _DIR_ . "js/select2.min.js",
     _DIR_ . "js/jquery.dataTables.min.js",
-    url("https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/4/tinymce.min.js")
+    _DIR_ . "js/tinymce/tinymce.min.js"
 ];
 $CSS_FILES_ = [
     "customer-profile.css",
@@ -190,11 +190,13 @@ $cars = $db->select("customer_car_history", "*", [
                                 </button>
                             </h4>
                             <div class="mt-3 customer-note-tinymce">
-                                <textarea class="customer-note form-control" id="customerNote" name="note" rows="8" placeholder="Start typing to leave a note..."></textarea>
-                                <button class="btn save-customer-note" type="submit">
-                                    <i class="fas fa-save"></i>
-                                    Save
-                                </button>
+                                <textarea class="customer-note form-control" id="customerNote" rows="6.8" name="note" placeholder="Start typing to leave a note..."></textarea>
+                                <div class="col-md-12 text-right">
+                                    <button class="btn save-customer-note" type="submit">
+                                        <i class="fas fa-save"></i>
+                                        Save
+                                    </button>
+                                </div>
                             </div>
                         <?php } ?>
                         <div class="view-customer-note <?= LOGGED_IN_USER['type']  !== "customer" ? 'd-none' : 'customer-login' ?>">
@@ -205,6 +207,13 @@ $cars = $db->select("customer_car_history", "*", [
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row mx-0 mt-3">
+            <div class="col-md-12">
+                <a href="add-customer?id=<?= $_GET['id'] ?>&redirectTo=customer-profile?id=<?= $_GET['id'] ?>" class="btn mx-1 br-5 text-white">Update Profile</a>
+                <button class="btn mx-1 br-5 text-white">Send Email</button>
+                <a href="send-sms?customer_id=<?= $_GET['id'] ?>&redirectTo=customer-profile?id=<?= $_GET['id'] ?>" class="btn mx-1 br-5 text-white">Send SMS</a>
             </div>
         </div>
         <div class="row mx-0 mt-4">
@@ -234,7 +243,6 @@ $cars = $db->select("customer_car_history", "*", [
     </main>
 
     <!-- View Work Carried -->
-
     <div class="modal fade view-work-carried-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
             <div class="modal-content">
@@ -250,6 +258,9 @@ $cars = $db->select("customer_car_history", "*", [
             </div>
         </div>
     </div>
+    <!-- Email Popup -->
+
+
     <script>
         const _GET = <?= json_encode($_GET); ?>;
         const SITE_URL = '<?= SITE_URL ?>';

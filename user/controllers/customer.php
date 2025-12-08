@@ -597,6 +597,7 @@ if (isset($_POST['createCustomer'])) {
     $get_data = arr_val($_POST, "get_data", null);
 
     $id = isset($_POST['id']) ? intval($_POST['id']) : null;
+    $redirectTo = isset($_POST['redirectTo']) ? $_POST['redirectTo'] : null;
 
     // ✅ Collect form data
     $data = [
@@ -682,7 +683,7 @@ if (isset($_POST['createCustomer'])) {
         // }
 
         returnSuccess($message, [
-            "redirect" => "view-customer",
+            "redirect" => $redirectTo ? $redirectTo : "view-customer",
             "customer" => $customers
         ]);
     } else {
@@ -696,6 +697,7 @@ if (isset($_POST['sendSMSToCustomers'])) {
     $customer_id  = $_POST['customer_id'];
     $service_template  = arr_val($_POST, 'service_template', "");
     $message  = arr_val($_POST, 'message', "");
+    $redirectTo  = arr_val($_POST, 'redirectTo', "");
 
     $sql = "
 SELECT 
@@ -756,7 +758,7 @@ ORDER BY u.fname, u.lname";
             returnError($smsSent['message']);
         } else {
             returnSuccess("SMS sent successfully!", [
-                "redirect" => ""
+                "redirect" => $redirectTo ? $redirectTo : ""
             ]);
         }
     }

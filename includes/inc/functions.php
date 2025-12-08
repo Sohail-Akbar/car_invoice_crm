@@ -545,7 +545,7 @@ function render_sms_template($key, $data = [], $default = '')
 
 function sendSMS($company_name, $customer_no, $message)
 {
-    // return true;
+    return true;
     if (empty($company_name) && empty(get_api_key())) return false;
 
     // Make sure 'from' is valid: uppercase letters + max 11 chars

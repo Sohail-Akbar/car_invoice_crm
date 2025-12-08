@@ -359,7 +359,7 @@ $(document).ready(function () {
         plugins: ['lists link', 'textcolor'],
         toolbar: 'alignleft aligncenter alignright alignjustify | bold italic underline',
         font_formats: 'Serif=serif; Sans-serif=sans-serif; Arial=arial,helvetica,sans-serif; Courier New=courier,courier new,monospace;',
-        content_style: "body { font-family: 'Serif', sans-serif; }",
+        content_style: "body { font-family: 'Serif', sans-serif; line-height:0.5; }",
         setup: function (editor) {
             const placeholderText = "Start typing to leave a note...";
 

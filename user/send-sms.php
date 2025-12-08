@@ -11,6 +11,7 @@ $CSS_FILES_ = [
 ];
 
 $get_customer_id = isset($_GET['customer_id']) ? $_GET['customer_id'] : null;
+$get_redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : null;
 
 $sql = "
 SELECT 
@@ -97,6 +98,9 @@ if (empty($customer)) $customer = [];
                                 </div>
                                 <div class="col-12 mt-2">
                                     <input type="hidden" name="sendSMSToCustomers" value="true">
+                                    <?php if ($get_redirectTo) { ?>
+                                        <input type="hidden" name="redirectTo" value="<?= $get_redirectTo ?>">
+                                    <?php } ?>
                                     <button type="submit" class="btn btn-send" id="sendBtn">
                                         <i class="fas fa-paper-plane me-2"></i>Send Service SMS
                                     </button>

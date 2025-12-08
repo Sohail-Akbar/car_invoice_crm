@@ -451,29 +451,6 @@
     font-size: 14px;
 }
 
-.customer-note-tinymce #mceu_14-body,
-.customer-note-tinymce #mceu_16-body {
-    display: none;
-}
-
-.customer-note-tinymce #mceu_0,
-.customer-note-tinymce #mceu_14,
-.customer-note-tinymce .customer-note,
-.customer-note-tinymce #mceu_7,
-.customer-note-tinymce #mceu_13 {
-    border: none !important;
-    box-shadow: none !important;
-}
-
-.customer-note-tinymce #mceu_8 {
-    position: absolute;
-    bottom: 0;
-}
-
-.customer-note-tinymce #mceu_7 {
-    padding-bottom: 38px;
-}
-
 .algin-center {
     align-items: center;
 }
@@ -500,11 +477,34 @@
     position: relative;
 }
 
-.customer-note-tinymce .btn {
+.customer-note-tinymce .tox-editor-header {
     position: absolute;
-    right: 4px;
+    left: 0px;
     bottom: 2px;
     padding: 7px 15px;
+}
+
+.customer-note-tinymce .tox .tox-toolbar,
+.customer-note-tinymce .tox .tox-toolbar__overflow,
+.customer-note-tinymce .tox .tox-toolbar__primary,
+.customer-note-tinymce .tox .tox-toolbar,
+.customer-note-tinymce .tox .tox-toolbar__overflow,
+.customer-note-tinymce .tox .tox-toolbar__primary {
+    background-image: none;
+}
+
+
+.customer-note-tinymce .tox-statusbar {
+    display: none !important;
+}
+
+.customer-note-tinymce textarea,
+.customer-note-tinymce .tox-tinymce {
+    border: none !important;
+}
+
+.customer-note-tinymce .tox-tinymce {
+    padding-bottom: 53px !important;
 }
 
 .vehicle-list-container .buttons .btn {
@@ -517,4 +517,9 @@
 
 .customer-login .tc-delete-btn {
     display: none !important;
+}
+
+#notesContainer {
+    max-height: 185px;
+    overflow: auto;
 }

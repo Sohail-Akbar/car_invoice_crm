@@ -72,6 +72,9 @@
                     <?php if ($id) { ?>
                         <input type="hidden" name="id" value="<?= $id; ?>">
                     <?php } ?>
+                    <?php if (isset($get_redirectTo)) { ?>
+                        <input type="hidden" name="redirectTo" value="<?= $get_redirectTo; ?>">
+                    <?php } ?>
                     <input type="hidden" name="createCustomer" value="<?= bc_code(); ?>">
                     <button class="btn" type="submit"><i class="fas fa-save"></i> Save</button>
                 </div>
