@@ -1,6 +1,6 @@
 <div class="card mt-3" id="registrationCarContainer">
     <h3 class="heading mb-4 custom-heading text-clr">Manually Registration Vehicle</h3>
-    <form action="mot-history" method="POST" class="ajax_form">
+    <form action="mot-history" method="POST" class="ajax_form" data-callback="manuallyVehicleRegisterationCB">
         <div class="row mt-4">
             <div class="col-md-8">
                 <div class="form-group">
@@ -16,7 +16,7 @@
             </div>
             <div class="col-md-4">
                 <label for=""></label><br>
-                <button class="btn btn-secondary" type="button" data-toggle="modal" data-target=".add-new-customer-model">Add New Customer</button>
+                <button class="btn btn-secondary add-new-customer-btn" type="button" data-toggle="modal" data-target=".add-new-customer-model">Add New Customer</button>
             </div>
             <div id="motFields">
                 <div class="row m-0">

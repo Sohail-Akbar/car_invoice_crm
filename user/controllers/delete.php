@@ -8,7 +8,8 @@ $_delete->set([
     "customer" => "users",
     "customer_car_history" => "customer_car_history",
     "customer_staff" => "customer_staff",
-    "customer_notes" => "customer_notes"
+    "customer_notes" => "customer_notes",
+    "email_template" => "email_template"
 ]);
 
 

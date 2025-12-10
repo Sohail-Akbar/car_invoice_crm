@@ -76,13 +76,13 @@ $existing_customers = $db->select("users", "*", [
 
 </head>
 
-<body>
+<body class="<?= isset($_GET['add_by']) ? "all-hide" : "" ?>">
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content reg-vehicle-container" id="mainContent">
         <?php if (!$custom_register) { ?>
             <div class="pull-away mt-4">
                 <h3 class="heading text-clr">Add Registration Vehicle</h3>
-                <a href="registration-vehicle" class="btn transparent-btn">Existing Vehicles</a>
+                <a href="registration-vehicle" class="btn transparent-btn existing-vehicle-btn">Existing Vehicles</a>
             </div>
             <div class="card mt-3">
                 <form action="mot-history" method="POST" class="ajax_form" data-callback="motHistoryCB">
@@ -90,7 +90,9 @@ $existing_customers = $db->select("users", "*", [
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="form-group has-search-right">
-                                    <a href="#" class="form-control-feedback"><span class="fa fa-search"></span></a>
+                                    <a href="#" class="form-control-feedback">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </a>
                                     <input type="text" class="form-control" name="reg" data-length="[1,250]" placeholder="Registration No....">
                                 </div>
                             </div>

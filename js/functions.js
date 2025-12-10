@@ -181,3 +181,160 @@ function select2() {
         allowClear: true
     });
 }
+
+// Custom Select list
+$(function () {
+    // <div class="custom-select-list-container">
+    //         <label class="form-label fw-semibold mb-2">Select a customer or add a new one:</label>
+    //         <div class="custom-select-wrapper">
+    //             <div class="custom-select" id="custom-select" tabindex="0">
+    //                 <span class="custom-select-placeholder">--- Select Customer ---</span>
+    //                 <span class="custom-select-arrow"><i class="fas fa-chevron-down"></i></span>
+    //             </div>
+    //             <ul class="custom-select-dropdown">
+    //                 <li class="search-container">
+    //                     <input type="text" class="search-input" placeholder="Search customers...">
+    //                 </li>
+
+    //                 <!-- Customers are pre-rendered -->
+    //                 <li role="option" data-id="1" data-name="John Doe" data-email="john.doe@example.com">
+    //                     <div class="customer-avatar">JD</div>
+    //                     <div class="customer-info">
+    //                         <div class="customer-name">John Doe</div>
+    //                         <div class="customer-email">john.doe@example.com</div>
+    //                     </div>
+    //                 </li>
+    //                 <li role="option" data-id="2" data-name="Jane Smith" data-email="jane.smith@example.com">
+    //                     <div class="customer-avatar">JS</div>
+    //                     <div class="customer-info">
+    //                         <div class="customer-name">Jane Smith</div>
+    //                         <div class="customer-email">jane.smith@example.com</div>
+    //                     </div>
+    //                 </li>
+    //                 <li role="option" data-id="3" data-name="Robert Johnson" data-email="robert.j@example.com">
+    //                     <div class="customer-avatar">RJ</div>
+    //                     <div class="customer-info">
+    //                         <div class="customer-name">Robert Johnson</div>
+    //                         <div class="customer-email">robert.j@example.com</div>
+    //                     </div>
+    //                 </li>
+    //                 <li role="option" data-id="4" data-name="Emily Davis" data-email="emily.davis@example.com">
+    //                     <div class="customer-avatar">ED</div>
+    //                     <div class="customer-info">
+    //                         <div class="customer-name">Emily Davis</div>
+    //                         <div class="customer-email">emily.davis@example.com</div>
+    //                     </div>
+    //                 </li>
+    //                 <li role="option" data-id="5" data-name="Michael Wilson" data-email="m.wilson@example.com">
+    //                     <div class="customer-avatar">MW</div>
+    //                     <div class="customer-info">
+    //                         <div class="customer-name">Michael Wilson</div>
+    //                         <div class="customer-email">m.wilson@example.com</div>
+    //                     </div>
+    //                 </li>
+    //                 <li role="option" data-id="6" data-name="Sarah Brown" data-email="sarah.brown@example.com">
+    //                     <div class="customer-avatar">SB</div>
+    //                     <div class="customer-info">
+    //                         <div class="customer-name">Sarah Brown</div>
+    //                         <div class="customer-email">sarah.brown@example.com</div>
+    //                     </div>
+    //                 </li>
+
+    //                 <!-- Add new & No results -->
+    //                 <li class="add-new-option"><i class="fas fa-plus-circle me-1"></i> Add as new customer</li>
+    //                 <li class="no-results">No customers found</li>
+    //             </ul>
+    //         </div>
+
+    //         <div class="selected-info" id="selected-info">
+    //             <div class="selected-label">Currently Selected:</div>
+    //             <div class="selected-value" id="selected-value"></div>
+    //         </div>
+    //     </div>
+    let selectedItem = null;
+
+    function filterCustomers($parent, query) {
+        let anyVisible = false;
+        $parent.find(".custom-select-dropdown").find('li[role="option"]').each(function () {
+            const $li = $(this);
+            const name = $li.data('name').toLowerCase();
+            const email = $li.data('email') || "";
+            if (name.includes(query) || email.includes(query)) {
+                $li.show();
+                anyVisible = true;
+            } else {
+                $li.hide();
+            }
+        });
+
+        if (query.trim()) {
+            $parent.find(".add-new-option").show();
+        } else {
+            // $parent.find(".add-new-option").hide();
+        }
+
+        $parent.find(".no-results").toggle(!anyVisible && query.trim() ? true : false);
+    }
+
+    function selectCustomer($parent, customer) {
+        selectedItem = customer;
+        $parent.find('.custom-select-placeholder').text(customer.name).addClass('edit-text');
+        $parent.find(".selected_id").val(customer.id);
+        // --- Run callback if defined ---
+        let cb = $parent.data("callback");
+        if (cb && typeof window[cb] === "function") {
+            window[cb](customer); // pass selected customer object
+        }
+    }
+
+    // Toggle dropdown
+    $(document).on("click", "#custom-select", function (e) {
+        e.stopPropagation(); // prevent the click from bubbling up
+        let $parent = $(this).parents(".custom-select-list-container");
+        $(this).toggleClass('active');
+        $parent.find(".custom-select-dropdown").toggle();
+        if ($parent.find(".custom-select-dropdown").is(':visible')) $parent.find(".search-input").focus();
+
+        if (!$parent.find(`[role="option"]`).length) {
+            $parent.find(".add-new-option").show();
+            $parent.find(".no-results").show();
+        }
+    });
+
+    // Option click
+    $(document).on("click", ".custom-select-dropdown li", function (e) {
+        e.stopPropagation(); // prevent the click from closing immediately
+        let $li = $(this);
+        let $parent = $(this).parents(".custom-select-list-container");
+
+        if ($li.hasClass('add-new-option')) {
+            let $popup = $li.data("popup");
+            $($popup).modal("show");
+            $parent.find(".custom-select-dropdown").hide();
+            $parent.find("#custom-select").removeClass('active');
+            return;
+        }
+        if ($li.attr('role') === 'option') {
+            selectCustomer($parent, {
+                name: $li.data('name'),
+                email: $li.data('email') || "",
+                id: $li.data('id')
+            });
+            $parent.find(".custom-select-dropdown").hide();
+            $parent.find("#custom-select").removeClass('active');
+        }
+    });
+
+    // Search input
+    $(document).on("input", ".custom-select-list-container .search-input", function () {
+        let query = $(this).val().toLowerCase();
+        let $parent = $(this).parents(".custom-select-list-container");
+        filterCustomers($parent, query);
+    });
+
+    // Click outside to close
+    $(document).on("click", function () {
+        $(".custom-select-dropdown").hide();
+        $(".custom-select").removeClass("active");
+    });
+});

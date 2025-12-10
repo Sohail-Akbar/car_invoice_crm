@@ -29,7 +29,7 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
     "agency_id" => LOGGED_IN_USER['agency_id'],
     "is_active" => 1,
     "type" => "customer"
-], ["select_query" => true]);
+], ["order_by" => "id desc"]);
 
 $agency = $db->select_one("agencies", "*", [
     "id" => LOGGED_IN_USER['agency_id'],
@@ -106,23 +106,68 @@ if ($get_invoice_id) {
                             </div>
                             <?php if (!$get_invoice_id) { ?>
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">Customer</label>
-                                        <select name="customer_id" class="form-control select2-list py-2" id="customerSelectBox">
-                                            <option value="">-- Select Customer --</option>
-                                            <?php foreach ($customers as $customer): ?>
-                                                <option value="<?= $customer['id'] ?>">
-                                                    <?= htmlspecialchars($customer['title'] . ' ' . $customer['fname'] . ' ' . $customer['lname']) ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                    <div class="custom-select-list-container customer-selectbox-parent" data-callback="customerSelectCB">
+                                        <label class="label fw-semibold">Customer</label>
+                                        <div class="custom-select-wrapper">
+                                            <div class="custom-select" id="custom-select" tabindex="0">
+                                                <span class="custom-select-placeholder">--- Select Customer ---</span>
+                                                <input type="hidden" class="selected_id" name="customer_id" value="">
+                                                <span class="custom-select-arrow"><i class="fas fa-chevron-down"></i></span>
+                                            </div>
+                                            <ul class="custom-select-dropdown">
+                                                <li class="search-container">
+                                                    <input type="text" class="search-input" placeholder="Search customers...">
+                                                </li>
+
+                                                <!-- Customers are pre-rendered -->
+                                                <?php foreach ($customers as $customer): ?>
+                                                    <li role="option" data-id="<?= $customer['id'] ?>" data-name="<?= htmlspecialchars($customer['title'] . ' ' . $customer['fname'] . ' ' . $customer['lname']) ?>">
+                                                        <div class="customer-info">
+                                                            <div class="customer-name"><?= htmlspecialchars($customer['title'] . ' ' . $customer['fname'] . ' ' . $customer['lname']) ?></div>
+                                                        </div>
+                                                    </li>
+                                                <?php endforeach; ?>
+
+                                                <!-- Add new & No results -->
+                                                <li class="add-new-option" data-popup=".add-new-customer-model"><i class="fas fa-plus-circle me-1"></i> Add as
+                                                    new customer</li>
+                                                <li class="no-results" style="display: none;">No customers found</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="selected-info" id="selected-info">
+                                            <div class="selected-label">Currently Selected:</div>
+                                            <div class="selected-value" id="selected-value"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 d-none" id="motHistoryDiv">
                                     <div class="form-group">
-                                        <label class="label">Vehicle (Reg No.)</label>
-                                        <select name="mot_id" class="form-control py-2" id="motHistorySelectBox">
-                                        </select>
+                                        <div class="custom-select-list-container vehicle-history-container">
+                                            <label class="label fw-semibold">Vehicle (Reg No.)</label>
+                                            <div class="custom-select-wrapper">
+                                                <div class="custom-select" id="custom-select" tabindex="0">
+                                                    <span class="custom-select-placeholder">--- Select Vehicle History ---</span>
+                                                    <input type="hidden" class="selected_id" name="mot_id" value="">
+                                                    <span class="custom-select-arrow"><i class="fas fa-chevron-down"></i></span>
+                                                </div>
+                                                <ul class="custom-select-dropdown">
+                                                    <li class="search-container">
+                                                        <input type="text" class="search-input" placeholder="Search customers...">
+                                                    </li>
+
+                                                    <!-- Add new & No results -->
+                                                    <li class="add-new-option" data-popup=".add-new-vehicle-model"><i class="fas fa-plus-circle me-1"></i> Add as
+                                                        new vehicle</li>
+                                                    <li class="no-results" style="display: none;">No Vehicle History found</li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="selected-info" id="selected-info">
+                                                <div class="selected-label">Currently Selected:</div>
+                                                <div class="selected-value" id="selected-value"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -287,11 +332,133 @@ if ($get_invoice_id) {
         </div>
     </main>
 
+    <!-- Add Customer -->
+    <div class="modal fade add-new-customer-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Customer</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <?php
+                    $id = null;
+                    $customer_data = [];
+                    $callback = "data-callback='addCustomerCB'";
+                    require_once('./components/customer-form.php'); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add new Vehicle -->
+    <div class="modal fade add-new-vehicle-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <style>
+            .add-new-vehicle-model .navbar {
+                background-color: red;
+            }
+        </style>
+        <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Customer</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <iframe id="myIframe" src="<?= SITE_URL . "user/add-vehicle?add_by=invoice" ?>" class="w-100" style="height:500px"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let SERVICES = <?= json_encode($services); ?>;
         let INVOICE_ITEMS = <?= json_encode($invoiceItems) ?>;
         let _GET = <?= json_encode($_GET) ?>;
     </script>
+    <script>
+        var autocomplete;
+
+        function initAutocomplete() {
+            var input = document.getElementById('autocomplete');
+            if (!input) return;
+
+            autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ['address'],
+                componentRestrictions: {
+                    country: 'GB'
+                }
+            });
+
+            autocomplete.addListener('place_changed', fillInAddress);
+        }
+
+        function fillInAddress() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                alert('Please select a valid address from the dropdown');
+                return;
+            }
+
+            $("#lat").val(place.geometry.location.lat());
+            $("#lng").val(place.geometry.location.lng());
+
+            var city = '';
+            var postcode = '';
+
+            $("#locality, #postal_code").val('');
+            $("#display_city, #display_postcode").text('');
+
+            place.address_components.forEach(function(component) {
+                var type = component.types[0];
+
+                if (type === 'locality' || type === 'postal_town') {
+                    city = component.long_name;
+                    $("#locality").val(city);
+                }
+                if (type === 'postal_code') {
+                    postcode = component.long_name;
+                    $("#postal_code").val(postcode);
+                }
+            });
+
+            // Fallback for UK postal town
+            if (!city) {
+                place.address_components.forEach(function(component) {
+                    if (component.types.includes('postal_town')) {
+                        city = component.long_name;
+                        $("#locality").val(city);
+                    }
+                });
+            }
+        }
+
+        function geolocate() {
+            if (navigator.geolocation && autocomplete) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var geolocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    var circle = new google.maps.Circle({
+                        center: geolocation,
+                        radius: position.coords.accuracy
+                    });
+                    autocomplete.setBounds(circle.getBounds());
+                });
+            }
+        }
+
+        // Initialize autocomplete **only after modal is shown**
+        $('.add-new-customer-model').on('shown.bs.modal', function() {
+            initAutocomplete();
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFeQ9V13F9lHKxCry0MmMQaRH32C8zIJY&libraries=places&region=GB&callback=initAutocomplete" async defer></script>
     <?php require_once('./includes/js.php'); ?>
 </body>
 

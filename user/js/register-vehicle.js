@@ -610,7 +610,7 @@ tc.fn.cb.addCustomerCB = async (form, data) => {
         form[0].reset();
         $('.add-new-customer-model').modal('hide');
     } else {
-        sAlert(data.message, 'error');
+        sAlert(data.data, 'error');
     }
 };
 
@@ -824,7 +824,7 @@ tc.fn.cb.updateCustomerData = async (form, data) => {
         form[0].reset();
         $modal.modal('hide');
     } else {
-        sAlert(data.message, 'error');
+        sAlert(data.data, 'error');
     }
 };
 
@@ -883,6 +883,16 @@ tc.fn.cb.addCustomerData = async (form, data) => {
     }
     if (data.status === "error") {
         $(".modal").modal("hide");
+        sAlert(data.data, 'error');
+    }
+}
+
+
+tc.fn.cb.manuallyVehicleRegisterationCB = async (form, data) => {
+    if (data.status === 'success') {
+        window.parent.postMessage({ type: "FORM_SUBMITTED" }, "*");
+        location.href = data.redirect;
+    } else {
         sAlert(data.data, 'error');
     }
 }

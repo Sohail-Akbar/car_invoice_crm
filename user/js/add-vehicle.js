@@ -446,7 +446,7 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
             confirmButtonText: 'Manually Register'
         }).then((result) => {
             if (result.value) {
-                window.location.href = 'registration-vehicle?type=manually';
+                window.location.href = 'registration-vehicle?type=manually&add_by=invoice';
             }
         })
         $registerVehicleCon.addClass("d-none");
@@ -475,8 +475,19 @@ tc.fn.cb.addCustomerCB = async (form, data) => {
         sAlert("Customer created successfully", 'success');
         form[0].reset();
         $('.add-new-customer-model').modal('hide');
+        window.parent.postMessage({ type: "FORM_SUBMITTED" }, "*");
     } else {
-        sAlert(data.message, 'error');
+        sAlert(data.data, 'error');
+    }
+};
+
+// Add new customer callback
+tc.fn.cb.addNewVehicleCB = async (form, data) => {
+    if (data.status === 'success') {
+        window.parent.postMessage({ type: "FORM_SUBMITTED" }, "*");
+        location.href = data.redirect;
+    } else {
+        sAlert(data.data, 'error');
     }
 };
 

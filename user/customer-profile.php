@@ -77,6 +77,14 @@ $cars = $db->select("customer_car_history", "*", [
     "is_active" => 1,
     "customer_id" => $get_id,
 ]);
+
+// Email Templates
+$email_template = $db->select("email_template", "id,email_title,email_body", [
+    "agency_id" => LOGGED_IN_USER['agency_id'],
+    "company_id" => LOGGED_IN_USER['company_id'],
+    "is_active" => 1
+]);
+if (empty($email_template)) $email_template = [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -167,7 +175,6 @@ $cars = $db->select("customer_car_history", "*", [
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M9.1 17H10.85V15.75C11.6833 15.6 12.4 15.275 13 14.775C13.6 14.275 13.9 13.5333 13.9 12.55C13.9 11.85 13.7 11.2083 13.3 10.625C12.9 10.0417 12.1 9.53333 10.9 9.1C9.9 8.76667 9.20833 8.475 8.825 8.225C8.44167 7.975 8.25 7.63333 8.25 7.2C8.25 6.76667 8.40434 6.425 8.713 6.175C9.02167 5.925 9.46733 5.8 10.05 5.8C10.5833 5.8 11 5.929 11.3 6.187C11.6 6.445 11.8167 6.766 11.95 7.15L13.55 6.5C13.3667 5.91667 13.0293 5.40833 12.538 4.975C12.0467 4.54167 11.5007 4.3 10.9 4.25V3H9.15V4.25C8.31667 4.43333 7.66667 4.8 7.2 5.35C6.73333 5.9 6.5 6.51667 6.5 7.2C6.5 7.98333 6.72933 8.61667 7.188 9.1C7.64667 9.58333 8.36733 10 9.35 10.35C10.4 10.7333 11.1293 11.075 11.538 11.375C11.9467 11.675 12.1507 12.0667 12.15 12.55C12.15 13.1 11.9543 13.5043 11.563 13.763C11.1717 14.0217 10.7007 14.1507 10.15 14.15C9.59933 14.1493 9.11167 13.9787 8.687 13.638C8.26233 13.2973 7.95 12.7847 7.75 12.1L6.1 12.75C6.33333 13.55 6.696 14.196 7.188 14.688C7.68 15.18 8.31734 15.5173 9.1 15.7V17ZM10 20C8.61667 20 7.31667 19.7373 6.1 19.212C4.88334 18.6867 3.825 17.9743 2.925 17.075C2.025 16.1757 1.31267 15.1173 0.788001 13.9C0.263335 12.6827 0.000667933 11.3827 1.26582e-06 10C-0.000665401 8.61733 0.262001 7.31733 0.788001 6.1C1.314 4.88267 2.02633 3.82433 2.925 2.925C3.82367 2.02567 4.882 1.31333 6.1 0.788C7.318 0.262667 8.618 0 10 0C11.382 0 12.682 0.262667 13.9 0.788C15.118 1.31333 16.1763 2.02567 17.075 2.925C17.9737 3.82433 18.6863 4.88267 19.213 6.1C19.7397 7.31733 20.002 8.61733 20 10C19.998 11.3827 19.7353 12.6827 19.212 13.9C18.6887 15.1173 17.9763 16.1757 17.075 17.075C16.1737 17.9743 15.1153 18.687 13.9 19.213C12.6847 19.739 11.3847 20.0013 10 20Z" fill="white" />
                             </svg>
-
                             <span class="ml-1">(<?= _CURRENCY_SYMBOL . $total_due ?>) Total Due</span>
                         </button>
                     </div>
@@ -190,8 +197,8 @@ $cars = $db->select("customer_car_history", "*", [
                                 </button>
                             </h4>
                             <div class="mt-3 customer-note-tinymce">
-                                <textarea class="customer-note form-control" id="customerNote" rows="6.8" name="note" placeholder="Start typing to leave a note..."></textarea>
-                                <div class="col-md-12 text-right">
+                                <textarea class="customer-note form-control" id="customerNote" rows="8" name="note" placeholder="Start typing to leave a note..."></textarea>
+                                <div class="col-md-12 text-right" style="position: absolute;right: 0px;bottom: 12px;">
                                     <button class="btn save-customer-note" type="submit">
                                         <i class="fas fa-save"></i>
                                         Save
@@ -210,9 +217,12 @@ $cars = $db->select("customer_car_history", "*", [
             </div>
         </div>
         <div class="row mx-0 mt-3">
-            <div class="col-md-12">
+            <div class="col-md-12 customer-action-btn">
                 <a href="add-customer?id=<?= $_GET['id'] ?>&redirectTo=customer-profile?id=<?= $_GET['id'] ?>" class="btn mx-1 br-5 text-white">Update Profile</a>
-                <button class="btn mx-1 br-5 text-white">Send Email</button>
+                <button class="btn mx-1 br-5 text-white"
+                    onclick="new bootstrap.Modal(document.querySelector('.view-send-email-model')).show();">
+                    Send Email
+                </button>
                 <a href="send-sms?customer_id=<?= $_GET['id'] ?>&redirectTo=customer-profile?id=<?= $_GET['id'] ?>" class="btn mx-1 br-5 text-white">Send SMS</a>
             </div>
         </div>
@@ -259,7 +269,48 @@ $cars = $db->select("customer_car_history", "*", [
         </div>
     </div>
     <!-- Email Popup -->
-
+    <div class="modal fade view-send-email-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width: 50%; box-shadow: 0 0 10px #5555;">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Send Email</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-white">
+                    <form action="customer" method="POST" class="ajax_form reset" data-reset="reset">
+                        <div class="row mx-0">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="label">Template</div>
+                                    <select name="email_template_id" class="form-control select2-list">
+                                        <option value="">--- Select ----</option>
+                                        <?php foreach ($email_template as $email_temp) { ?>
+                                            <option value="<?= $email_temp['id'] ?>"><?= $email_temp['email_title'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="label">Message</div>
+                                    <textarea class="customer-message form-control" id="customerMessage" rows="6" name="message" placeholder="Start typing to leave a note..."></textarea>
+                                </div>
+                                <div class="col-md-12 px-0 text-right">
+                                    <input type="hidden" name="sendEmailToCustomer" value="true">
+                                    <input type="hidden" name="customer_id" value="<?= $get_id ?>">
+                                    <div class="form-group">
+                                        <button class="btn br-5" type="submit">
+                                            <i class="fas fa-save    "></i> Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         const _GET = <?= json_encode($_GET); ?>;

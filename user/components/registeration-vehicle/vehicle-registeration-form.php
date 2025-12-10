@@ -2,7 +2,8 @@
     <div class="vehicle-information-header text-right">
         <button type="button" class="btn br-5" data-toggle="modal" data-target=".mot-history-model"><i class="fa fa-eye" aria-hidden="true"></i> View Vehicle History</button>
     </div>
-    <form action="mot-history" method="POST" class="ajax_form reset customer-vehicle-form" data-reset="reset">
+    <!-- data-callback="addNewVehicleCB" -->
+    <form action="mot-history" method="POST" class="ajax_form reset customer-vehicle-form" data-reset="reset" data-callback="addNewVehicleCB">
         <div class="row mt-4">
             <div class="col-md-8">
                 <div class="form-group">

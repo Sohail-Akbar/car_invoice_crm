@@ -234,6 +234,10 @@ if (isset($_POST['saveInvoice'])) {
 
     // First time insert
     $mot_id = intval($_POST['mot_id'] ?? 0);
+    if (empty($mot_id)) {
+        returnError("Please select a Vehicle (Reg No.) before saving the invoice.");
+        exit;
+    }
 
     $data = [
         "company_id" => $company_id,

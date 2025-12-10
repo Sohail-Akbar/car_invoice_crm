@@ -71,7 +71,7 @@ $existing_customers = $db->select("users", "*", [
 
 </head>
 
-<body>
+<body class="<?= isset($_GET['add_by']) ? "all-hide" : "" ?>">
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content reg-vehicle-container" id="mainContent">
         <?php if (!$custom_register) { ?>
@@ -159,7 +159,9 @@ $existing_customers = $db->select("users", "*", [
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="form-group has-search-right">
-                                            <a href="#" class="form-control-feedback"><span class="fa fa-search"></span></a>
+                                            <a href="#" class="form-control-feedback">
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                            </a>
                                             <input type="text" class="form-control" name="reg" data-length="[1,250]" placeholder="Registration No....">
                                         </div>
                                     </div>

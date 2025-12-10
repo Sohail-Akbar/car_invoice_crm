@@ -9,7 +9,7 @@ select.form-control:not([size]):not([multiple]) {
     padding-left: 40px;
     padding-top: 50px;
     position: relative;
-    background-attachment: fixed;
+    /* background-attachment: fixed; */
 }
 
 .dashboard-svg-bar {
@@ -28,7 +28,8 @@ h5,
 p,
 span,
 button,
-a {
+a,
+div {
     font-family: var(--fontFamily) !important;
 }
 
@@ -98,6 +99,14 @@ a {
 .select2-container .select2-selection__rendered {
     font-size: 15px;
     color: #333;
+}
+
+.select2-container {
+    z-index: 999999;
+}
+
+.swal2-container {
+    z-index: 9999999 !important;
 }
 
 /* Arrow styling */
@@ -551,4 +560,172 @@ table.dataTable tbody td {
 
 .flex-1 {
     flex: 1 !important;
+}
+
+/* Custom Select List */
+.customerShortCode {
+    font-size: 13px;
+    font-family: var(--fontFamily);
+    color: #33333399;
+}
+
+.custom-select-list-container .custom-select-wrapper {
+    position: relative;
+}
+
+.custom-select-list-container .custom-select-dropdown li:hover {
+    background-color: #f8f9fa;
+    color: #333;
+    transition: 0.5s;
+}
+
+.custom-select-list-container .custom-select-placeholder.edit-text {
+    color: #333 !important;
+}
+
+.custom-select-list-container .custom-select {
+    border: 1px solid var(--webMainColor);
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    background: #fff;
+    transition: all 0.2s;
+    height: calc(2.25rem + 8px) !important;
+}
+
+.custom-select-list-container .custom-select.active {
+    border: 2px solid var(--webMainColor);
+}
+
+.modal,
+.pac-container {
+    z-index: 999999 !important;
+}
+
+.custom-select-list-container .custom-select-placeholder {
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.custom-select-list-container .custom-select-arrow {
+    transition: transform 0.2s;
+    font-size: 12px;
+}
+
+.custom-select-list-container .custom-select.active .custom-select-arrow {
+    transform: rotate(180deg);
+}
+
+.custom-select-list-container .custom-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #d1d5db;
+    border-top: none;
+    display: none;
+    background: #fff;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0 0 8px 8px;
+    z-index: 1000;
+}
+
+.custom-select-list-container .search-container {
+    padding: 0.5rem 1rem;
+    background: #f9fafb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.custom-select-list-container .search-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--webMainColor);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.custom-select-list-container .custom-select-dropdown li {
+    padding: 0.5rem 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccccccab;
+    width: 100%;
+}
+
+.custom-select-list-container .custom-select-dropdown li:last-child {
+    border-bottom: none;
+}
+
+.custom-select-list-container .no-results {
+    text-align: center;
+    padding: 1rem;
+    color: #6b7280;
+    font-style: italic;
+    display: none;
+}
+
+.custom-select-list-container .add-new-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(67, 97, 238, 0.05);
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-top: 1px dashed #d1d5db;
+    display: none;
+}
+
+.custom-select-list-container .add-new-option:hover {
+    background: rgba(67, 97, 238, 0.1);
+}
+
+.custom-select-list-container .selected-info {
+    display: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f0f9ff;
+    border-left: 4px solid #4361ee;
+    border-radius: 8px;
+}
+
+.custom-select-list-container .selected-info.show {
+    display: block;
+}
+
+.custom-select-list-container .customer-info {
+    flex-grow: 1;
+}
+
+/* Custom Select List */
+
+
+body.all-hide .sidebar,
+body.all-hide .existing-vehicle-btn,
+body.all-hide .sidebar,
+body.all-hide .navbar {
+    display: none !important;
+}
+
+body.all-hide #mainContent {
+    margin: 0px !important;
+}
+
+
+iframe,
+body.all-hide iframe {
+    border: none !important;
+}
+
+body.all-hide #registrationCarContainer .add-new-customer-btn {
+    display: none !important;
 }

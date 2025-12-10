@@ -103,7 +103,7 @@ $(document).on("click", ".remove-row", function () {
 $(document).ready(function () {
     // if customer id and vehicle id is existing 
     if (_GET.customer_id) {
-        $("#customerSelectBox").val(_GET.customer_id).trigger("change");
+        $(".customer-selectbox-parent").find(`[role="option"][data-id="${_GET.customer_id}"]`).trigger("click");
     }
     // Initialize Select2 for all selects
     select2();
@@ -171,6 +171,54 @@ $(document).on("change", "#customerSelectBox", function () {
         sAlert("Please select a customer to fetch vehicle history.", "warning");
     }
 });
+
+window.addEventListener("message", function (event) {
+    if (event.data.type === "FORM_SUBMITTED") {
+        $("modal").modal("hide");
+        location.reload();
+        console.log("Iframe form submitted!");
+        // Yahan aap apna callback ya koi bhi action kar sakte ho
+    }
+});
+
+
+function customerSelectCB(customer) {
+    let customerId = customer.id;
+    if (customerId) {
+        $.ajax({
+            url: "controllers/invoice",
+            method: "POST",
+            data: { customer_id: customerId, fetchCustomerMotHistory: true },
+            dataType: "json",
+            success: function (data) {
+                let $vehicleSelectBoxContainer = $(".vehicle-history-container")
+                if (data.status === "success") {
+                    $vehicleSelectBoxContainer.find(`[role="option"]`).remove();
+                    $.each(data.data, function (index, item) {
+                        $vehicleSelectBoxContainer.find(".search-container").after(`<li role="option" data-id="${item.id}" data-name="${item.reg_number}">
+                                                        <div class="customer-info">
+                                                            <div class="customer-name">${item.reg_number}</div>
+                                                        </div>
+                                                    </li>`);
+                        $("#motHistoryDiv").removeClass("d-none");
+                        if (_GET.vehicle_id) {
+                            $(".vehicle-history-container").find(`[role="option"][data-id="${_GET.vehicle_id}"]`).trigger("click");
+                        }
+
+                        $(".invoice-right-container .customer-name").text(data.fname + " " + data.lname);
+                        $(".invoice-right-container .customer-address").text(data.address);
+                        $(".invoice-right-container .customer-phone .contact").text(data.contact);
+                    });
+                } else {
+                    $("#motHistoryDiv").removeClass("d-none");
+                    $vehicleSelectBoxContainer.find(`[role="option"]`).remove();
+                }
+            }
+        });
+    } else {
+        sAlert("Please select a customer to fetch vehicle history.", "warning");
+    }
+}
 
 
 // When user selects or adds a new option
@@ -245,3 +293,13 @@ $(document).on("focusout", ".service_amount", function () {
         error: makeError
     });
 });
+
+
+// Add new customer callback
+tc.fn.cb.addCustomerCB = async (form, data) => {
+    if (data.status === 'success') {
+        location.href = "";
+    } else {
+        sAlert(data.data, 'error');
+    }
+};

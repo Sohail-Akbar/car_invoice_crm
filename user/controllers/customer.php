@@ -878,3 +878,138 @@ if (isset($_POST['editVehicleInfo'])) {
         returnError("No customers found.");
     }
 }
+
+// Save Email Template
+if (isset($_POST['saveEmailTemplates'])) {
+    $email_title = $_POST['email_title'];
+    $email_body = $_POST['email_body'];
+    $id = isset($_POST['id']) ? $_POST['id'] : null;
+
+    if (empty($email_title)) returnError("Email title is required");
+    if (empty($email_body)) returnError("Email body is required");
+
+    if ($id) {
+        $save  = $db->update("email_template", [
+            "email_title" => $email_title,
+            "email_body" => $email_body,
+        ], [
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "id" => $id
+        ]);
+    } else {
+        $save  = $db->insert("email_template", [
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "email_title" => $email_title,
+            "email_body" => $email_body,
+            "created_at" => $timestamp,
+        ]);
+    }
+
+    if ($save) {
+        returnSuccess("Data Update Syccessfully", [
+            "redirect" => "email-template"
+        ]);
+    } else {
+        returnError("Something Went wrong");
+    }
+}
+
+if (isset($_GET['fetchEmailTemplates'])) {
+
+    $columns = ["id", "email_title", "email_body", "is_active", "created_at"];
+    $limit  = $_POST['length'];
+    $offset = $_POST['start'];
+    $search = $_POST['search']['value'];
+
+    $query = "SELECT * FROM email_template WHERE 1";
+
+    if (!empty($search)) {
+        $query .= " AND (email_title LIKE '%$search%' OR email_body LIKE '%$search%')";
+    }
+
+    $totalQuery = mysqli_query($db->conn, $query);
+    $totalRows = mysqli_num_rows($totalQuery);
+
+    $query .= " ORDER BY id DESC LIMIT $offset, $limit";
+    $result = mysqli_query($db->conn, $query);
+
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+
+        // Decode special characters in email body
+        $row['email_body'] = htmlspecialchars_decode($row['email_body'], ENT_QUOTES);
+
+        $data[] = $row;
+    }
+
+
+    echo json_encode([
+        "draw" => intval($_POST['draw']),
+        "recordsTotal" => $totalRows,
+        "recordsFiltered" => $totalRows,
+        "data" => $data
+    ]);
+    exit;
+}
+
+// get Email template body
+if (isset($_POST['getEmailTemplateBody'])) {
+    $template_id = $_POST['template_id'];
+    if (empty($template_id)) returnError("Template id is required");
+
+    $email_template = $db->select_one("email_template", "email_body", [
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "id" => $template_id
+    ]);
+
+    // Shortcodes replace (LOGGED_IN_USER)
+    $shortCodes = [
+        "CustomerFullName" => LOGGED_IN_USER['name'],
+        "CustomerFirstName" => LOGGED_IN_USER['fname'],
+        "CustomerLastName" => LOGGED_IN_USER['lname'],
+        "CustomerTitle" => LOGGED_IN_USER['title'],
+        "CustomerEmail" => LOGGED_IN_USER['email'],
+        "CustomerAddress" => LOGGED_IN_USER['address'],
+        "CustomerMobileNo" => LOGGED_IN_USER['contact'],
+        "CustomerCity" => LOGGED_IN_USER['city'],
+    ];
+
+    $emailBody = $email_template['email_body'];
+    foreach ($shortCodes as $code => $value) {
+        $emailBody = str_replace($code, $value, $emailBody);
+    }
+
+    returnSuccess(htmlspecialchars_decode($emailBody));
+}
+
+
+// Send Email TO Customer 
+if (isset($_POST['sendEmailToCustomer'])) {
+    $email_template_id = $_POST['email_template_id'];
+    if (empty($email_template_id)) returnError("Please Select Template First.");
+    $message = $_POST['message'];
+    if (empty($message)) returnError("Message is required");
+    $customer_id = $_POST['customer_id'];
+    if (empty($customer_id)) returnError("Customer id is required");
+
+    // Direct email data
+    $emailData = [
+        'to' => 'sohailakbar3324@gmail.com',
+        'subject' => 'Garaj Email',
+        'body' => $message,
+    ];
+
+    // Send email
+    $result = $_tc_email->sendEmailTo($emailData);
+
+    if ($result) {
+        returnSuccess("Send Email Successfully", [
+            "redirect" => ""
+        ]);
+    } else {
+        returnError("Something went wrong");
+    }
+}

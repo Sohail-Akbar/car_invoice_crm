@@ -620,3 +620,18 @@ function get_api_key()
 
     return $apiKey; // Return original API key for usage
 }
+
+// Customer Short Code 
+function getCustomerShortCode()
+{
+    return [
+        "Customer Full Name" => "CustomerFullName",
+        "Customer First Name" => "CustomerFirstName",
+        "Customer Last Name" => "CustomerLastName",
+        "Customer Title" => "CustomerTitle",
+        "Customer Email" => "CustomerEmail",
+        "Customer Address" => "CustomerAddress",
+        "Customer Mobile No" => "CustomerMobileNo",
+        "Customer City" => "CustomerCity",
+    ];
+}

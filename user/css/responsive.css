@@ -243,6 +243,11 @@
      .dashboard-container .single-btn:last-child {
          margin-bottom: 5px;
      }
+
+     .customer-action-btn button,
+     .customer-action-btn a {
+         margin-top: 5px;
+     }
  }
 
  @media (max-width: 330px) {

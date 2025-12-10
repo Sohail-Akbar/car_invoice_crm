@@ -354,7 +354,7 @@ $(document).on("click", ".customer-note-container .view-note", function () {
 $(document).ready(function () {
     tinymce.init({
         selector: '#customerNote',
-        height: 170,
+        height: 200,
         menubar: false,
         plugins: ['lists link', 'textcolor'],
         toolbar: 'alignleft aligncenter alignright alignjustify | bold italic underline',
@@ -378,6 +378,43 @@ $(document).ready(function () {
             editor.on('blur', setPlaceholder);
         }
     });
+
+    if ($("#customerMessage").length) {
+        tinymce.init({
+            selector: '#customerMessage',
+            height: 300, // thoda bada height better view ke liye
+            menubar: true, // menubar enable
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount',
+                'textcolor colorpicker'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+                'bold italic underline strikethrough | forecolor backcolor | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat | help',
+            font_formats: 'Serif=serif; Sans-serif=sans-serif; Arial=arial,helvetica,sans-serif; Courier New=courier,courier new,monospace;',
+            content_style: "body { font-family: 'Serif', sans-serif; line-height:0.5; }",
+            setup: function (editor) {
+                const placeholderText = "Start typing to leave a note...";
+
+                function setPlaceholder() {
+                    if (editor.getContent() === '') {
+                        editor.setContent(`<p style="color:#888;">${placeholderText}</p>`);
+                    }
+                }
+
+                editor.on('init', setPlaceholder);
+                editor.on('focus', function () {
+                    if (editor.getContent().includes(placeholderText)) {
+                        editor.setContent('');
+                    }
+                });
+                editor.on('blur', setPlaceholder);
+            }
+        });
+    }
 });
 
 // jQuery form submit validation
@@ -409,6 +446,31 @@ $(document).on('click', ".save-customer-note", function (e) {
                 }, 200);
             } else {
                 sAlert(res.message, "error");
+            }
+        },
+        error: makeError
+    });
+});
+
+// get email template
+$('select[name="email_template_id"]').on('select2:select', function (e) {
+    let template_id = $(this).val();
+    if (!template_id) return false;
+
+    $.ajax({
+        url: "controllers/customer",
+        method: "POST",
+        data: {
+            template_id,
+            getEmailTemplateBody: true
+        },
+        dataType: "json",
+        success: function (res) {
+            if (res.status === "success") {
+                // Set HTML content in TinyMCE
+                tinymce.get('customerMessage').setContent(res.data);
+            } else {
+                sAlert(data.data, "error");
             }
         },
         error: makeError

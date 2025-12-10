@@ -3,125 +3,413 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Select Box with Conditional Add Button</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Select + Add New (Optimized)</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <!-- Bootstrap CSS for modal -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap JS for modal -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
-        .select2-container .select2-results__option.add-new {
-            color: blue;
-            font-weight: bold;
+        .custom-select-list-container .custom-select-wrapper {
+            position: relative;
+            max-width: 400px;
+            margin-bottom: 1rem;
+        }
+
+        .custom-select-list-container .custom-select-placeholder.edit-text {
+            color: #333 !important;
+        }
+
+        .custom-select-list-container .custom-select {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+
+        .custom-select-list-container .custom-select.active {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        .custom-select-list-container .custom-select-placeholder {
+            color: #9ca3af;
+        }
+
+        .custom-select-list-container .custom-select-arrow {
+            transition: transform 0.2s;
+        }
+
+        .custom-select-list-container .custom-select.active .custom-select-arrow {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-list-container .custom-select-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #d1d5db;
+            border-top: none;
+            display: none;
+            background: #fff;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border-radius: 0 0 8px 8px;
+            z-index: 1000;
+        }
+
+        .custom-select-list-container .search-container {
+            padding: 0.5rem 1rem;
+            background: #f9fafb;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .custom-select-list-container .search-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+
+        .custom-select-list-container .custom-select-dropdown li {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .custom-select-list-container .custom-select-dropdown li:last-child {
+            border-bottom: none;
+        }
+
+        .custom-select-list-container .no-results {
+            text-align: center;
+            padding: 1rem;
+            color: #6b7280;
+            font-style: italic;
+            display: none;
+        }
+
+        .custom-select-list-container .add-new-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(67, 97, 238, 0.05);
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-top: 1px dashed #d1d5db;
+            display: none;
+        }
+
+        .custom-select-list-container .add-new-option:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .custom-select-list-container .selected-info {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f0f9ff;
+            border-left: 4px solid #4361ee;
+            border-radius: 8px;
+        }
+
+        .custom-select-list-container .selected-info.show {
+            display: block;
+        }
+
+        .custom-select-list-container .customer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #4361ee;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 0.75rem;
+        }
+
+        .custom-select-list-container .customer-info {
+            flex-grow: 1;
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
+        <div class="custom-select-list-container">
+            <label class="form-label fw-semibold mb-2">Select a customer or add a new one:</label>
+            <div class="custom-select-wrapper">
+                <div class="custom-select" id="custom-select" tabindex="0">
+                    <span class="custom-select-placeholder">--- Select Customer ---</span>
+                    <input type="hidden" class="selected_id" name="test" value="">
+                    <span class="custom-select-arrow"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <ul class="custom-select-dropdown">
+                    <li class="search-container">
+                        <input type="text" class="search-input" placeholder="Search customers...">
+                    </li>
 
-    <div class="container mt-5">
-        <!-- Example select box -->
-        <select id="mySelect" data-popup="#addModal" data-add="true" style="width: 100%">
-            <!-- <option value="Apple">Apple</option>
-            <option value="Banana">Banana</option>
-            <option value="Orange">Orange</option> -->
-        </select>
+                    <!-- Customers are pre-rendered -->
+                    <li role="option" data-id="1" data-name="John Doe" data-email="john.doe@example.com">
+                        <div class="customer-avatar">JD</div>
+                        <div class="customer-info">
+                            <div class="customer-name">John Doe</div>
+                            <div class="customer-email">john.doe@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="2" data-name="Jane Smith" data-email="jane.smith@example.com">
+                        <div class="customer-avatar">JS</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Jane Smith</div>
+                            <div class="customer-email">jane.smith@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="3" data-name="Robert Johnson" data-email="robert.j@example.com">
+                        <div class="customer-avatar">RJ</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Robert Johnson</div>
+                            <div class="customer-email">robert.j@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="4" data-name="Emily Davis" data-email="emily.davis@example.com">
+                        <div class="customer-avatar">ED</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Emily Davis</div>
+                            <div class="customer-email">emily.davis@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="5" data-name="Michael Wilson" data-email="m.wilson@example.com">
+                        <div class="customer-avatar">MW</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Michael Wilson</div>
+                            <div class="customer-email">m.wilson@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="6" data-name="Sarah Brown" data-email="sarah.brown@example.com">
+                        <div class="customer-avatar">SB</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Sarah Brown</div>
+                            <div class="customer-email">sarah.brown@example.com</div>
+                        </div>
+                    </li>
+
+                    <!-- Add new & No results -->
+                    <li class="add-new-option"><i class="fas fa-plus-circle me-1"></i> Add as new customer</li>
+                    <li class="no-results">No customers found</li>
+                </ul>
+            </div>
+
+            <div class="selected-info" id="selected-info">
+                <div class="selected-label">Currently Selected:</div>
+                <div class="selected-value" id="selected-value"></div>
+            </div>
+        </div>
+        <div class="custom-select-list-container">
+            <label class="form-label fw-semibold mb-2">Select a customer or add a new one:</label>
+            <div class="custom-select-wrapper">
+                <div class="custom-select" id="custom-select" tabindex="0">
+                    <span class="custom-select-placeholder">--- Select Customer ---</span>
+                    <input type="hidden" class="selected_id" name="test" value="">
+                    <span class="custom-select-arrow"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <ul class="custom-select-dropdown">
+                    <li class="search-container">
+                        <input type="text" class="search-input" placeholder="Search customers...">
+                    </li>
+
+                    <!-- Customers are pre-rendered -->
+                    <li role="option" data-id="1" data-name="John Doe" data-email="john.doe@example.com">
+                        <div class="customer-avatar">JD</div>
+                        <div class="customer-info">
+                            <div class="customer-name">John Doe</div>
+                            <div class="customer-email">john.doe@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="2" data-name="Jane Smith" data-email="jane.smith@example.com">
+                        <div class="customer-avatar">JS</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Jane Smith</div>
+                            <div class="customer-email">jane.smith@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="3" data-name="Robert Johnson" data-email="robert.j@example.com">
+                        <div class="customer-avatar">RJ</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Robert Johnson</div>
+                            <div class="customer-email">robert.j@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="4" data-name="Emily Davis" data-email="emily.davis@example.com">
+                        <div class="customer-avatar">ED</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Emily Davis</div>
+                            <div class="customer-email">emily.davis@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="5" data-name="Michael Wilson" data-email="m.wilson@example.com">
+                        <div class="customer-avatar">MW</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Michael Wilson</div>
+                            <div class="customer-email">m.wilson@example.com</div>
+                        </div>
+                    </li>
+                    <li role="option" data-id="6" data-name="Sarah Brown" data-email="sarah.brown@example.com">
+                        <div class="customer-avatar">SB</div>
+                        <div class="customer-info">
+                            <div class="customer-name">Sarah Brown</div>
+                            <div class="customer-email">sarah.brown@example.com</div>
+                        </div>
+                    </li>
+
+                    <!-- Add new & No results -->
+                    <li class="add-new-option" data-popup="#addNewModal"><i class="fas fa-plus-circle me-1"></i> Add as
+                        new customer</li>
+                    <li class="no-results">No customers found</li>
+                </ul>
+            </div>
+
+            <div class="selected-info" id="selected-info">
+                <div class="selected-label">Currently Selected:</div>
+                <div class="selected-value" id="selected-value"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- Add New Customer Modal -->
+    <div class="modal fade" id="addNewModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add New Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Add New Customer</h5>
+                    <button type="button" class="btn-close-custom" data-bs-dismiss="modal"><i
+                            class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="newItem" class="form-control" placeholder="Enter new item">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="saveItem" class="btn btn-primary">Save</button>
+                    <form id="addNewForm">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="customerName" required autofocus>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="customerEmail"
+                                placeholder="customer@example.com">
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary-custom"><i class="fas fa-save me-1"></i> Save &
+                                Select</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        $(document).ready(function () {
-            $('select').each(function () {
-                var $select = $(this);
-                var enableAdd = $select.data('add') === true || $select.data('add') === "true";
-                var popupSelector = $select.data('popup');
+        $(function () {
+            let selectedCustomer = null;
 
-                if (enableAdd && popupSelector) {
-                    $select.select2({
-                        placeholder: "Select or search item",
-                        allowClear: true,
-                        tags: true,
-                        createTag: function (params) {
-                            return {
-                                id: params.term,
-                                text: '+ Add',
-                                newOption: true
-                            };
-                        },
-                        templateResult: function (data) {
-                            if (data.newOption) {
-                                return $('<span class="add-new">' + data.text + '</span>');
-                            }
-                            return data.text;
-                        },
-                        language: {
-                            noResults: function () {
-                                // Return HTML for the +Add button
-                                return $('<button class="btn btn-link add-new-no-result">+ Add</button>');
-                            }
-                        },
-                        escapeMarkup: function (markup) {
-                            return markup; // Allow HTML in noResults
-                        }
-                    }).on('select2:select', function (e) {
-                        if (e.params.data.newOption) {
-                            $select.val(null).trigger('change');
-                            $(popupSelector).modal('show');
-                            $(popupSelector).find('#newItem').val(e.params.data.id);
+            function filterCustomers($parent, query) {
+                let anyVisible = false;
+                $parent.find(".custom-select-dropdown").find('li[role="option"]').each(function () {
+                    const $li = $(this);
+                    const name = $li.data('name').toLowerCase();
+                    const email = $li.data('email').toLowerCase();
+                    if (name.includes(query) || email.includes(query)) {
+                        $li.show();
+                        anyVisible = true;
+                    } else {
+                        $li.hide();
+                    }
+                });
 
-                            $(popupSelector).find('#saveItem').off('click').on('click', function () {
-                                var newItem = $(popupSelector).find('#newItem').val();
-                                if (newItem) {
-                                    var newOption = new Option(newItem, newItem, true, true);
-                                    $select.append(newOption).trigger('change');
-                                    $(popupSelector).modal('hide');
-                                }
-                            });
-                        }
-                    });
-
-                    // Handle click on the noResults +Add button
-                    $(document).on('click', '.add-new-no-result', function () {
-
-                        $(popupSelector).modal('show');
-                        $(popupSelector).find('#newItem').val('');
-                    });
-
+                if (query.trim()) {
+                    $parent.find(".add-new-option").show().find('i').next().text(` Add "${query}" as new customer`);
                 } else {
-                    // Normal Select2 behavior
-                    $select.select2({
-                        placeholder: "Select or search item",
-                        allowClear: true
+                    $parent.find(".add-new-option").hide();
+                }
+
+                $parent.find(".no-results").toggle(!anyVisible && query.trim() ? true : false);
+            }
+
+            function selectCustomer($parent, customer) {
+                selectedCustomer = customer;
+                $parent.find('.custom-select-placeholder').text(customer.name).addClass('edit-text');
+                $parent.find(".selected_id").val(customer.id);
+            }
+
+            // Toggle dropdown
+            $(document).on("click", "#custom-select", function (e) {
+                e.stopPropagation(); // prevent the click from bubbling up
+                let $parent = $(this).parents(".custom-select-list-container");
+                $(this).toggleClass('active');
+                $parent.find(".custom-select-dropdown").toggle();
+                if ($parent.find(".custom-select-dropdown").is(':visible')) $parent.find(".search-input").focus();
+            });
+
+            // Option click
+            $(document).on("click", ".custom-select-dropdown li", function (e) {
+                e.stopPropagation(); // prevent the click from closing immediately
+                let $li = $(this);
+                let $parent = $(this).parents(".custom-select-list-container");
+
+                if ($li.hasClass('add-new-option')) {
+                    let $popup = $li.data("popup");
+                    new bootstrap.Modal($($popup)).show();
+                    $parent.find(".custom-select-dropdown").hide();
+                    $parent.find("#custom-select").removeClass('active');
+                    return;
+                }
+                if ($li.attr('role') === 'option') {
+                    selectCustomer($parent, {
+                        name: $li.data('name'),
+                        email: $li.data('email'),
+                        id: $li.data('id')
                     });
+                    $parent.find(".custom-select-dropdown").hide();
+                    $parent.find("#custom-select").removeClass('active');
                 }
             });
+
+            // Search input
+            $(document).on("input", ".custom-select-list-container .search-input", function () {
+                let query = $(this).val().toLowerCase();
+                let $parent = $(this).parents(".custom-select-list-container");
+                filterCustomers($parent, query);
+            });
+
+            // Click outside to close
+            $(document).on("click", function () {
+                $(".custom-select-dropdown").hide();
+                $(".custom-select").removeClass("active");
+            });
         });
+
     </script>
-
-
 
 </body>
 
