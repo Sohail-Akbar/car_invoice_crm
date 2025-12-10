@@ -355,15 +355,10 @@ if ($get_invoice_id) {
     </div>
     <!-- Add new Vehicle -->
     <div class="modal fade add-new-vehicle-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <style>
-            .add-new-vehicle-model .navbar {
-                background-color: red;
-            }
-        </style>
         <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New Customer</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Vehicle</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
