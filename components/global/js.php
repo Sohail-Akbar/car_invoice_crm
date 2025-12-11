@@ -10,6 +10,7 @@ $_fullPathUrl = $_protocol . $_host . $_path;
 <script>
     const GLOBAL_GET = <?= json_encode($_GET) ?>;
     const MAIN_PATH = <?= json_encode($_fullPathUrl) ?>;
+    const _CURRENCY_SYMBOL = '<?= _CURRENCY_SYMBOL ?>';
 </script>
 <?php assets_file([
     "jquery.min.js",

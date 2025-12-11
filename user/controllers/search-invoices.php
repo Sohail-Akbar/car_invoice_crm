@@ -13,6 +13,9 @@ if (isset($_GET['fetchFilteredInvoices'])) {
     $from_date     = isset($_POST['from_date']) ? trim($_POST['from_date']) : '';
     $to_date       = isset($_POST['to_date']) ? trim($_POST['to_date']) : '';
 
+    if (!empty($from_date)) $from_date = DateTime::createFromFormat('d-m-Y', $from_date)->format('Y-m-d');
+    if (!empty($to_date)) $to_date = DateTime::createFromFormat('d-m-Y', $to_date)->format('Y-m-d');
+
     $company_id = LOGGED_IN_USER['company_id'];
     $agency_id  = LOGGED_IN_USER['agency_id'];
 
@@ -72,7 +75,7 @@ if (isset($_GET['fetchFilteredInvoices'])) {
         $data[] = [
             'id'            => $row['id'],
             'invoice_no'    => $row['invoice_no'],
-            'invoice_date'  => $row['invoice_date'],
+            'invoice_date'  =>  DateTime::createFromFormat('d/m/Y', $row['invoice_date'])->format('d F Y'),
             'total_amount'  => $row['total_amount'],
             'paid_amount'   => $row['paid_amount'],
             'due_amount'    => $row['due_amount'],

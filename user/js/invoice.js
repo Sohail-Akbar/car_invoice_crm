@@ -101,6 +101,12 @@ $(document).on("click", ".remove-row", function () {
 });
 
 $(document).ready(function () {
+    $(function () {
+        $("#datepicker").datepicker({
+            autoclose: true,
+            todayHighlight: true
+        }).datepicker('update', new Date());
+    });
     // if customer id and vehicle id is existing 
     if (_GET.customer_id) {
         $(".customer-selectbox-parent").find(`[role="option"][data-id="${_GET.customer_id}"]`).trigger("click");
@@ -194,6 +200,8 @@ function customerSelectCB(customer) {
                 let $vehicleSelectBoxContainer = $(".vehicle-history-container")
                 if (data.status === "success") {
                     $vehicleSelectBoxContainer.find(`[role="option"]`).remove();
+                    $vehicleSelectBoxContainer.find(".custom-select-placeholder").text("--- Select Vehicle History ---");
+                    $vehicleSelectBoxContainer.find(".selected_id").val("");
                     $.each(data.data, function (index, item) {
                         $vehicleSelectBoxContainer.find(".search-container").after(`<li role="option" data-id="${item.id}" data-name="${item.reg_number}">
                                                         <div class="customer-info">
@@ -212,6 +220,8 @@ function customerSelectCB(customer) {
                 } else {
                     $("#motHistoryDiv").removeClass("d-none");
                     $vehicleSelectBoxContainer.find(`[role="option"]`).remove();
+                    $vehicleSelectBoxContainer.find(".custom-select-placeholder").text("--- Select Vehicle History ---");
+                    $vehicleSelectBoxContainer.find(".selected_id").val("");
                 }
             }
         });

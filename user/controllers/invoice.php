@@ -7,6 +7,9 @@ use Dompdf\Options;
 
 
 if (isset($_POST['saveInvoice'])) {
+    $_POST['invoice_date'] = DateTime::createFromFormat('d-m-Y', $_POST['invoice_date'])->format('Y-m-d');
+    $_POST['due_date'] = DateTime::createFromFormat('d-m-Y', $_POST['due_date'])->format('Y-m-d');
+
     $invoice_id = arr_val($_POST, "invoice_id", null);
 
     $invoice_no = trim($_POST['invoice_no']);
@@ -378,12 +381,12 @@ function saveInvoicePDF($invoice_data = [])
     // Invoice Title
     $invoice_title =    'Invoice ' . ($invoice_data['invoice_no'] ?? 'INV-001') . '';
     $invoice_no = $invoice_data['invoice_no'];
-    $invoice_date = $invoice_data['invoice_date'];
+    $invoice_date = DateTime::createFromFormat('Y-m-d', $invoice_data['invoice_date'])->format('d F Y');
     $company_name = $invoice_data['company_name'];
     $company_address = $invoice_data['company_address'];
     $company_phone = $invoice_data['company_phone'];
     $company_email = $invoice_data['company_email'];
-    $due_date = $invoice_data['due_date'];
+    $due_date = DateTime::createFromFormat('Y-m-d', $invoice_data['due_date'])->format('d F Y');
     $tax_rate = $invoice_data['tax_rate'];
     $discount_percentage = $invoice_data['discount_percentage'];
     $client_name = $invoice_data['client_name'];

@@ -452,6 +452,8 @@ if (isset($_GET['fetchInvoiceData'])) {
 
     $data = [];
     foreach ($invoiceData as $row) {
+        $row['due_date'] = DateTime::createFromFormat('Y-m-d', $row['due_date'])->format('d F Y');
+        $row['invoice_date'] = DateTime::createFromFormat('Y-m-d', $row['invoice_date'])->format('d F Y');
         $data[] = $row;
     }
 
@@ -502,6 +504,8 @@ if (isset($_GET['fetchPorformaInvoiceData'])) {
 
     $data = [];
     foreach ($invoiceData as $row) {
+        $row['due_date'] = DateTime::createFromFormat('Y-m-d', $row['due_date'])->format('d F Y');
+        $row['invoice_date'] = DateTime::createFromFormat('Y-m-d', $row['invoice_date'])->format('d F Y');
         $data[] = $row;
     }
 

@@ -254,20 +254,20 @@ $(document).ready(function () {
             "scrollCollapse": true,
             "autoWidth": false,
             "columns": [
-                { "data": "invoice_no", "width": "30%" },
-                { "data": "invoice_date", "width": "30%" },
-                { "data": "due_date", "width": "30%" },
+                { "data": "invoice_no" },
+                { "data": "invoice_date" },
+                { "data": "due_date" },
                 {
                     "data": "total_amount",
-                    "render": data => '$' + parseFloat(data).toFixed(2)
+                    "render": data => _CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "paid_amount",
-                    "render": data => '$' + parseFloat(data).toFixed(2)
+                    "render": data => _CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "due_amount",
-                    "render": data => '$' + parseFloat(data).toFixed(2)
+                    "render": data => _CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "pdf_file",

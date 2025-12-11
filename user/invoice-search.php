@@ -2,7 +2,13 @@
 require_once('includes/db.php');
 $page_name = 'Dashboard';
 
-$JS_FILES_ = [];
+$JS_FILES_ = [
+    _DIR_ . "js/bootstrap-datepicker.min.js"
+];
+$CSS_FILES_ = [
+    _DIR_ . "css/bootstrap-datepicker.min.css"
+];
+
 
 ?>
 <!DOCTYPE html>
@@ -122,13 +128,29 @@ $JS_FILES_ = [];
                             <div class="col-lg-4 col-md-6 col-12">
                                 <div class="form-group">
                                     <label for="from_date" class="form-label">From Date</label>
-                                    <input type="date" class="form-control" id="from_date" name="from_date">
+                                    <!-- <input type="date" class="form-control" id="from_date" name="from_date"> -->
+                                    <div class="input-group date bs-datepicker"
+                                        data-date="<?= date('d-m-Y', strtotime('-30 days')) ?>"
+                                        data-date-format="dd-mm-yyyy">
+                                        <input class="form-control" type="text" id="from_date" name="from_date" readonly />
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12">
                                 <div class="form-group">
                                     <label for="to_date" class="form-label">To Date</label>
-                                    <input type="date" class="form-control" id="to_date" name="to_date">
+                                    <!-- <input type="date" class="form-control" id="to_date" name="to_date"> -->
+                                    <div class="input-group date bs-datepicker"
+                                        data-date="<?= date('d-m-Y') ?>"
+                                        data-date-format="dd-mm-yyyy">
+                                        <input class="form-control" type="text" id="to_date" name="to_date" readonly />
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12">

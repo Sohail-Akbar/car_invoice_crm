@@ -342,3 +342,19 @@ $(function () {
         $(".custom-select").removeClass("active");
     });
 });
+
+// date picker
+$(function () {
+    $(".bs-datepicker").each(function () {
+        let phpDate = $(this).data("date"); // PHP date in mm-dd-yyyy format
+        let format = $(this).data("date-format"); // Read format if needed
+        console.log(phpDate);
+
+        $(this).datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: format   // Ensure same format
+        }).datepicker('update', phpDate); // <-- pass date in same format
+    });
+
+});

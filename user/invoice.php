@@ -4,11 +4,13 @@ $page_name = 'Dashboard';
 
 $JS_FILES_ = [
     "invoice.js",
-    _DIR_ . "js/select2.min.js"
+    _DIR_ . "js/select2.min.js",
+    _DIR_ . "js/bootstrap-datepicker.min.js"
 ];
 $CSS_FILES_ = [
     _DIR_ . "css/select2.min.css",
-    "invoice.css"
+    "invoice.css",
+    _DIR_ . "css/bootstrap-datepicker.min.css"
 ];
 
 $get_invoice_id = _get_param("id", null);
@@ -94,14 +96,24 @@ if ($get_invoice_id) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="label">Invoice Date</label>
-                                    <input type="date" name="invoice_date" class="form-control py-2" value="<?= date('Y-m-d') ?>">
+                                    <div class="input-group date bs-datepicker" data-date="<?= date('d-m-Y'); ?>" data-date-format="mm-dd-yyyy">
+                                        <input class="form-control" type="text" name="invoice_date" readonly />
+                                        <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="label">Due Date</label>
-                                    <input type="date" name="due_date" class="form-control py-2"
-                                        value="<?= date('Y-m-d', strtotime('+7 days')) ?>">
+                                    <div class="input-group date bs-datepicker"
+                                        data-date="<?= date('d-m-Y', strtotime('+7 days')) ?>"
+                                        data-date-format="dd-mm-yyyy">
+                                        <input class="form-control" type="text" name="due_date" readonly />
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+
                                 </div>
                             </div>
                             <?php if (!$get_invoice_id) { ?>
@@ -261,7 +273,7 @@ if ($get_invoice_id) {
                                     <label class="mb-0">Invoice No.</label>
                                     <p class="invoice-no text-dark"><b>#<?= $invoice_no ?></b></p>
                                     <p class="issue-on">Issue On</p>
-                                    <p class="issue-date text-dark"><b><?= date("M d, Y"); ?></b></p>
+                                    <p class="issue-date text-dark"><b><?= date("d M, Y"); ?></b></p>
                                 </div>
                             </div>
                             <h5 class="invoice-text mb-0 mt-4" style="font-size: 18px;">Services</h5>

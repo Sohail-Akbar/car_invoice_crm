@@ -506,7 +506,7 @@
      font-size: 0.9rem;
  }
 
- .dropdown-menu {
+ .navbar .dropdown-menu {
      right: 0;
      left: auto;
      border-radius: 0;

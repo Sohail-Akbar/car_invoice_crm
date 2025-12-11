@@ -386,7 +386,7 @@ table.dataTable tbody td {
     transform: translate3d(-127px, 0px, 0px) !important;
 }
 
-.dropdown-menu {
+.table-custom-design .dropdown-menu {
     border: none;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -769,3 +769,40 @@ body.all-hide #registrationCarContainer .add-new-customer-btn {
 }
 
 /* Sweeet Alert Styling */
+
+/* bs datepicker */
+.bs-datepicker {
+    position: relative;
+}
+
+.bs-datepicker .input-group-addon {
+    position: absolute;
+    right: 14px;
+    font-size: 20px;
+    top: 7px;
+    color: #214f7985;
+    z-index: 9999;
+}
+
+.bs-datepicker input {
+    padding-left: 10px !important;
+}
+
+.datepicker-dropdown {
+    border-radius: 8px;
+    padding: 10px !important;
+}
+
+.datepicker td,
+.datepicker th {
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.datepicker table tr td.active,
+.datepicker table tr td.active:hover {
+    background: var(--webMainColor) !important;
+    color: #fff !important;
+}
+
+/* bs datepicker */
