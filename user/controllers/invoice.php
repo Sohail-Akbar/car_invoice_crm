@@ -358,226 +358,58 @@ function saveInvoicePDF($invoice_data = [])
     $is_proforma_div_hide = $invoice_data['proforma'] ? "d-none" : "";
     $invoiceTitle = $invoice_data["proforma"] ? "Quotation" : "INVOICE";
 
-    // HTML content for the invoice
-    $html = '
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>Invoice ' . ($invoice_data['invoice_no'] ?? 'INV-001') . '</title>
-        <style>
-            body { 
-                font-family: "Helvetica", Arial, sans-serif; 
-                font-size: 12px; 
-                color: #333;
-                margin: 0;
-                background-color: #f5f5f5;
-            }
-            .invoice-container {
-                max-width: 800px;
-                margin: 0 auto;
-                background: white;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            }
-            .header {
-                display: flex;
-                justify-content: space-between;
-                border-bottom: 2px solid #333;
-            }
-            .company-info h2 {
-                color: #2c3e50;
-                margin: 0 0 10px 0;
-                font-size: 24px;
-            }
-            .company-info p {
-                margin: 2px 0;
-                color: #666;
-            }
-            .invoice-info {
-                text-align: right;
-            }
-            .invoice-info h1 {
-                color: #e74c3c;
-                margin: 0 0 10px 0;
-                font-size: 28px;
-            }
-            .invoice-info p {
-                margin: 3px 0;
-            }
-            .billing-info {
-                display: flex;
-                justify-content: space-between;
-            }
-            .bill-to, .invoice-details {
-                width: 100%;
-            }
-            .section-title {
-                background-color: #f8f9fa;
-                padding: 8px 12px;
-                font-weight: bold;
-                border-left: 4px solid #3498db;
-                margin-bottom: 10px;
-                color: #2c3e50;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 10px 0;
-            }
-            table th {
-                background-color: #34495e;
-                color: white;
-                padding: 12px;
-                text-align: left;
-                border: 1px solid #ddd;
-                font-weight: bold;
-            }
-            table td {
-                padding: 12px;
-                border: 1px solid #ddd;
-            }
-            table tr:nth-child(even) {
-                background-color: #f8f9fa;
-            }
-            .totals {
-                width: 300px;
-                margin-left: auto;
-                margin-top: 20px;
-            }
-            .totals table {
-                width: 100%;
-                margin: 0;
-            }
-            .totals td {
-                padding: 8px;
-                border: none;
-            }
-            .totals tr:last-child {
-                font-weight: bold;
-                font-size: 14px;
-                background-color: #ecf0f1;
-                border-top: 2px solid #bdc3c7;
-            }
-            .amount {
-                text-align: right;
-            }
-            .status {
-                display: inline-block;
-                padding: 4px 12px;
-                border-radius: 20px;
-                font-weight: bold;
-                text-transform: uppercase;
-                font-size: 10px;
-                margin-top: 5px;
-            }
-            .status-paid { background-color: #d4edda; color: #155724; }
-            .status-pending { background-color: #fff3cd; color: #856404; }
-            .status-overdue { background-color: #f8d7da; color: #721c24; }
-            .footer {
-                margin-top: 50px;
-                text-align: center;
-                color: #7f8c8d;
-                font-size: 10px;
-                border-top: 1px solid #ddd;
-                padding-top: 20px;
-            }
-            .notes {
-                margin-top: 30px;
-                padding: 15px;
-                background-color: #f8f9fa;
-                border-left: 4px solid #3498db;
-                border-radius: 4px;
-            }
-            .watermark {
-                opacity: 0.1;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) rotate(-45deg);
-                font-size: 80px;
-                color: #000;
-                pointer-events: none;
-            }
-            .d-none{
-                display: none !important;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="invoice-container">
-            <!-- Watermark -->
-<div class="header">
-                <table style="width:100%; border-collapse: collapse;">
-                        <tr>
-                            <td style="width:70%; vertical-align: top; border:none;">
-                                <div class="company-info">
-                                    <h2>' . ($invoice_data['company_name']) . '</h2>
-                                    <p>' . ($invoice_data['company_address']) . '</p>
-                                    <p>Phone: ' . ($invoice_data['company_phone']) . '</p>
-                                    <p>Email: ' . ($invoice_data['company_email']) . '</p>
-                                </div>
-                            </td>
-                            <td style="width:30%; vertical-align: top; border:none;">
-                                <div class="invoice-info">
-                                    <h1>' . $invoiceTitle . '</h1>
-                                    <p><strong>Invoice No:</strong> ' . ($invoice_data['invoice_no']) . '</p>
-                                    <p><strong>Invoice Date:</strong> ' . ($invoice_data['invoice_date']) . '</p>
-                                    <p><strong>Due Date:</strong> ' . ($invoice_data['due_date']) . '</p>
-                                    <span class="status status-paid ' . $is_proforma_div_hide . '">' . ucfirst($invoice_data['status']) . '</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-</div>
-            <!-- Billing Information -->
-            <div class="billing-info">
-             <table style="width:100%;">
-                        <tr>
-                            <td style="width:50%; vertical-align: top; border:none;">
-                                 <div class="bill-to">
-                    <div class="section-title">Bill To</div>
-                    <p><strong>' . ($invoice_data['client_name']) . '</strong></p>
-                    <p>Attn: ' . ($invoice_data['client_contact']) . '</p>
-                    <p>' . ($invoice_data['client_address']) . '</p>
-                    <p>' . ($invoice_data['client_city']) . '</p>
-                    <p>Email: ' . ($invoice_data['client_email']) . '</p>
-                </div>
-                            </td>
-                            <td style="width:50%; vertical-align: top; border:none;">
-                                <div class="invoice-details">
-                    <div class="section-title">Invoice Details</div>
-                    <p><strong>Invoice Date:</strong> ' . ($invoice_data['invoice_date']) . '</p>
-                    <p><strong>Due Date:</strong> ' . ($invoice_data['due_date']) . '</p>
-                    <p><strong>Tax Rate:</strong> ' . ($invoice_data['tax_rate']) . '%</p>
-                    <p><strong>Branch Percentage:</strong> ' . ($invoice_data['discount_percentage']) . '%</p>
-                </div>
-                            </td>
-                        </tr>
-                    </table>
-               
-                
-            </div>
 
-            <!-- Services Table -->
-            <table>
-                <thead>
-                    <tr>
-                        <th width="5%">#</th>
-                        <th width="65%">Service Description</th>
-                        <th width="30%">Amount</th>
-                        <th width="30%">Quantity</th>
-                        <th width="30%">Total</th>
-                    </tr>
-                </thead>
-                <tbody>';
 
-    // Add services dynamically
+    // Branch Logo
+    $user_img = "";
+    $uploaded_img = _DIR_ . "uploads/" . LOGGED_IN_USER['image'];
+    // If no custom image OR file doesn't exist → fallback to default
+    if (
+        LOGGED_IN_USER['image'] == "avatar.png" ||
+        !file_exists($uploaded_img)
+    ) {
+        $user_img = "images/logo_img.png";
+    } else {
+        $user_img = "uploads/" . LOGGED_IN_USER['image'];
+    }
+    $branch_logo = SITE_URL . $user_img;
+    // Signature img
+    $signature_img = SITE_URL . "images/signature.png";
+    // Invoice Title
+    $invoice_title =    'Invoice ' . ($invoice_data['invoice_no'] ?? 'INV-001') . '';
+    $invoice_no = $invoice_data['invoice_no'];
+    $invoice_date = $invoice_data['invoice_date'];
+    $company_name = $invoice_data['company_name'];
+    $company_address = $invoice_data['company_address'];
+    $company_phone = $invoice_data['company_phone'];
+    $company_email = $invoice_data['company_email'];
+    $due_date = $invoice_data['due_date'];
+    $tax_rate = $invoice_data['tax_rate'];
+    $discount_percentage = $invoice_data['discount_percentage'];
+    $client_name = $invoice_data['client_name'];
+    $client_address = $invoice_data['client_address'];
+    $client_contact = $invoice_data['client_contact'];
+    $client_email = $invoice_data['client_email'];
+    // Serviices Table
     $services = $invoice_data['services'];
 
+    $services_table = '
+<table style="margin:0px;">
+    <thead>
+        <tr>
+            <th width="5%">#</th>
+            <th width="65%">Service Description</th>
+            <th width="30%">Amount</th>
+            <th width="30%">Quantity</th>
+            <th width="30%">Total</th>
+        </tr>
+    </thead>
+    <tbody>';
     foreach ($services as $index => $service) {
-        $lineTotal = $service['amount'] * $service['quantity']; // calculate line total
 
-        $html .= '
+        $lineTotal = $service['amount'] * $service['quantity'];
+
+        $services_table .= '
         <tr>
             <td>' . ($index + 1) . '</td>
             <td>' . htmlspecialchars($service['description']) . '</td>
@@ -586,67 +418,240 @@ function saveInvoicePDF($invoice_data = [])
             <td>' . _CURRENCY_SYMBOL . number_format($lineTotal, 2) . '</td>
         </tr>';
     }
+    $services_table .= '
+    </tbody>
+</table>';
 
-    // Write off amount 
-    $write_off_row = "";
-    if ($invoice_data['write_off']) {
-        $write_off_row = '<tr class="' . $is_proforma_div_hide . '">
-                        <td><strong>Write Off Amount:</strong></td>
-                        <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($invoice_data['due_amount'], 2) . '</strong></td>
-                    </tr>';
-        $invoice_data['due_amount'] = 0;
-    }
+    $subtotal = _CURRENCY_SYMBOL . number_format($invoice_data['subtotal'], 2);
+    $tax_rate = number_format($invoice_data['tax_rate'], 2);
+    $tax_amount = _CURRENCY_SYMBOL . number_format($invoice_data['tax_amount'], 2);
+    $discount_amount = _CURRENCY_SYMBOL . number_format($invoice_data['discount_amount'] ?? 0.00, 2);
+    $total_amount = _CURRENCY_SYMBOL . number_format($invoice_data['total_amount'], 2);
+    $paid_amount = _CURRENCY_SYMBOL . number_format($invoice_data['paid_amount'], 2);
+    $due_amount = _CURRENCY_SYMBOL . number_format($invoice_data['due_amount'], 2);
+    $client_note = $invoice_data["notes"];
+    $l_user_contact = LOGGED_IN_USER['contact'];
+    $l_user_email = LOGGED_IN_USER['email'];
 
-    $html .= '
-                </tbody>
+
+
+    // HTML content for the invoice
+    $html = <<<HTML
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{$invoice_title}</title>
+    <style>
+        body {
+            size: A4;
+        }
+
+        @page {
+            margin-top: 10mm;
+            margin-right: 12mm;
+            margin-bottom: 0mm;
+            margin-left: 12mm;
+        }
+
+
+        .m-0 {
+            margin: 0px
+        }
+
+        .invoice-pdf-container {
+            width: 100%;
+        }
+
+        .content-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        table th {
+            background-color: #214F79;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            font-size: 15px !important;
+        }
+
+        table td {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #ECF9FF;
+        }
+
+        .footer {
+            background-color: #214F79 !important;
+            width: 100%;
+        }
+
+        .invoice-notes {
+            border-left: 4px solid #214F79;
+            padding: 10px 20px;
+            background: #ECF9FF;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-left: -12mm;
+            margin-right: -12mm;
+            width: calc(100% + 15mm);
+            background-color: #214F79 !important;
+            padding: 5px 20px;
+            padding-bottom:0px !important;
+            color: #fff;
+            margin-top:30px;
+        }
+
+        .footer-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .footer-table td {
+            width: 50%;
+            padding: 5px 10px;
+        }
+        .d-none{
+            display:none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-pdf-container">
+        <table style="width:100%; border-collapse: collapse;">
+            <tr>
+                <td style="width:50%; padding-right:20px; vertical-align: top;">
+                    <h1 style="color:#214F79;margin:0px;">{$invoiceTitle}</h1>
+                    <h4 style="margin:0px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice No.</h4>
+                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">{$invoice_no}</h4>
+                    <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:15px;">Issue On</h4>
+                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">{$invoice_date}
+                    </h4>
+                </td>
+                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                    <img src="{$branch_logo}" style="width:30%;">
+                </td>
+            </tr>
+        </table>
+        <div style="padding-left:20px;padding-right:20px;">
+            <hr style="margin-top:10px;border:0.5px solid #ccc;">
+            <table style="width:100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width:50%; padding-right:20px; vertical-align: top;">
+                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Bill to
+                        </h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:16px;">{$client_name}</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_address}</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: {$client_contact}</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_email}</h4>
+                    </td>
+                    <td style="width:50%; padding-left:20px; vertical-align: top;">
+                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice
+                            Details</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-weight:500;font-size:13px;">Invoice
+                            Date: {$invoice_date}</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Due Date: {$due_date}</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Tax Rate: {$tax_rate}%</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Branch Discount: {$discount_percentage}%</h4>
+                    </td>
+                </tr>
             </table>
-
-            <!-- Totals Section -->
-            <div class="totals">
-                <table>
-                    <tr>
-                        <td>Subtotal:</td>
-                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($invoice_data['subtotal'], 2) . '</td>
-                    </tr>
-                    <tr>
-                        <td>VAT (' . number_format($invoice_data['tax_rate'], 2) . '%):</td>
-                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($invoice_data['tax_amount'], 2) . '</td>
-                    </tr>
-                    <tr>
-                        <td>Discount:</td>
-                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($invoice_data['discount_amount'] ?? 0.00, 2) . '</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Total Amount:</strong></td>
-                        <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($invoice_data['total_amount'], 2) . '</strong></td>
-                    </tr>
-                    <tr class="' . $is_proforma_div_hide . '">
-                        <td>Paid Amount:</td>
-                        <td class="amount">' . _CURRENCY_SYMBOL . number_format($invoice_data['paid_amount'], 2) . '</td>
-                    </tr>
-                    <tr class="' . $is_proforma_div_hide . '">
-                        <td><strong>Due Amount:</strong></td>
-                        <td class="amount"><strong>' . _CURRENCY_SYMBOL . number_format($invoice_data['due_amount'], 2) . '</strong></td>
-                    </tr>
-                    ' . $write_off_row . '
-                </table>
-            </div>
-
-            <!-- Payment Instructions -->
-            <div class="notes">
-               ' . $invoice_data["notes"] . '
-            </div>
-
-            <!-- Footer -->
-            <div class="footer">
-                <p><strong>Thank you for your business!</strong></p>
-                <p>' . ($invoice_data['company_name']) . ' | ' . ($invoice_data['company_phone']) . ' | ' . ($invoice_data['company_email']) . '</p>
-                <p>This is a computer generated invoice. No signature required.</p>
-            </div>
         </div>
-    </body>
-    </html>';
+        {$services_table}
+        <table style="width:100%; border-collapse: collapse;">
+            <tr>
+                <td style="width:50%; padding-right:20px; vertical-align: bottom;">
+                    <img src="{$signature_img}" style="max-width:200px;">
+                    <h1 style="color:#214F79;margin:0px;font-size:15px;">{$company_name}</h1>
+                </td>
+                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                    <table style="margin-top:20px;">
+                        <tbody>
+                            <tr>
+                                <td>SubTotal:</td>
+                                <td style="text-align: right;">{$subtotal}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold !important;">Vat ({$tax_rate}%):</td>
+                                <td style="text-align: right;">{$tax_amount}</td>
+                            </tr>
+                            <tr>
+                                <td>Discount:</td>
+                                <td style="text-align: right;">{$discount_amount}</td>
+                            </tr>
+                             <tr style="background:#F2F2F7;">
+                                <td style="font-weight:bold;">Total Amount:</td>
+                                <td style="text-align: right; font-weight:bold;">{$total_amount}</td>
+                            </tr>
+                            <tr class="{$is_proforma_div_hide}">
+                                <td>Paid:</td>
+                                <td style="text-align: right;">{$paid_amount}</td>
+                            </tr>
+                            <tr class="{$is_proforma_div_hide}" style="background:#214F79; ">
+                                <td style="color:white;">Due Amount:</td>
+                                <td style="text-align: right;color:white;">{$due_amount}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div class="invoice-notes">
+            {$client_note}
+        </div>
+        <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>
+    </div>
+    <div class="footer">
+        <table class="footer-table">
+            <tr>
+                <td style="width:50%; padding-right:20px; vertical-align: top;">
+                    <strong>Terms And Conditions:</strong><br>
+                    <p style="margin-top:5px;">Payment is due within 07 days from the invoice date. <br>
+                    Late payment may incur a 2% monthly fee.</p>
+                </td>
 
+                <td style="width:50%; padding-left:20px; vertical-align: top;">
+                    <table class="footer-table m-0">
+                        <tr>
+                            <td style="width:50%; vertical-align: top;">
+                                <strong>Contact Us:</strong><br>
+                                <p style="margin-top:5px;">{$company_phone}<br>
+                                {$l_user_contact}<br></p>
+                            </td>
+
+                            <td style="width:50%; vertical-align: top;">
+                                <strong>Find Us:</strong><br>
+                                <p style="margin-top:5px;">{$company_email}<br>
+                                {$l_user_email}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
+HTML;
     try {
         // Load HTML content
         $dompdf->loadHtml($html);

@@ -1,59 +1,268 @@
 <?php
-require_once('includes/db.php');
+
+require 'vendor/autoload.php';
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+$options = new Options();
+$options->set('isHtml5ParserEnabled', true);
+$options->set('isRemoteEnabled', true);
+$options->set('defaultFont', 'Helvetica');
+
+$dompdf = new Dompdf($options);
 
 
-
-// Uncomment to test
-// testGenerateInvoice();
-
-// $db->insert("users", [
-//     "fname" => ["encrypt" => "Super"],
-//     "lname" => ["encrypt" => "Admin"],
-//     "gender" => ["encrypt" => "Male"],
-//     "title" => ["encrypt" => "Mr"],
-//     "name" => ["encrypt" => "Super Admin"],
-//     "email" => "admin@gmail.com",
-//     "password" => ["encrypt" => "$2y$10$101hiV2jGn2sTvMpszu/peorZ4Uj6oZZS/CeaA0.4OKi4WJ7T8EMm"],
-//     "type" => "main_admin",
-//     "address" => ["encrypt" => ""],
-//     "contact" => ["encrypt" => "+923081438096"],
-//     "city" => ["encrypt" => "Mian Channu"],
-//     "image" => ["encrypt" => "avatar.png"],
-//     "is_admin" =>  1,
-//     "verify_status" => 1,
-// ]);
+$branch_logo = "http://localhost/projects/car_invoice_crm/images/logo_img.png";
+$signature_img = "http://localhost/projects/car_invoice_crm/images/signature.png";
 
 
-// $result = $_mailer->send(
-//     'sohailakbar3324@gmail.com',         // Receiver email
-//     'Sohail Akbar',                      // Receiver name
-//     'Test Email from Mailer Class',      // Subject
-//     '<h2>Hello!</h2><p>This email was sent via <b>Mailer class</b> using Hostinger SMTP.</p>' // HTML Body
-// );
+$html = <<<HTML
+<!DOCTYPE html>
+<html>
 
-// if ($result === true) {
-//     echo "✅ Message sent successfully!";
-// } else {
-//     echo "❌ Failed: $result";
-// }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice INV-20556</title>
+    <style>
+        body {
+            size: A4;
+        }
+
+        @page {
+            margin-top: 10mm;
+            margin-right: 12mm;
+            margin-bottom: 0mm;
+            margin-left: 12mm;
+        }
 
 
-// $result = $_tc_email->send([
-//     'to' => 'sohailakbar3324@gmail.com',
-//     'to_name' => 'Sohail Akbar',
-//     'template' => 'contactEmail',
-//     'vars' => [
-//         'name' => 'Sohail',
-//         'email' => 'sohail@example.com',
-//         'message' => 'Hello, this is a test SMTP email',
-//         'subject' => 'New Message from Site',
-//     ],
-//     'subject' => 'New Message from Site',
-//     'attachments' => [__DIR__ . '/invoices/INV-1234.pdf']
-// ]);
+        .m-0 {
+            margin: 0px
+        }
 
-// if ($result === true) {
-//     echo "✅ Email sent successfully!";
-// } else {
-//     echo "❌ Failed: $result";
-// }
+        .invoice-pdf-container {
+            width: 100%;
+        }
+
+        .content-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        table th {
+            background-color: #214F79;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            font-size: 15px !important;
+        }
+
+        table td {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #ECF9FF;
+        }
+
+        .footer {
+            background-color: #214F79 !important;
+            width: 100%;
+        }
+
+        .invoice-notes {
+            border-left: 4px solid #214F79;
+            padding: 10px 20px;
+            background: #ECF9FF;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-left: -12mm;
+            margin-right: -12mm;
+            width: calc(100% + 15mm);
+            background-color: #214F79 !important;
+            padding: 5px 20px;
+            padding-bottom:0px !important;
+            color: #fff;
+            margin-top:30px;
+        }
+
+        .footer-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .footer-table td {
+            width: 50%;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-pdf-container">
+        <table style="width:100%; border-collapse: collapse;">
+            <tr>
+                <td style="width:50%; padding-right:20px; vertical-align: top;">
+                    <h1 style="color:#214F79;margin:0px;">Invoice</h1>
+                    <h4 style="margin:0px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice No.</h4>
+                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">#010101</h4>
+                    <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:15px;">Issue On</h4>
+                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">Nov 27, 2025
+                    </h4>
+                </td>
+                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                    <img src="{$branch_logo}" style="max-width:150px;">
+                </td>
+            </tr>
+        </table>
+        <div style="padding-left:20px;padding-right:20px;">
+            <hr style="margin-top:10px;border:0.5px solid #ccc;">
+            <table style="width:100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width:50%; padding-right:20px; vertical-align: top;">
+                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Bill to
+                        </h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:16px;">Intellectual
+                            Bunch Limited</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">123 Business Ave New York,
+                            NY </h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: (555) 123-4567</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">hello@gmail.com</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">(555) 123-4567</h4>
+                    </td>
+                    <td style="width:50%; padding-left:20px; vertical-align: top;">
+                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice
+                            Details</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-weight:500;font-size:13px;">Invoice
+                            Date: mm/dd/yyyy</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Due Date: mm/dd/yyyy</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Tax Rate: 11%</h4>
+                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Branch Percentage: 10%</h4>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <table style="margin:0px;">
+            <thead>
+                <tr>
+                    <th width="5%">#</th>
+                    <th width="65%">Service Description</th>
+                    <th width="30%">Amount</th>
+                    <th width="30%">Quantity</th>
+                    <th width="30%">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>testing</td>
+                    <td>£200.00</td>
+                    <td>1</td>
+                    <td>£200.00</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>testing</td>
+                    <td>£200.00</td>
+                    <td>1</td>
+                    <td>£200.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width:100%; border-collapse: collapse;">
+            <tr>
+                <td style="width:50%; padding-right:20px; vertical-align: bottom;">
+                    <img src="{$signature_img}" style="max-width:200px;">
+                    <h1 style="color:#214F79;margin:0px;font-size:15px;">XYZ Name.....</h1>
+                </td>
+                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                    <table style="margin-top:20px;">
+                        <tbody>
+                            <tr>
+                                <td>SubTotal:</td>
+                                <td style="text-align: right;">£1350.00</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold !important;">Vat (11.00%):</td>
+                                <td style="text-align: right;">$200.00</td>
+                            </tr>
+                            <tr>
+                                <td>Discount:</td>
+                                <td style="text-align: right;">£1350.00</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">Total Amount:</td>
+                                <td style="text-align: right;font-weight:bold !important;">$200.00</td>
+                            </tr>
+                            <tr>
+                                <td>Discount:</td>
+                                <td style="text-align: right;">£1350.00</td>
+                            </tr>
+                            <tr style="background:#214F79;">
+                                <td style="color:white;font-weight:bold;">Total Amount:</td>
+                                <td style="text-align: right; color:white; font-weight:bold;">$200.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div class="invoice-notes">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum, ex!
+        </div>
+        <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>
+    </div>
+    <div class="footer">
+        <table class="footer-table">
+            <tr>
+                <td style="width:50%; padding-right:20px; vertical-align: top;">
+                    <strong>Terms And Conditions:</strong><br>
+                    <p style="margin-top:5px;">Payment is due within 14 days from the invoice date. <br>
+                    Late payment may incur a 2% monthly fee.</p>
+                </td>
+
+                <td style="width:50%; padding-left:20px; vertical-align: top;">
+                    <table class="footer-table m-0">
+                        <tr>
+                            <td style="width:50%; vertical-align: top;">
+                                <strong>Contact Us:</strong><br>
+                                <p style="margin-top:5px;">(555) 123-4567<br>
+                                (555) 123-4567<br></p>
+                            </td>
+
+                            <td style="width:50%; vertical-align: top;">
+                                <strong>Find Us:</strong><br>
+                                <p style="margin-top:5px;">hello@gmail.com<br>
+                                hello@gmail.com</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
+HTML;
+// echo $html;
+// die;
+
+$dompdf->loadHtml($html);
+$dompdf->setPaper("A4", "portrait");
+$dompdf->render();
+$dompdf->stream("invoice.pdf", ["Attachment" => false]);

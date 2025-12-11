@@ -29,6 +29,3 @@ if (!is_null(LOGGED_IN_USER) && $VERIFY_LOGIN) {
 }
 
 define('IS_ADMIN', is_admin());
-
-// print_r($timestamp);
-// die;
