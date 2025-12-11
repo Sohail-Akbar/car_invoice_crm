@@ -446,7 +446,11 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
             confirmButtonText: 'Manually Register'
         }).then((result) => {
             if (result.value) {
-                window.location.href = 'registration-vehicle?type=manually&add_by=invoice';
+                if (GLOBAL_GET.add_by) {
+                    window.location.href = 'registration-vehicle?type=manually&add_by=invoice';
+                } else {
+                    window.location.href = 'registration-vehicle?type=manually';
+                }
             }
         })
         $registerVehicleCon.addClass("d-none");

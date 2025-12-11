@@ -155,11 +155,6 @@ $JS_FILES_ = [
 
                     // CUSTOM BUTTON
                     confirmButtonText: 'Back to Login',
-                    customClass: {
-                        confirmButton: 'my-confirm-btn',
-                        popup: 'my-swal-box'
-                    },
-                    buttonsStyling: false,
                 }).then(() => {
                     window.location.href = "login";
                 });

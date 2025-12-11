@@ -50,21 +50,21 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class=" label">Address</label>
-                    <input type="text" class="form-control pac-target-input" placeholder="Enter Address" name="address" autocomplete="off" aria-describedby="basic-addon1" id="autocomplete" onfocus="geolocate()" required="required" value="<?= arr_val($customer_data, "address", "") ?>">
-                    <input type="hidden" id="lat" name="lat">
-                    <input type="hidden" id="lng" name="lng">
+                    <input type="text" class="form-control pac-target-input" placeholder="Enter Address" id="add_customer_address" name="address" autocomplete="off" aria-describedby="basic-addon1" id="autocomplete" onfocus="geolocate()" required="required" value="<?= arr_val($customer_data, "address", "") ?>">
+                    <input type="hidden" id="add_customer_lat" name="lat">
+                    <input type="hidden" id="add_customer_lng" name="lng">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="label">Postcode</label>
-                    <input type="text" class="form-control" placeholder="Postcode" name="postcode" aria-describedby="basic-addon1" id="postal_code" readonly required="" value="<?= arr_val($customer_data, "postcode", "") ?>">
+                    <input type="text" class="form-control" placeholder="Postcode" id="add_customer_postcode" name="postcode" aria-describedby="basic-addon1" id="postal_code" readonly required="" value="<?= arr_val($customer_data, "postcode", "") ?>">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="label">City</label>
-                    <input type="text" class="form-control" placeholder="City" id="locality" name="city" aria-describedby="basic-addon1" readonly required="" value="<?= arr_val($customer_data, "city", "") ?>">
+                    <input type="text" class="form-control" placeholder="City" id="add_customer_city" name="city" aria-describedby="basic-addon1" readonly required="" value="<?= arr_val($customer_data, "city", "") ?>">
                 </div>
             </div>
             <div class="col-md-12 mt-4">

@@ -249,7 +249,7 @@ $existing_customers = $db->select("users", "*", [
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Customer</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -271,7 +271,7 @@ $existing_customers = $db->select("users", "*", [
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Update Customer</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -294,7 +294,7 @@ $existing_customers = $db->select("users", "*", [
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Change Customer</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

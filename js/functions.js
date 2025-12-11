@@ -51,6 +51,8 @@ function sAlert(text, heading, options = {}) {
         type: type,
         title: heading,
         text: text,
+        timer: 1500,
+        showConfirmButton: false,
     };
     if (html) {
         delete msgOptions.text;
@@ -82,6 +84,8 @@ function makeError(error = 'Something went wrong! Please try again') {
         type: 'error',
         title: 'Oops...',
         text: error,
+        timer: 1500,
+        showConfirmButton: false,
     });
 }
 // Disaled button

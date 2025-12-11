@@ -1,3 +1,11 @@
+<button title="Go Back" class="btn content-center br-5 transparent-btn d-block">
+    <a href="add-vehicle<?= isset($_GET['add_by']) ? "?add_by=invoice" : "" ?>" class="text-clr">
+        <svg width="7" height="12" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292769 7.071L5.94977 12.728L7.36377 11.314L2.41377 6.364L7.36377 1.414L5.94977 -1.23616e-07L0.292769 5.657C0.105298 5.84453 -1.72225e-05 6.09883 -1.72457e-05 6.364C-1.72688e-05 6.62916 0.105298 6.88347 0.292769 7.071Z" fill="#214F79" />
+        </svg>
+        <span class="ml-2">Back</span>
+    </a>
+</button>
 <div class="card mt-3" id="registrationCarContainer">
     <h3 class="heading mb-4 custom-heading text-clr">Manually Registration Vehicle</h3>
     <form action="mot-history" method="POST" class="ajax_form" data-callback="manuallyVehicleRegisterationCB">
