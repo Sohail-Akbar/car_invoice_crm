@@ -20,16 +20,12 @@ if (
 $query = "
     SELECT 
         COUNT(*) AS total_orders,
-
-        -- Total income (exclude write_off amount)
         SUM(
             CASE 
                 WHEN write_off = 1 THEN 0
                 ELSE CAST(total_amount AS DECIMAL(10,2))
             END
         ) AS total_income,
-
-        -- Total paid amount (pure customer ne jo pay kiya)
         SUM(
             CASE 
                 WHEN write_off = 1 THEN 0
@@ -37,17 +33,15 @@ $query = "
             END
         ) AS total_paid,
 
-        -- Total due amount
         SUM(CAST(due_amount AS DECIMAL(10,2))) AS total_due
 
     FROM invoices
     WHERE company_id = " . LOGGED_IN_USER['company_id'] . "
     AND agency_id = " . LOGGED_IN_USER['agency_id'] . "
-    AND status IN ('paid', 'partial')
+    AND status IN ('paid', 'partial','unpaid')
 ";
 
 $result = $db->query($query, ["select_query" => true]);
-
 // Safe defaults
 $total_orders = $total_income = $total_paid = $total_due = 0;
 
@@ -218,7 +212,7 @@ if (!empty($result)) {
                 <div class="stat-label">Total Orders</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value"><?= _CURRENCY_SYMBOL . $total_income ?></div>
+                <div class="stat-value"><?= _CURRENCY_SYMBOL . ($total_income - $total_due) ?></div>
                 <div class="stat-label">Total Revenue</div>
             </div>
             <div class="stat-item">
