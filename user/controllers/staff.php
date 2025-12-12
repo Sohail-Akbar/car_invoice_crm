@@ -5,6 +5,8 @@ require_once(DIR . 'includes/db.php');
 // Add Staff
 if (isset($_POST['createStaff'])) {
     $id = isset($_POST['id']) ? intval($_POST['id']) : null;
+    $password = isset($_POST['password']) ? $_POST['password'] : "";
+    if (strlen($password) !== 6 && !$id) returnError("Password must be exactly 6 digits!");
 
     // ✅ Collect form data
     $data = [
@@ -16,6 +18,7 @@ if (isset($_POST['createStaff'])) {
         "gender"     => arr_val($_POST, 'gender'),
         "fname"      => arr_val($_POST, 'fname'),
         "lname"      => arr_val($_POST, 'lname'),
+        "name" => arr_val($_POST, 'fname') . " " . arr_val($_POST, 'lname'),
         "email"      => arr_val($_POST, 'email'),
         "contact"    => arr_val($_POST, 'contact'),
         "address"    => arr_val($_POST, 'address'),
@@ -25,13 +28,14 @@ if (isset($_POST['createStaff'])) {
         "verify_status" => 1,
         "image"      => "avatar.png"
     ];
+    if (!empty($password)) {
+        $data["password"] =  password_hash($password, PASSWORD_BCRYPT);
+    }
 
     // ✅ Prevent duplicate email (for new records)
     if (!$id && !empty($data['email'])) {
         $exists = $db->select_one('users', 'id', [
             'email' => $data['email'],
-            "company_id" => LOGGED_IN_USER['company_id'],
-            "agency_id"  => LOGGED_IN_USER['agency_id']
         ]);
 
         if ($exists) {
@@ -56,17 +60,47 @@ if (isset($_POST['createStaff'])) {
 
         if ($save) {
             // Send email to staff to set password
-            $_tc_email->send([
-                'template' => 'set_password', // create this email template
-                'to' => $data['email'],
-                'to_name' => $data['fname'] . " " . $data['lname'],
-                'subject' => 'Set Your Account Password',
-                'vars' => [
-                    'name' => $data['fname'],
-                    'set_password_link' => SITE_URL . "/set-password.php?token=" . $token
-                ]
-            ]);
+            // $_tc_email->send([
+            //     'template' => 'set_password', // create this email template
+            //     'to' => $data['email'],
+            //     'to_name' => $data['fname'] . " " . $data['lname'],
+            //     'subject' => 'Set Your Account Password',
+            //     'vars' => [
+            //         'name' => $data['fname'],
+            //         'set_password_link' => SITE_URL . "/set-password.php?token=" . $token
+            //     ]
+            // ]);
+            $fullName = $data['name'];
+            $email = $data['email'];
+            $password = $password; // saved password (hashed nahi bhejna!)
+
+            // Email body bana lo
+            $emailBody = "
+    <h3>Welcome to " . SITE_NAME . "</h3>
+    <p>Dear <strong>$fullName</strong>,</p>
+    <p>Your account has been created successfully.</p>
+
+    <h4>Login Details</h4>
+    <p><strong>Email:</strong> $email</p>
+    <p><strong>Password:</strong> $password</p>
+    
+    <br><br>
+    <p>If you have any questions, feel free to contact us.</p>
+";
+
+            // Email data create
+            $emailData = [
+                'to' => "sohailakbar3324@gmail.com",
+                // 'to' => $email,
+                'to_name' => $fullName,
+                'subject' => 'Your Staff Login Details - ' . SITE_NAME,
+                'body' => $emailBody
+            ];
+
+            // Send email
+            $mailStatus = $_tc_email->sendEmailTo($emailData);
         }
+
         $message = "Staff added successfully";
     }
 

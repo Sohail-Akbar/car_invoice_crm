@@ -35,7 +35,7 @@ $staff_data = $db->select_one("users", "*", [
                         <h3 class="heading mb-3 custom-heading">Add New Staff</h3>
                     </div>
                 </div>
-                <form action="staff" method="POST" class="mt-4 ajax_form reset" data-reset="reset">
+                <form action="staff" method="POST" class="mt-4 ajax_form">
                     <div class="form-group has-error has-danger">
                         <div class="row m-0">
                             <div class="col-md-6">
@@ -110,6 +110,16 @@ $staff_data = $db->select_one("users", "*", [
                             <div class="col-md-6">
                                 <label class="label">City:</label>
                                 <input type="text" class="form-control" placeholder="City" id="locality" name="city" aria-describedby="basic-addon1" readonly required="" value="<?= arr_val($staff_data, "city", "") ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Password -->
+                    <div class="form-group">
+                        <div class="row m-0">
+                            <div class="col-md-12">
+                                <label class="label">Password</label>
+                                <input type="password" data-minlength="6" class="form-control" name="password" placeholder="Password">
+                                <div class="help-block">Minimum of 6 characters</div>
                             </div>
                         </div>
                     </div>

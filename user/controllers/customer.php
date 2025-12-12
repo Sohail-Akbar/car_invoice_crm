@@ -626,8 +626,6 @@ if (isset($_POST['createCustomer'])) {
     if (!$id && !empty($data['email'])) {
         $exists = $db->select_one('users', 'id', [
             'email' => arr_val($_POST, 'email'),
-            "company_id" => LOGGED_IN_USER['company_id'],
-            "agency_id"  => LOGGED_IN_USER['agency_id']
         ]);
 
         if ($exists) {
