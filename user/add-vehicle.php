@@ -139,64 +139,99 @@ $existing_customers = $db->select("users", "*", [
     <?php require_once "./components/registeration-vehicle/update-vehicle-modal.php"; ?>
 
     <script>
-        var autocomplete;
+        var autocompletes = {};
 
         function initAutocomplete() {
-            var input = document.getElementById('autocomplete');
-            if (!input) return;
-
-            autocomplete = new google.maps.places.Autocomplete(input, {
-                types: ['address'],
-                componentRestrictions: {
-                    country: 'GB'
+            // Update CUstomer
+            autocompletes.update_customer = new google.maps.places.Autocomplete(
+                document.getElementById('update_customer_address'), {
+                    types: ['address'],
+                    componentRestrictions: {
+                        country: 'GB'
+                    }
                 }
+            );
+            autocompletes.update_customer.addListener('place_changed', function() {
+                fillInAddress('update_customer');
+            });
+            // Add Customer
+            autocompletes.add_customer = new google.maps.places.Autocomplete(
+                document.getElementById('add_customer_address'), {
+                    types: ['address'],
+                    componentRestrictions: {
+                        country: 'GB'
+                    }
+                }
+            );
+            autocompletes.add_customer.addListener('place_changed', function() {
+                fillInAddress('add_customer');
             });
 
-            autocomplete.addListener('place_changed', fillInAddress);
+            // User Address
+            autocompletes.user = new google.maps.places.Autocomplete(
+                document.getElementById('user_address'), {
+                    types: ['address'],
+                    componentRestrictions: {
+                        country: 'GB'
+                    }
+                }
+            );
+            autocompletes.user.addListener('place_changed', function() {
+                fillInAddress('user');
+            });
         }
 
-        function fillInAddress() {
-            var place = autocomplete.getPlace();
+        function fillInAddress(type) {
+            console.log(autocompletes[type]);
+
+            var place = autocompletes[type].getPlace();
             if (!place.geometry) {
                 alert('Please select a valid address from the dropdown');
                 return;
             }
 
-            $("#lat").val(place.geometry.location.lat());
-            $("#lng").val(place.geometry.location.lng());
+            // Fill coordinates
+            $('#' + type + '_lat').val(place.geometry.location.lat());
+            $('#' + type + '_lng').val(place.geometry.location.lng());
 
-            var city = '';
-            var postcode = '';
+            // Reset
+            $('#' + type + '_city').val('');
+            $('#' + type + '_postcode').val('');
+            $('#display_' + type + '_city').text('');
+            $('#display_' + type + '_postcode').text('');
 
-            $("#locality, #postal_code").val('');
-            $("#display_city, #display_postcode").text('');
-
+            var city = '',
+                postcode = '';
             place.address_components.forEach(function(component) {
-                var type = component.types[0];
-
-                if (type === 'locality' || type === 'postal_town') {
+                var addressType = component.types[0];
+                if (addressType === 'locality' || addressType === 'postal_town') {
                     city = component.long_name;
-                    $("#locality").val(city);
+                    $('#' + type + '_city').val(city);
                 }
-                if (type === 'postal_code') {
+                if (addressType === 'postal_code') {
                     postcode = component.long_name;
-                    $("#postal_code").val(postcode);
+                    $('#' + type + '_postcode').val(postcode);
                 }
             });
 
-            // Fallback for UK postal town
+            // UK fallback
             if (!city) {
                 place.address_components.forEach(function(component) {
                     if (component.types.includes('postal_town')) {
                         city = component.long_name;
-                        $("#locality").val(city);
+                        $('#' + type + '_city').val(city);
                     }
                 });
             }
+
+            // Display
+            $('#display_' + type + '_city').text('City: ' + city);
+            $('#display_' + type + '_postcode').text('Postcode: ' + postcode);
         }
 
+        // Geolocate bias
         function geolocate() {
-            if (navigator.geolocation && autocomplete) {
+            if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var geolocation = {
                         lat: position.coords.latitude,
@@ -206,11 +241,12 @@ $existing_customers = $db->select("users", "*", [
                         center: geolocation,
                         radius: position.coords.accuracy
                     });
-                    autocomplete.setBounds(circle.getBounds());
+                    Object.values(autocompletes).forEach(function(auto) {
+                        auto.setBounds(circle.getBounds());
+                    });
                 });
             }
         }
-
         // Initialize autocomplete **only after modal is shown**
         $('.add-new-customer-model').on('shown.bs.modal', function() {
             initAutocomplete();
