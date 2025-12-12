@@ -165,7 +165,9 @@ function submitForm(form, extraData = {}, showPopup = true, cb = null) {
                 handleAlert(response);
             }
             if ("redirect" in response) {
-                location.assign(response.redirect);
+                setTimeout(() => {
+                    location.assign(response.redirect);
+                }, 1000);
             }
             if (toBoolean($(form).dataVal("reset"))) {
                 if ($(form).hasClass("tc-tmp-form")) {
