@@ -192,16 +192,13 @@ $session = isset($_SESSION["pending_2fa"])  ? $_SESSION["pending_2fa"] : [];
             <div class="login-form content-center">
                 <div class="login-form-container">
                     <div class="logo-img-head">
-                        <img src="./images/autopro_logoo.png" class="logo-img" alt="Logo Img">
+                        <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img">
                     </div>
                     <div class="heading">
-                        <a href="<?= isset($_GET['type']) ? "forgot" : "login" ?>">
-                            <h3 style="font-size: 14px;"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; Back</h3>
-                        </a>
                         <h3 class="mt-4 text-center mb-2">Enter OTP <?= ENV === "local" ? arr_val($session, "otp", "") : "" ?></h3>
                         <p class="text-center">We shared a code to your registered email address <?= arr_val($session, "email", "") ?></p>
                     </div>
-                    <form action="authorize" method="POST" class="mt-5 ajax_form">
+                    <form action="authorize" method="POST" class="mt-0 ajax_form" data-callback="signInCB">
                         <div class="otp-container">
                             <input type="text" class="otp-input" maxlength="1" data-index="0">
                             <input type="text" class="otp-input" maxlength="1" data-index="1">
@@ -219,8 +216,10 @@ $session = isset($_SESSION["pending_2fa"])  ? $_SESSION["pending_2fa"] : [];
                             <button type="submit" class="login-btn">Verify</button>
                         </div>
                     </form>
-                    <p class="foot-param">© 2024 AutoPro Vehicle Management System.
-                        All rights reserved.</p>
+                    <p class="foot-param">© 2025 Intellectual Bunch Limited. All rights reserved. </p>
+                    <a href="<?= isset($_GET['type']) ? "forgot" : "login" ?>">
+                        <h3 style="font-size: 14px;"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; Back</h3>
+                    </a>
                 </div>
             </div>
         </div>
@@ -385,6 +384,14 @@ $session = isset($_SESSION["pending_2fa"])  ? $_SESSION["pending_2fa"] : [];
                 }, 1000);
             }
         });
+
+        tc.fn.cb.signInCB = async (form, data) => {
+            if (data.status === 'success') {
+                location.href = data.redirect;
+            } else {
+                sAlert(data.data, data.status);
+            }
+        }
     </script>
 
 </body>

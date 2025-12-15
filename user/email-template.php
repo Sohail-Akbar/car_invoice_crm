@@ -49,54 +49,52 @@ if ($id) {
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-role-container" id="mainContent">
         <div class="card">
-            <div class="card-body">
-                <h3 class="heading mb-5 custom-heading">Define/Update Email Templates</h3>
-                <form action="customer" method="POST" class="ajax_form reset" data-reset="reset">
-                    <div class="row mt-4">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <span class="label">Email Template Head:</span>
-                                <input type="text" name="email_title" class="form-control" placeholder="Email Title" required>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <small class="label">Available Short Codes</small>
-                                <div class="customerShortCode">
-                                    <?php
-                                    $shortCodes = getCustomerShortCode();
-                                    $total = count($shortCodes);
-                                    $i = 1;
-
-                                    foreach ($shortCodes as $label => $code) {
-                                        echo $label . ' = [' . $code . ']';
-
-                                        // Add comma only if NOT last item
-                                        if ($i < $total) {
-                                            echo ', ';
-                                        }
-
-                                        $i++;
-                                    }
-                                    ?>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="label">Detail</div>
-                            <textarea class="customer-note form-control" id="customerNote" rows="6.8" name="email_body" placeholder="Start typing to leave a note..."></textarea>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <input type="hidden" name="saveEmailTemplates" value="<?= bc_code(); ?>">
-                            <?php if ($id) { ?>
-                                <input type="hidden" name="id" value="<?= $id ?>">
-                            <?php } ?>
-                            <button class="btn br-5" type="submit"><i class="fas fa-save"></i> Save</button>
+            <h3 class="heading mb-5 custom-heading">Define/Update Email Templates</h3>
+            <form action="customer" method="POST" class="ajax_form reset" data-reset="reset">
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <span class="label">Email Template Head:</span>
+                            <input type="text" name="email_title" class="form-control" placeholder="Email Title" required>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <small class="label">Available Short Codes</small>
+                            <div class="customerShortCode">
+                                <?php
+                                $shortCodes = getCustomerShortCode();
+                                $total = count($shortCodes);
+                                $i = 1;
+
+                                foreach ($shortCodes as $label => $code) {
+                                    echo $label . ' = [' . $code . ']';
+
+                                    // Add comma only if NOT last item
+                                    if ($i < $total) {
+                                        echo ', ';
+                                    }
+
+                                    $i++;
+                                }
+                                ?>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="label">Detail</div>
+                        <textarea class="customer-note form-control" id="customerNote" rows="6.8" name="email_body" placeholder="Start typing to leave a note..."></textarea>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <input type="hidden" name="saveEmailTemplates" value="<?= bc_code(); ?>">
+                        <?php if ($id) { ?>
+                            <input type="hidden" name="id" value="<?= $id ?>">
+                        <?php } ?>
+                        <button class="btn br-5" type="submit"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="table-responsive mt-5">
             <table class="table table-striped emailTemplatesTable">
@@ -105,7 +103,7 @@ if ($id) {
                         <th>#</th>
                         <th>Title</th>
                         <th>Body</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -197,14 +195,14 @@ if ($id) {
                             }
                         },
                         // Status
-                        {
-                            "data": "is_active",
-                            "render": function(data) {
-                                let className = data == '1' ? 'bg-success' : 'bg-warning text-dark';
-                                let statusText = data == '1' ? 'Active' : 'Inactive';
-                                return `<span class="text-white p-1 bold small-font ${className}">${statusText}</span>`;
-                            }
-                        },
+                        // {
+                        //     "data": "is_active",
+                        //     "render": function(data) {
+                        //         let className = data == '1' ? 'bg-success' : 'bg-warning text-dark';
+                        //         let statusText = data == '1' ? 'Active' : 'Inactive';
+                        //         return `<span class="text-white p-1 bold small-font ${className}">${statusText}</span>`;
+                        //     }
+                        // },
                         // Action
                         {
                             "data": "actions",

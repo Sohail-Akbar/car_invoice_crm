@@ -17,46 +17,46 @@ if (
     $user_img = $uploaded_img;
 }
 
-$query = "
-    SELECT 
-        COUNT(*) AS total_orders,
-        SUM(
-            CASE 
-                WHEN write_off = 1 THEN 0
-                ELSE CAST(total_amount AS DECIMAL(10,2))
-            END
-        ) AS total_income,
-        SUM(
-            CASE 
-                WHEN write_off = 1 THEN 0
-                ELSE CAST(paid_amount AS DECIMAL(10,2))
-            END
-        ) AS total_paid,
+// $query = "
+//     SELECT 
+//         COUNT(*) AS total_orders,
+//         SUM(
+//             CASE 
+//                 WHEN write_off = 1 THEN 0
+//                 ELSE CAST(total_amount AS DECIMAL(10,2))
+//             END
+//         ) AS total_income,
+//         SUM(
+//             CASE 
+//                 WHEN write_off = 1 THEN 0
+//                 ELSE CAST(paid_amount AS DECIMAL(10,2))
+//             END
+//         ) AS total_paid,
 
-        SUM(CAST(due_amount AS DECIMAL(10,2))) AS total_due
+//         SUM(CAST(due_amount AS DECIMAL(10,2))) AS total_due
 
-    FROM invoices
-    WHERE company_id = " . LOGGED_IN_USER['company_id'] . "
-    AND agency_id = " . LOGGED_IN_USER['agency_id'] . "
-    AND status IN ('paid', 'partial','unpaid')
-";
+//     FROM invoices
+//     WHERE company_id = " . LOGGED_IN_USER['company_id'] . "
+//     AND agency_id = " . LOGGED_IN_USER['agency_id'] . "
+//     AND status IN ('paid', 'partial','unpaid')
+// ";
 
-$result = $db->query($query, ["select_query" => true]);
-// Safe defaults
-$total_orders = $total_income = $total_paid = $total_due = 0;
+// $result = $db->query($query, ["select_query" => true]);
+// // Safe defaults
+// $total_orders = $total_income = $total_paid = $total_due = 0;
 
-if (!empty($result)) {
-    $total_orders = intval($result[0]['total_orders']);
-    $total_income = floatval($result[0]['total_income']);
-    $total_paid   = floatval($result[0]['total_paid']);
-    $total_due    = floatval($result[0]['total_due']);
-}
+// if (!empty($result)) {
+//     $total_orders = intval($result[0]['total_orders']);
+//     $total_income = floatval($result[0]['total_income']);
+//     $total_paid   = floatval($result[0]['total_paid']);
+//     $total_due    = floatval($result[0]['total_due']);
+// }
 ?>
 <!-- Left Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-menu">
         <div class="branch-log">
-            <img src="<?= $user_img ?>" alt="Branch Logo Img">
+            <img src="<?= _DIR_ . "/images/Hillcliffe-Garage-Logo.png" ?>" alt="Branch Logo Img">
         </div>
         <div class="sidebar-option-menu">
             <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
@@ -191,15 +191,25 @@ if (!empty($result)) {
             </div>
         <?php } ?>
         <div class="user-profile" id="userProfile">
-            <div class="user-avatar"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
-            <div class="user-name"><?= LOGGED_IN_USER['name'] ?></div>
-            <i class="fas fa-chevron-down"></i>
+            <div class="dropdown">
+                <button class="dropdown-toggle menu-item no-arrow-icon content-center" type="button" data-toggle="dropdown">
+                    <div class="user-avatar"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
+                    <div class="user-name d-none"><?= LOGGED_IN_USER['name'] ?></div>
+                    <i class="fas fa-chevron-down d-none"></i>
+                </button>
+                <div class="dropdown-menu animated flipInY" style="min-width: 15rem;">
+                    <a href="logout" class="logout-btn dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
 
 <!-- Right Sidebar - User Info -->
-<aside class="user-sidebar" id="userSidebar">
+<aside class="user-sidebar d-none" id="userSidebar">
     <div class="user-header">
         <div class="user-avatar-large"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
         <div class="user-name-large"><?= LOGGED_IN_USER['name'] ?></div>

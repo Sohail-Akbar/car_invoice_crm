@@ -27,10 +27,7 @@
  @media (max-width: 768px) {
 
      .setting-container .card,
-     .add-services-container .card,
-     .add-role-container .card,
      .add-staff-container .card,
-     .view-staff-container .card,
      .view-reg-vehicle-container .card,
      .add-customer-container .card,
      .view-reg-vehicle-container .card-body,

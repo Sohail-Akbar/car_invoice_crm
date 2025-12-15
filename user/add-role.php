@@ -32,26 +32,24 @@ if ($role_id) {
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content add-role-container" id="mainContent">
         <div class="card">
-            <div class="card-body">
-                <h3 class="heading mb-5 custom-heading">Add New Role</h3>
-                <form action="role" method="POST" class="ajax_form reset" data-reset="reset">
-                    <div class="row mt-4">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <span class="label">Role:</span>
-                                <input type="text" class="form-control" value="<?= arr_val($role_data, "text", "") ?>" name="text" placeholder="Add New Role" required data-length="[1,250]">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <input type="hidden" name="saveRole" value="<?= bc_code(); ?>">
-                            <?php if ($role_id) { ?>
-                                <input type="hidden" name="id" value="<?= $role_id; ?>">
-                            <?php } ?>
-                            <button class="btn" type="submit"><i class="fas fa-save"></i> Save</button>
+            <h3 class="heading mb-3 custom-heading">Add New Role</h3>
+            <form action="role" method="POST" class="ajax_form reset" data-reset="reset">
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <span class="label">Role:</span>
+                            <input type="text" class="form-control" value="<?= arr_val($role_data, "text", "") ?>" name="text" placeholder="Add New Role" required data-length="[1,250]">
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="col-12 mt-2">
+                        <input type="hidden" name="saveRole" value="<?= bc_code(); ?>">
+                        <?php if ($role_id) { ?>
+                            <input type="hidden" name="id" value="<?= $role_id; ?>">
+                        <?php } ?>
+                        <button class="btn" type="submit"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="table-responsive mt-5">
             <table class="table table-striped dataTable">
@@ -59,8 +57,8 @@ if ($role_id) {
                     <tr>
                         <th>#</th>
                         <th>Text</th>
-                        <th>Status</th>
-                        <th></th>
+                        <th class="d-none">Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +71,7 @@ if ($role_id) {
                             <tr>
                                 <td><?php echo $count; ?></td>
                                 <td><?= $role['text'] ?></td>
-                                <td>
+                                <td class="d-none">
                                     <span class="text-white p-1 bold small-font <?php
                                                                                 if ($role['is_active'] != '1') echo 'bg-warning text-dark';
                                                                                 else echo 'bg-success'; ?>">

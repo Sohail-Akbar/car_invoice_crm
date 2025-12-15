@@ -78,13 +78,13 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
             <div class="login-form content-center">
                 <div class="login-form-container">
                     <div class="logo-img-head">
-                        <img src="./images/autopro_logoo.png" class="logo-img" alt="Logo Img">
+                        <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img">
                     </div>
                     <div class="heading text-center">
-                        <h3 class="mb-1">Login to Auto Pro</h3>
-                        <p>Please Sign in to access your vehicle management dashboard.</p>
+                        <h3 class="mb-1">Sign in Hillcliffe Garage</h3>
+                        <p> Please sign in to access your workshop dashboard.</p>
                     </div>
-                    <form action="authorize" method="POST" class="mt-5 ajax_form">
+                    <form action="authorize" method="POST" class="mt-5 ajax_form" autocomplete="off" data-callback="signInCB">
                         <div class="form-group">
                             <div class="form-outline">
                                 <input type="email" id="email" name="email" class="form-control" />
@@ -110,8 +110,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
                             </button>
                         </div>
                     </form>
-                    <p class="foot-param">© 2024 AutoPro Vehicle Management System.
-                        All rights reserved.</p>
+                    <p class="foot-param">© 2025 Intellectual Bunch Limited. All rights reserved. </p>
                 </div>
             </div>
         </div>
@@ -119,6 +118,15 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
 
 
     <?php require_once('./includes/js.php'); ?>
+    <script>
+        tc.fn.cb.signInCB = async (form, data) => {
+            if (data.status === 'success') {
+                location.href = data.redirect;
+            } else {
+                sAlert(data.data, data.status);
+            }
+        }
+    </script>
 </body>
 
 </html>

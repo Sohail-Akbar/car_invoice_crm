@@ -85,6 +85,10 @@
    .login-form-container {
        background-color: transparent;
        padding: 10px 20px;
+       display: flex;
+       justify-content: center;
+       align-items: normal;
+       flex-direction: column;
    }
 
    .login-form-container .logo-img-head {
@@ -95,7 +99,7 @@
    }
 
    .login-form-container .logo-img {
-       width: 45%;
+       width: 75%;
    }
 
    .login-form-container {

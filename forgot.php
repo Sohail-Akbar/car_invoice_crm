@@ -81,17 +81,14 @@ $JS_FILES_ = [
             <div class="login-form content-center">
                 <div class="login-form-container">
                     <div class="logo-img-head">
-                        <img src="./images/autopro_logoo.png" class="logo-img" alt="Logo Img">
+                        <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img">
                     </div>
                     <?php if (!isset($_GET['type'])) { ?>
                         <div class="heading">
-                            <a href="login">
-                                <h3 style="font-size: 14px;"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; Back</h3>
-                            </a>
                             <h3 class="mt-4 text-center mb-2">Forgot Password</h3>
                             <p class="text-center">Enter your registered email address. We’ll send you a code to reset your password.</p>
                         </div>
-                        <form action="authorize" method="POST" class="mt-4 ajax_form">
+                        <form action="authorize" method="POST" class="mt-4 ajax_form" data-callback="signInCB">
                             <div class="form-group">
                                 <div class="form-outline">
                                     <input type="email" id="email" name="email" class="form-control" />
@@ -130,8 +127,11 @@ $JS_FILES_ = [
                             </div>
                         </form>
                     <?php } ?>
-                    <p class="foot-param">© 2024 AutoPro Vehicle Management System.
-                        All rights reserved.</p>
+                    <p class="foot-param">© 2025 Intellectual Bunch Limited.
+                        All rights reserved. </p>
+                    <a href="login">
+                        <h3 style="font-size: 14px;"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; Back</h3>
+                    </a>
                 </div>
             </div>
         </div>
@@ -164,6 +164,14 @@ $JS_FILES_ = [
                 sAlert(data.data, data.status);
             }
         };
+
+        tc.fn.cb.signInCB = async (form, data) => {
+            if (data.status === 'success') {
+                location.href = data.redirect;
+            } else {
+                sAlert(data.data, data.status);
+            }
+        }
     </script>
 </body>
 

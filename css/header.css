@@ -122,10 +122,6 @@
      transition: all 0.3s;
  }
 
- .navbar .user-profile:hover {
-     background-color: rgba(0, 0, 0, 0.05);
- }
-
  .navbar .user-avatar {
      width: 40px;
      height: 40px;
@@ -171,10 +167,13 @@
  }
 
  .sidebar .branch-log img {
-     width: 125px;
-     padding-left: 12px;
-     height: 125px;
+     width: 250px;
+     height: 110px;
      object-fit: contain;
+ }
+
+ .sidebar .branch-log {
+     padding: 0px 22px 0px 22px;
  }
 
  .sidebar .sidebar-menu .sidebar-option-menu {

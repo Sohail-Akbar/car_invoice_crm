@@ -213,8 +213,8 @@ if (isset($data['reset_password'])) {
         $_tc_email->send([
             'template' => 'sendOtp',
             // 'to'       => $email,
-            // 'to'       => "haider.ali@intellectualbunch.com",
-            'to'       => "sohailakbar3324@gmail.com",
+            'to'       => "haider.ali@intellectualbunch.com",
+            // 'to'       => "sohailakbar3324@gmail.com",
             'subject'  => "Your Verification Code: $otp",
             'vars'     => [
                 'OTP' => $otp
