@@ -25,14 +25,14 @@ $(document).ready(function () {
                         return `${row.address}, ${row.postcode}, ${row.city}`;
                     }
                 },
-                {
-                    "data": "is_active",
-                    "render": function (data) {
-                        let className = data == '1' ? 'bg-success' : 'bg-warning text-dark';
-                        let statusText = data == '1' ? 'Active' : 'Inactive';
-                        return `<span class="text-white p-1 bold small-font ${className}">${statusText}</span>`;
-                    }
-                },
+                // {
+                //     "data": "is_active",
+                //     "render": function (data) {
+                //         let className = data == '1' ? 'bg-success' : 'bg-warning text-dark';
+                //         let statusText = data == '1' ? 'Active' : 'Inactive';
+                //         return `<span class="text-white p-1 bold small-font ${className}">${statusText}</span>`;
+                //     }
+                // },
                 {
                     "data": null,
                     "orderable": false,

@@ -166,6 +166,9 @@ $(document).ready(function () {
                 $parentSubmenu.addClass('open');
                 $parentSubmenu.prev('.menu-item').addClass('active');
                 $parentSubmenu.closest('.has-submenu').addClass('open');
+                if ($parentSubmenu.prev('.menu-item.active')) {
+                    $(this).parents(".sub-menu-header").find(".menu-item").first().click().addClass("active");
+                }
             }
         }
     });

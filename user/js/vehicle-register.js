@@ -20,12 +20,12 @@ $(document).ready(function () {
                 },
                 { "data": "reg_number" },
                 { "data": "details" },
-                {
-                    "data": "status",
-                    "render": function (data) {
-                        return data;
-                    }
-                },
+                // {
+                //     "data": "status",
+                //     "render": function (data) {
+                //         return data;
+                //     }
+                // },
                 { "data": "id", "visible": false }
             ],
             "order": [[0, "desc"]],

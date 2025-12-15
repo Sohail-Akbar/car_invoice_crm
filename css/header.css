@@ -192,7 +192,7 @@
  }
 
  .sidebar .menu-item {
-     padding: 12px 25px;
+     padding: 12px 18px;
      display: flex;
      align-items: center;
      color: var(--dark);
@@ -200,6 +200,12 @@
      transition: all 0.3s;
      border-left: 3px solid transparent;
      margin-bottom: 10px;
+     display: flex;
+     justify-content: space-between;
+ }
+
+ .sidebar .submenu.open .has-submenu {
+     padding-left: 38px;
  }
 
  .sidebar .menu-item:hover {
@@ -284,6 +290,7 @@
      margin-left: auto;
      font-size: 0.8rem;
      transition: transform 0.3s;
+     margin-left: 10px;
  }
 
  .sidebar .has-submenu.open>.menu-item::after {

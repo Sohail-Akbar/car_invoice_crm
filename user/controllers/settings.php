@@ -53,3 +53,41 @@ if (isset($_POST['saveSmsApiKey'])) {
 
     returnSuccess("SMS API Key updated successfully");
 }
+
+
+// save Company Discount
+if (isset($_POST['saveCompanyDiscount'])) {
+    $title = arr_val($_POST, "title", "");
+    $discount = arr_val($_POST, "discount", "");
+    $id = arr_val($_POST, "id", "");
+
+    if (empty($title)) returnError("Title is required");
+    if (empty($discount)) returnError("Discount is required");
+
+    $save  = null;
+    if ($id) {
+        $save = $db->update("discount", [
+            "title" => $title,
+            "discount" => $discount
+        ], [
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "id" => $id
+        ]);
+    } else {
+        $save = $db->insert("discount", [
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "title" => $title,
+            "discount" => $discount
+        ]);
+    }
+
+    if ($save) {
+        returnSuccess("Data save successfully", [
+            "redirect" => "discount"
+        ]);
+    } else {
+        returnError("Something went wrong");
+    }
+}

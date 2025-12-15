@@ -63,7 +63,7 @@ if (!$mot_history) $mot_history = [];
                             <th>Customer Details</th>
                             <th>Registration No</th>
                             <th>Details</th>
-                            <th>Status</th>
+                            <th class="d-none">Status</th>
                             <th class="d-none"></th>
                         </tr>
                     </thead>

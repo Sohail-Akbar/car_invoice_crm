@@ -38,11 +38,13 @@ function calculateTotals() {
     $("#discount_show").text(totalDiscount.toFixed(2));
     $("#total_amount").text(total.toFixed(2));
     $("#due_amount").text(due.toFixed(2));
+    $(".payment-status").trigger("change");
 }
 
 
 
 $(document).on("input", ".service_quantity, #discountAmount", calculateTotals);
+$(document).on("change", "#discountPercentage", calculateTotals);
 
 // Function to generate service options HTML from SERVICES array
 function getServiceOptions() {
@@ -313,3 +315,17 @@ tc.fn.cb.addCustomerCB = async (form, data) => {
         sAlert(data.data, 'error');
     }
 };
+
+// payment status change
+$(document).on("change", ".payment-status", function () {
+    let paidAmountField = $("#paid_amount");
+
+    paidAmountField.addClass("d-none");
+    $("#paid_amount").val("0")
+    if (this.value === "partial") {
+        paidAmountField.removeClass("d-none");
+    } else if (this.value === "paid") {
+        paidAmountField.removeClass("d-none").val($("#total_amount").text()).trigger("change");
+        $("#due_amount").text("0.00");
+    }
+});

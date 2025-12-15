@@ -545,7 +545,7 @@ function saveInvoicePDF($invoice_data = [])
                     <h1 style="color:#214F79;margin:0px;">{$invoiceTitle}</h1>
                     <h4 style="margin:0px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice No.</h4>
                     <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">{$invoice_no}</h4>
-                    <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:15px;">Issue On</h4>
+                    <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:15px;">Issued on</h4>
                     <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">{$invoice_date}
                     </h4>
                 </td>

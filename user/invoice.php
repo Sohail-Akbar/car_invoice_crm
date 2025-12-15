@@ -58,6 +58,13 @@ if ($get_invoice_id) {
     if (!$invoiceData) $invoiceData = [];
 }
 
+
+// Discount
+$company_discount = $db->select("discount", "*", [
+    "company_id" => LOGGED_IN_USER['company_id'],
+    "agency_id" => LOGGED_IN_USER['agency_id'],
+]);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,9 +103,15 @@ if ($get_invoice_id) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="label">Invoice Date</label>
-                                    <div class="input-group date bs-datepicker" data-date="<?= date('d-m-Y'); ?>" data-date-format="mm-dd-yyyy">
+
+                                    <div class="input-group date bs-datepicker"
+                                        data-date="<?= date('d-m-Y'); ?>"
+                                        data-date-format="dd-mm-yyyy">
+
                                         <input class="form-control" type="text" name="invoice_date" readonly />
-                                        <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +154,7 @@ if ($get_invoice_id) {
                                                 <?php endforeach; ?>
 
                                                 <!-- Add new & No results -->
-                                                <li class="add-new-option" data-popup=".add-new-customer-model"><i class="fas fa-plus-circle me-1"></i> Add as
+                                                <li class="add-new-option" data-popup=".add-new-customer-model"><i class="fas fa-plus-circle me-1"></i> Add a
                                                     new customer</li>
                                                 <li class="no-results" style="display: none;">No customers found</li>
                                             </ul>
@@ -169,7 +182,7 @@ if ($get_invoice_id) {
                                                     </li>
 
                                                     <!-- Add new & No results -->
-                                                    <li class="add-new-option" data-popup=".add-new-vehicle-model"><i class="fas fa-plus-circle me-1"></i> Add as
+                                                    <li class="add-new-option" data-popup=".add-new-vehicle-model"><i class="fas fa-plus-circle me-1"></i> Add a
                                                         new vehicle</li>
                                                     <li class="no-results" style="display: none;">No Vehicle History found</li>
                                                 </ul>
@@ -186,7 +199,7 @@ if ($get_invoice_id) {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="label">Status</label>
-                                    <select name="status" class="form-control py-2">
+                                    <select name="status" class="form-control payment-status py-2">
                                         <option value="unpaid">Unpaid</option>
                                         <option value="paid">Paid</option>
                                         <option value="partial">Partial</option>
@@ -202,9 +215,13 @@ if ($get_invoice_id) {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="label">Discount %</label>
-                                    <input type="number" step="0.01" name="discount_percentage" id="discountPercentage" class="form-control py-2"
-                                        value="<?= arr_val($agency, "discount_percentage", 0)  ?>" readonly>
+                                    <label class="label">Discount Type</label>
+                                    <select name="discount_percentage" id="discountPercentage" class="form-control">
+                                        <option value="0" selected>--- Select Discount Type ----</option>
+                                        <?php foreach ($company_discount as $discount) { ?>
+                                            <option value="<?= $discount['discount'] ?>"><?= $discount['title']  ?> - <?= $discount['discount']  ?>%</option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -272,7 +289,7 @@ if ($get_invoice_id) {
                                 <div class="right-content text-right">
                                     <label class="mb-0">Invoice No.</label>
                                     <p class="invoice-no text-dark"><b>#<?= $invoice_no ?></b></p>
-                                    <p class="issue-on">Issue On</p>
+                                    <p class="issue-on">Issued on</p>
                                     <p class="issue-date text-dark"><b><?= date("d M, Y"); ?></b></p>
                                 </div>
                             </div>
@@ -300,7 +317,7 @@ if ($get_invoice_id) {
                                 <hr class="my-0">
                                 <div class="single-item">
                                     <span>Paid:</span>
-                                    <span><input type="number" name="paid_amount" id="paid_amount" class="form-control text-right text-clr" step="any" value="0"></span>
+                                    <span><input type="number" name="paid_amount" id="paid_amount" class="form-control text-right text-clr d-none" step="any" value="0"></span>
                                 </div>
                                 <hr class="my-0">
                                 <div class="due-amount-head">

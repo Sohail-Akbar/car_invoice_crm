@@ -77,8 +77,8 @@ $existing_customers = $db->select("users", "*", [
         <?php if (!$custom_register) { ?>
             <?php if (!isset($_GET['search_by'])) { ?>
                 <div class="pull-away mt-4">
-                    <h3 class="heading text-clr">Search Registration Vehicle</h3>
-                    <a href="add-vehicle" class="btn content-center br-5 transparent-btn">+ Add New Vehicle</a>
+                    <h3 class="heading text-clr">Search Database</h3>
+                    <a href="add-vehicle" class="btn content-center br-5 transparent-btn d-none">+ Add New Vehicle</a>
                 </div>
                 <div class="card mt-4">
                     <div class="buttons-grid">
@@ -97,7 +97,7 @@ $existing_customers = $db->select("users", "*", [
                             </p>
                             <a href="registration-vehicle?search_by=reg_no" class="redirect-btn register">
                                 <i class="fas fa-external-link-alt"></i>
-                                Go to Registration
+                                Search by VRM
                             </a>
                         </div>
 
@@ -115,7 +115,7 @@ $existing_customers = $db->select("users", "*", [
                             </p>
                             <a href="registration-vehicle?search_by=name" class="redirect-btn customer">
                                 <i class="fas fa-external-link-alt"></i>
-                                Go to Customer Names
+                                Search by Customer Name
                             </a>
                         </div>
 
@@ -126,14 +126,14 @@ $existing_customers = $db->select("users", "*", [
                                     <path d="M20.4161 8.58413L27.3836 1.61311L26.5613 0.797628C25.4986 -0.265876 23.6417 -0.265876 22.579 0.797628L19.6013 3.77769C19.0681 4.31132 18.7752 5.0197 18.7752 5.77129C18.7752 6.52289 19.0681 7.23126 19.5975 7.76301L20.4161 8.58413ZM7.78419 19.5874C6.72152 18.5239 4.86465 18.5239 3.80198 19.5874L0.824231 22.5675C0.292893 23.1011 0 23.8095 0 24.5611C0 25.3127 0.292893 26.0211 0.827986 26.5566L1.64846 27.3683L8.60091 20.4104L7.78419 19.5874ZM29.922 4.16101L29.2574 3.49585L22.2955 10.4631L23.5159 11.6826C23.6033 11.7698 23.6727 11.8735 23.72 11.9877C23.7674 12.1018 23.7917 12.2242 23.7917 12.3477C23.7917 12.4713 23.7674 12.5937 23.72 12.7078C23.6727 12.8219 23.6033 12.9256 23.5159 13.0129L13.0281 23.5089C12.8491 23.6793 12.6115 23.7743 12.3644 23.7743C12.1173 23.7743 11.8797 23.6793 11.7007 23.5089L10.4803 22.2875L3.52974 29.2586L4.19438 29.9237C4.68253 30.4123 6.53377 32 9.93207 32C12.9661 32 17.9228 30.6622 24.2951 24.2868C37.0115 11.5567 30.2243 4.46352 29.922 4.16101Z" fill="white" />
                                 </svg>
                             </div>
-                            <h3>Customer Phone</h3>
+                            <h3>Contact Number</h3>
                             <p>
                                 Find vehicles using the customer's phone number.
                                 Access all associated vehicle and contact information.
                             </p>
                             <a href="registration-vehicle?search_by=phone" class="redirect-btn phone">
                                 <i class="fas fa-external-link-alt"></i>
-                                Go to Phone Management
+                                Search by contact number
                             </a>
                         </div>
                     </div>
@@ -222,7 +222,7 @@ $existing_customers = $db->select("users", "*", [
                                             <th>Customer Details</th>
                                             <th>Vehicle Details</th>
                                             <th>Vehicle</th>
-                                            <th>Status</th>
+                                            <!-- <th>Status</th> -->
                                             <th>Actions</th>
                                         </tr>
                                     </thead>

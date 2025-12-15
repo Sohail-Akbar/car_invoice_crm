@@ -129,11 +129,11 @@ if (empty($email_template)) $email_template = [];
                             </div>
                             <div class="profile-info">
                                 <div class="head">
-                                    <h2 class="name"><?= $customer['title'] . " " . $customer['fname'] . " " . $customer['lname'] ?></h2>
-                                    <span class="badge active">Active</span>
-                                    <span class="badge premium" style="background-color: #e7eef5;">Premium Client</span>
+                                    <h2 class="name mt-4"><?= $customer['title'] . " " . $customer['fname'] . " " . $customer['lname'] ?></h2>
+                                    <span class="badge active d-none">Active</span>
+                                    <span class="badge premium d-none" style="background-color: #e7eef5;">Premium Client</span>
                                 </div>
-                                <div class="single-info mt-4 mb-2">
+                                <div class="single-info mt-5 mb-2">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M17 3.5H7C4 3.5 2 5 2 8.5V15.5C2 19 4 20.5 7 20.5H17C20 20.5 22 19 22 15.5V8.5C22 5 20 3.5 17 3.5ZM17.47 9.59L14.34 12.09C13.68 12.62 12.84 12.88 12 12.88C11.16 12.88 10.31 12.62 9.66 12.09L6.53 9.59C6.21 9.33 6.16 8.85 6.41 8.53C6.67 8.21 7.14 8.15 7.46 8.41L10.59 10.91C11.35 11.52 12.64 11.52 13.4 10.91L16.53 8.41C16.85 8.15 17.33 8.2 17.58 8.53C17.84 8.85 17.79 9.33 17.47 9.59Z" fill="#214F79" />
                                     </svg>
@@ -162,7 +162,7 @@ if (empty($email_template)) $email_template = [];
                             <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0 0V16.7143H10.4615V15.4286H1.30769V1.28571H7.84615V5.14286H11.7692V6.42857H13.0769V4.24286L12.8808 4.05L8.95769 0.192857L8.76154 0H0ZM9.15385 2.18571L10.8538 3.85714H9.15385V2.18571ZM2.61538 6.42857V7.71429H10.4615V6.42857H2.61538ZM13.7308 7.71429V9C12.6192 9.19286 11.7692 10.0929 11.7692 11.25C11.7692 12.5357 12.75 13.5 14.0577 13.5H14.7115C15.2346 13.5 15.6923 13.95 15.6923 14.4643C15.6923 14.9786 15.2346 15.4286 14.7115 15.4286H12.4231V16.7143H13.7308V18H15.0385V16.7143C16.15 16.5214 17 15.6214 17 14.4643C17 13.1786 16.0192 12.2143 14.7115 12.2143H14.0577C13.5346 12.2143 13.0769 11.7643 13.0769 11.25C13.0769 10.7357 13.5346 10.2857 14.0577 10.2857H16.3462V9H15.0385V7.71429H13.7308ZM2.61538 9.64286V10.9286H7.19231V9.64286H2.61538ZM8.5 9.64286V10.9286H10.4615V9.64286H8.5ZM2.61538 12.2143V13.5H7.19231V12.2143H2.61538ZM8.5 12.2143V13.5H10.4615V12.2143H8.5Z" fill="white" />
                             </svg>
-                            <span class="ml-1">(<?= _CURRENCY_SYMBOL . $total_invoice ?>) Total Invoice</span>
+                            <span class="ml-1">(<?= $total_invoice ?>) Total Invoice</span>
                         </button>
                         <button class="btn d-flex">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

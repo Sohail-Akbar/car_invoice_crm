@@ -61,55 +61,86 @@ if (
         <div class="sidebar-option-menu">
             <?php if (LOGGED_IN_USER['type'] === "agency") { ?>
                 <a href="dashboard" class="menu-item">
-                    <i class="fas fa-home"></i>
-                    <span class="menu-text">Dashboard</span>
+                    <div>
+                        <i class="fas fa-home"></i>
+                        <span class="menu-text">Dashboard</span>
+                    </div>
                 </a>
                 <a href="invoice" class="menu-item">
-                    <i class="fas fa-file-invoice"></i>
-                    <span class="menu-text">Invoice</span>
-                    <!-- <span class="menu-badge">15</span> -->
+                    <div>
+                        <i class="fas fa-file-invoice"></i>
+                        <span class="menu-text">Quick Invoice</span>
+                    </div>
                 </a>
                 <a href="invoice-search" class="menu-item">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                    <span class="menu-text">Invoice Search</span>
+                    <div>
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        <span class="menu-text">Search Invoice</span>
+                    </div>
                 </a>
                 <div class="has-submenu">
                     <a href="#" class="menu-item" id="customerMenu">
-                        <i class="fas fa-user"></i>
-                        <span class="menu-text">Customers</span>
+                        <div>
+                            <i class="fas fa-user"></i>
+                            <span class="menu-text">Customer Record</span>
+                        </div>
                     </a>
                     <div class="submenu" id="customerMenu">
-                        <a href="add-customer" class="submenu-item">Add Customer</a>
-                        <a href="view-customer" class="submenu-item">View Customer</a>
+                        <a href="add-customer" class="submenu-item">Add</a>
+                        <a href="view-customer" class="submenu-item">View</a>
                     </div>
                 </div>
                 <div class="has-submenu">
                     <a href="#" class="menu-item" id="registerationMenu">
-                        <i class="fas fa-car"></i>
-                        <span class="menu-text">Registration</span>
+                        <div>
+                            <i class="fas fa-car"></i>
+                            <span class="menu-text">Registration</span>
+                        </div>
                     </a>
                     <div class="submenu" id="registerationMenu">
-                        <a href="registration-vehicle" class="submenu-item">Registration Vehicle</a>
-                        <a href="view-registration-vehicle" class="submenu-item">View Registration Vehicle</a>
+                        <a href="add-vehicle" class="submenu-item">Add Vehicle</a>
+                        <a href="view-registration-vehicle" class="submenu-item">View Vehicle</a>
+                        <a href="registration-vehicle" class="submenu-item">Search</a>
+                        <div class="has-submenu d-none">
+                            <a href="#" class="menu-item" id="customerMenu">
+                                <div>
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                    <span class="menu-text">Search</span>
+                                </div>
+                            </a>
+                            <div class="submenu" id="customerMenu">
+                                <a href="registration-vehicle?search_by=name" class="submenu-item">By Customer</a>
+                                <a href="registration-vehicle?search_by=reg_no" class="submenu-item">By Vehicle</a>
+                                <a href="registration-vehicle?search_by=phone" class="submenu-item">By Telephone</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <a href="financial-income-reports" class="menu-item">
-                    <i class="fas fa-chart-line me-2"></i>
-                    <span class="menu-text">Income Reports</span>
+                    <div>
+                        <i class="fas fa-chart-line me-2"></i>
+                        <span class="menu-text">Financial Records</span>
+                    </div>
                 </a>
                 <a href="send-sms" class="menu-item">
-                    <i class="fa fa-comment" aria-hidden="true"></i>
-                    <span class="menu-text">Send SMS</span>
+                    <div>
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <span class="menu-text">Send SMS</span>
+                    </div>
                 </a>
             <?php } ?>
             <?php if (LOGGED_IN_USER['type'] === "staff") { ?>
                 <a href="assigned-vehicles" class="menu-item">
-                    <i class="fas fa-users"></i>
-                    <span class="menu-text">Assigned Vehicles - (<?= isset($assigned_tasks) ? count($assigned_tasks) : "0" ?>)</span>
+                    <div>
+                        <i class="fas fa-users"></i>
+                        <span class="menu-text">Assigned Vehicles - (<?= isset($assigned_tasks) ? count($assigned_tasks) : "0" ?>)</span>
+                    </div>
                 </a>
                 <a href="completed-tasks" class="menu-item">
-                    <i class="fas fa-users"></i>
-                    <span class="menu-text">Completed Tasks</span>
+                    <div>
+                        <i class="fas fa-users"></i>
+                        <span class="menu-text">Completed Tasks</span>
+                    </div>
                 </a>
             <?php } ?>
         </div>
@@ -156,6 +187,12 @@ if (
                             <path d="M0 21.5H24M13.5 19V13C13.5 13 11 11.5 7 11.5C3 11.5 0.5 13 0.5 13V19M17.5 0.5V3.5H14.5V6.5H17.5V9.5H20.5V6.5H23.5V3.5H20.5V0.5H17.5ZM6.744 9.5C6.744 9.5 3.999 7.752 3.999 5.566C3.999 3.875 5.343 2.504 7.001 2.504C8.659 2.504 9.996 3.875 9.996 5.566C9.996 7.75 7.26 9.5 7.26 9.5H6.744Z" stroke="black" />
                         </svg>
                         <span class="text">View Staff</span>
+                    </a>
+                    <a href="discount" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 2.5C0 1.83696 0.263392 1.20107 0.732233 0.732233C1.20107 0.263392 1.83696 0 2.5 0H11.5C12.163 0 12.7989 0.263392 13.2678 0.732233C13.7366 1.20107 14 1.83696 14 2.5V6.6C13.5272 6.3585 13.022 6.18672 12.5 6.09V2.5C12.5 2.23478 12.3946 1.98043 12.2071 1.79289C12.0196 1.60536 11.7652 1.5 11.5 1.5H2.5C2.23478 1.5 1.98043 1.60536 1.79289 1.79289C1.60536 1.98043 1.5 2.23478 1.5 2.5V11.5C1.5 11.7652 1.60536 12.0196 1.79289 12.2071C1.98043 12.3946 2.23478 12.5 2.5 12.5H6.09C6.18672 13.022 6.3585 13.5272 6.6 14H2.5C1.83696 14 1.20107 13.7366 0.732233 13.2678C0.263392 12.7989 0 12.163 0 11.5V2.5ZM16 11.5C16 12.6935 15.5259 13.8381 14.682 14.682C13.8381 15.5259 12.6935 16 11.5 16C10.3065 16 9.16193 15.5259 8.31802 14.682C7.47411 13.8381 7 12.6935 7 11.5C7 10.3065 7.47411 9.16193 8.31802 8.31802C9.16193 7.47411 10.3065 7 11.5 7C12.6935 7 13.8381 7.47411 14.682 8.31802C15.5259 9.16193 16 10.3065 16 11.5ZM12 9.5C12 9.36739 11.9473 9.24021 11.8536 9.14645C11.7598 9.05268 11.6326 9 11.5 9C11.3674 9 11.2402 9.05268 11.1464 9.14645C11.0527 9.24021 11 9.36739 11 9.5V11H9.5C9.36739 11 9.24021 11.0527 9.14645 11.1464C9.05268 11.2402 9 11.3674 9 11.5C9 11.6326 9.05268 11.7598 9.14645 11.8536C9.24021 11.9473 9.36739 12 9.5 12H11V13.5C11 13.6326 11.0527 13.7598 11.1464 13.8536C11.2402 13.9473 11.3674 14 11.5 14C11.6326 14 11.7598 13.9473 11.8536 13.8536C11.9473 13.7598 12 13.6326 12 13.5V12H13.5C13.6326 12 13.7598 11.9473 13.8536 11.8536C13.9473 11.7598 14 11.6326 14 11.5C14 11.3674 13.9473 11.2402 13.8536 11.1464C13.7598 11.0527 13.6326 11 13.5 11H12V9.5Z" fill="black" />
+                        </svg>
+                        Discount
                     </a>
                     <a href="add-role" class="dropdown-item">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

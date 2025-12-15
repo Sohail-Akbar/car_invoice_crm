@@ -1,15 +1,18 @@
 <?php
-$_protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
-$_host = $_SERVER['HTTP_HOST'];
-$_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// Protocol
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    ? 'https://'
+    : 'http://';
 
-$_fullPathUrl = $_protocol . $_host . $_path;
+
+// Remove fragment (#) if somehow exists
+$fullUrl = strtok($protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], '#');
 
 ?>
 
 <script>
     const GLOBAL_GET = <?= json_encode($_GET) ?>;
-    const MAIN_PATH = <?= json_encode($_fullPathUrl) ?>;
+    const MAIN_PATH = <?= json_encode($fullUrl) ?>;
     const _CURRENCY_SYMBOL = '<?= _CURRENCY_SYMBOL ?>';
 </script>
 <?php assets_file([

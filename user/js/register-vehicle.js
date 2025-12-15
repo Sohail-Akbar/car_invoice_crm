@@ -508,7 +508,6 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
                     <td>${customerDetails}</td>
                     <td>${vehicleDetails}</td>
                     <td>${vehicle.make} ${vehicle.model}</td>
-                    <td>${statusBadge}</td>
                     <td>${actions}</td>
                 </tr>
             `;
