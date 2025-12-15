@@ -44,7 +44,7 @@ $agency = $db->select_one("agencies", "*", [
                 </form>
             </div>
         </div>
-        <div class="card mt-4">
+        <div class="card mt-4 d-none">
             <div class="card-header">
                 Branch Discount
             </div>
