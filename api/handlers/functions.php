@@ -1,6 +1,6 @@
 <?php
 // Helper function for Bearer Token validation
-function validateBearerToken()
+function validateBearerToken($column_name = "token")
 {
     global $db;
     $headers = getallheaders();
@@ -18,7 +18,7 @@ function validateBearerToken()
     $token = substr($authHeader, 7);
 
     // Check token in the database
-    $user = $db->select_one('users', 'id,agency_id,token,user_type', ['token' => $token]);
+    $user = $db->select_one('users', '*', [$column_name => $token]);
     if (!$user) {
         sendErrorResponse("Invalid or expired token", 403);
     }
