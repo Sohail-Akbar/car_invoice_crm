@@ -495,7 +495,7 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
                                         <li>
                                             <a class="cm-dropdown-item" href="invoice?customer_id=${single_customer.id}&vehicle_id=${vehicle.id}"><i class="fas fa-file-alt text-success"></i>Generate Invoice</a>
                                         </li> 
-                                        <li>
+                                        <li class="d-none">
                                             <a class="cm-dropdown-item" href="send-sms?customer_id=${single_customer.id}"><i class="fas fa-envelope me-2 text-warning"></i>Send Message</a>
                                         </li>
                                         ${$changeCustomerBtnHMTL}

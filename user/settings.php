@@ -20,29 +20,25 @@ $agency = $db->select_one("agencies", "*", [
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content setting-container" id="mainContent">
         <div class="card">
-            <div class="card-header">
-                Branch VAT%
-            </div>
-            <div class="card-body">
-                <form action="settings" method="POST" class="ajax_form">
-                    <div class="row mt-4">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <span class="label">VAT%</span>
-                                <input type="number" step="0.01" class="form-control"
-                                    value="<?= arr_val($agency, "vat_percentage", "") ?>"
-                                    name="vat" required data-length="[1,250]">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <input type="hidden" name="saveVat" value="true">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-save"></i> Update
-                            </button>
+            <h3 class="heading mb-4 custom-heading text-clr">VAT%</h3>
+            <form action="settings" method="POST" class="ajax_form">
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <span class="label">VAT%</span>
+                            <input type="number" step="0.01" class="form-control"
+                                value="<?= arr_val($agency, "vat_percentage", "") ?>"
+                                name="vat" required data-length="[1,250]">
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="col-12 mt-2">
+                        <input type="hidden" name="saveVat" value="true">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-save"></i> Update
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="card mt-4 d-none">
             <div class="card-header">
@@ -69,7 +65,7 @@ $agency = $db->select_one("agencies", "*", [
                 </form>
             </div>
         </div>
-        <div class="card mt-4">
+        <div class="card mt-4 d-none">
             <div class="card-header">
                 SMS API Settings
             </div>

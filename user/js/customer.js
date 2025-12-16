@@ -51,7 +51,7 @@ $(document).ready(function () {
                                         <li>
                                             <a class="dropdown-item" href="invoice?customer_id=${row.id}"><i class="fas fa-file-alt text-success"></i>Generate Invoice</a>
                                         </li> 
-                                        <li>
+                                        <li class="d-none">
                                             <a class="dropdown-item" href="send-sms?customer_id=${row.id}"><i class="fas fa-envelope me-2 text-warning"></i>Send Message</a>
                                         </li>
                                         </ul>

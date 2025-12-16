@@ -122,7 +122,7 @@ if (
                         <span class="menu-text">Financial Records</span>
                     </div>
                 </a>
-                <a href="send-sms" class="menu-item">
+                <a href="send-sms" class="menu-item d-none">
                     <div>
                         <i class="fa fa-comment" aria-hidden="true"></i>
                         <span class="menu-text">Send SMS</span>

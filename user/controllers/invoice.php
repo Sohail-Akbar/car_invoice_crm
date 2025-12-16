@@ -376,6 +376,7 @@ function saveInvoicePDF($invoice_data = [])
         $user_img = "uploads/" . LOGGED_IN_USER['image'];
     }
     $branch_logo = SITE_URL . $user_img;
+    $branch_logo = SITE_URL . "images/Hillcliffe-Garage-Logo.png";
     // Signature img
     $signature_img = SITE_URL . "images/signature.png";
     // Invoice Title
@@ -436,7 +437,7 @@ function saveInvoicePDF($invoice_data = [])
     $l_user_contact = LOGGED_IN_USER['contact'];
     $l_user_email = LOGGED_IN_USER['email'];
 
-
+    $is_client_note = empty($client_note) ? "d-none" : "";
 
     // HTML content for the invoice
     $html = <<<HTML
@@ -550,7 +551,7 @@ function saveInvoicePDF($invoice_data = [])
                     </h4>
                 </td>
                 <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
-                    <img src="{$branch_logo}" style="width:30%;">
+                    <img src="{$branch_logo}" style="width:100%;">
                 </td>
             </tr>
         </table>
@@ -617,7 +618,7 @@ function saveInvoicePDF($invoice_data = [])
                 </td>
             </tr>
         </table>
-        <div class="invoice-notes">
+        <div class="invoice-notes {$is_client_note}">
             {$client_note}
         </div>
         <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>

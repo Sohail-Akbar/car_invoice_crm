@@ -223,7 +223,7 @@ if (empty($email_template)) $email_template = [];
                     onclick="new bootstrap.Modal(document.querySelector('.view-send-email-model')).show();">
                     Send Email
                 </button>
-                <a href="send-sms?customer_id=<?= $_GET['id'] ?>&redirectTo=customer-profile?id=<?= $_GET['id'] ?>" class="btn mx-1 br-5 text-white">Send SMS</a>
+                <a href="send-sms?customer_id=<?= $_GET['id'] ?>&redirectTo=customer-profile?id=<?= $_GET['id'] ?>" class="btn mx-1 br-5 text-white d-none">Send SMS</a>
             </div>
         </div>
         <div class="row mx-0 mt-4">

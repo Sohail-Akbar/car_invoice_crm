@@ -22,14 +22,18 @@
            </div>
            <div class="sidebar-option-menu">
                <a href="dashboard" class="menu-item">
-                   <i class="fas fa-home"></i>
-                   <span class="menu-text">Dashboard</span>
+                   <div>
+                       <i class="fas fa-home"></i>
+                       <span class="menu-text">Dashboard</span>
+                   </div>
                </a>
                <?php if (LOGGED_IN_USER["type"] === "main_admin") { ?>
                    <div class="has-submenu">
                        <a href="#" class="menu-item" id="customerMenu">
-                           <i class="fas fa-user"></i>
-                           <span class="menu-text">Companies</span>
+                           <div>
+                               <i class="fas fa-user"></i>
+                               <span class="menu-text">Companies</span>
+                           </div>
                        </a>
                        <div class="submenu" id="customerMenu">
                            <a href="add-company" class="submenu-item">Add Company</a>
@@ -40,8 +44,10 @@
                <?php if (LOGGED_IN_USER["type"] === "admin") { ?>
                    <div class="has-submenu">
                        <a href="#" class="menu-item" id="customerMenu">
-                           <i class="fas fa-user"></i>
-                           <span class="menu-text">Branches</span>
+                           <div>
+                               <i class="fas fa-user"></i>
+                               <span class="menu-text">Branches</span>
+                           </div>
                        </a>
                        <div class="submenu" id="customerMenu">
                            <a href="add-agency" class="submenu-item">Add Branch</a>
@@ -102,15 +108,25 @@
                </div>
            <?php } ?>
            <div class="user-profile" id="userProfile">
-               <div class="user-avatar"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
-               <div class="user-name"><?= LOGGED_IN_USER['name'] ?></div>
-               <i class="fas fa-chevron-down"></i>
+               <div class="dropdown">
+                   <button class="dropdown-toggle menu-item no-arrow-icon content-center" type="button" data-toggle="dropdown">
+                       <div class="user-avatar"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
+                       <div class="user-name d-none"><?= LOGGED_IN_USER['name'] ?></div>
+                       <i class="fas fa-chevron-down d-none"></i>
+                   </button>
+                   <div class="dropdown-menu animated flipInY" style="min-width: 15rem;">
+                       <a href="<?= _DIR_ . "logout" ?>" class="logout-btn dropdown-item">
+                           <i class="fas fa-sign-out-alt"></i>
+                           <span>Logout</span>
+                       </a>
+                   </div>
+               </div>
            </div>
        </div>
    </nav>
 
    <!-- Right Sidebar - User Info -->
-   <aside class="user-sidebar" id="userSidebar">
+   <aside class="user-sidebar d-none" id="userSidebar">
        <div class="user-header">
            <div class="user-avatar-large"><?= strtoupper(substr(LOGGED_IN_USER['fname'], 0, 1)) .  strtoupper(substr(LOGGED_IN_USER['lname'], 0, 1)) ?></div>
            <div class="user-name-large"><?= LOGGED_IN_USER['name'] ?></div>

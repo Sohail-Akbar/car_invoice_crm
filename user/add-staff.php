@@ -39,7 +39,7 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group has-error has-danger">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">Title:</label>
+                                <label class="label">Title <span class="required">*</span></label>
                                 <select name="title" class="form-control" required="">
                                     <option <?= arr_val($staff_data, "title", "") == "" ? 'selected' : '' ?> value="">Select Title</option>
                                     <option <?= arr_val($staff_data, "title", "") == "Mr" ? 'selected' : '' ?> value="Mr">Mr</option>
@@ -49,7 +49,7 @@ $staff_data = $db->select_one("users", "*", [
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="label">Gender:</label>
+                                <label class="label">Gender <span class="required">*</span></label>
                                 <select name="gender" class="form-control" required="">
                                     <option <?= arr_val($staff_data, "gender", "") == "" ? 'selected' : '' ?> value="">Select Gender</option>
                                     <option <?= arr_val($staff_data, "gender", "") == "Male" ? 'selected' : '' ?> value="Male">Male</option>
@@ -61,11 +61,11 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">First Name:</label>
+                                <label class="label">First Name <span class="required">*</span></label>
                                 <input type="text" name="fname" class="form-control" placeholder="Enter Your First Name" required="required" value="<?= arr_val($staff_data, "fname", "") ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class=" label">Last Name:</label>
+                                <label class=" label">Last Name <span class="required">*</span></label>
                                 <input type="text" name="lname" class="form-control" placeholder="Enter Your Last Name" required="required" value="<?= arr_val($staff_data, "lname", "") ?>">
                             </div>
                         </div>
@@ -73,11 +73,11 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label for="inputEmail" class="label">Email:</label>
+                                <label for="inputEmail" class="label">Email <span class="required">*</span></label>
                                 <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" required="" value="<?= arr_val($staff_data, "email", "") ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class="label">Contact:</label>
+                                <label class="label">Contact <span class="required">*</span></label>
                                 <input type="text" name="contact" class="form-control" placeholder="Enter contact" required="required" value="<?= arr_val($staff_data, "contact", "") ?>">
                             </div>
                         </div>
@@ -85,7 +85,7 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">Role:</label>
+                                <label class="label">Role <span class="optional">(Optional)</span></label>
                                 <select name="role_id" class="form-control" required="">
                                     <option value="">Select Role</option>
                                     <?php foreach ($roles_data as $role) { ?>
@@ -94,7 +94,7 @@ $staff_data = $db->select_one("users", "*", [
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class=" label">Address:</label>
+                                <label class=" label">Address <span class="required">*</span></label>
                                 <input type="text" class="form-control pac-target-input" placeholder="Enter Address" onfocusout="checkBlackList(this)" name="address" autocomplete="off" aria-describedby="basic-addon1" id="autocomplete" onfocus="geolocate()" required="required" value="<?= arr_val($staff_data, "address", "") ?>">
                                 <input type="hidden" id="lat" name="lat">
                                 <input type="hidden" id="lng" name="lng">
@@ -104,12 +104,12 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-6">
-                                <label class="label">Postcode:</label>
-                                <input type="text" class="form-control" placeholder="Postcode" name="postcode" aria-describedby="basic-addon1" id="postal_code" readonly required="" value="<?= arr_val($staff_data, "postcode", "") ?>">
+                                <label class="label">Postcode <span class="required">*</span></label>
+                                <input type="text" class="form-control" placeholder="Postcode" name="postcode" aria-describedby="basic-addon1" id="postal_code" required="" value="<?= arr_val($staff_data, "postcode", "") ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class="label">City:</label>
-                                <input type="text" class="form-control" placeholder="City" id="locality" name="city" aria-describedby="basic-addon1" readonly required="" value="<?= arr_val($staff_data, "city", "") ?>">
+                                <label class="label">City <span class="optional">(Optional)</span></label>
+                                <input type="text" class="form-control" placeholder="City" id="locality" name="city" aria-describedby="basic-addon1" value="<?= arr_val($staff_data, "city", "") ?>">
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ $staff_data = $db->select_one("users", "*", [
                     <div class="form-group">
                         <div class="row m-0">
                             <div class="col-md-12">
-                                <label class="label">Password</label>
+                                <label class="label">Password <?= $id ?  '<span class="optional">(Optional)</span>' : '<span class="required">*</span>'  ?></label>
                                 <input type="password" data-minlength="6" class="form-control" name="password" placeholder="Password">
                                 <div class="help-block">Minimum of 6 characters</div>
                             </div>
