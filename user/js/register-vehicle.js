@@ -460,11 +460,11 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
 
             // Customer Details column
             let customerDetails = `
-                <div>
+                <a href="customer-profile?id=${single_customer.id}">
                     <strong class="text-clr">${single_customer.fname} ${single_customer.lname}</strong><br>
                     <i class="fa fa-phone"></i> ${single_customer.contact}<br>
-                    <i class="fa fa-envelope"></i> ${single_customer.email}
-                </div>
+                   ${single_customer.email ? `<i class="fa fa-envelope"></i> ${single_customer.email}` : ""}
+                </a>
             `;
 
             // Vehicle Details column
@@ -736,6 +736,7 @@ function initializeSelect2(data) {
 
 // Document Ready
 $(document).ready(function () {
+    $("#customersContainer").val(GLOBAL_GET.customer_id).trigger("change");
     if (_GET.search_by === "name" || _GET.search_by === "phone") {
         $.ajax({
             url: "controllers/customer",

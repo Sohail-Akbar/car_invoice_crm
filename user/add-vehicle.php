@@ -18,7 +18,7 @@ $existing_customers = $db->select("users", "*", [
     "agency_id" => LOGGED_IN_USER['agency_id'],
     "type" => "customer",
     "is_active" => 1
-]);
+], ["order_by" => "id desc"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">

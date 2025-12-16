@@ -721,6 +721,21 @@ body.all-hide #mainContent {
     padding-top: 0px;
 }
 
+a {
+    color: var(--webMainColor);
+}
+
+.required {
+    color: red;
+    font-weight: bold;
+}
+
+.optional {
+    color: #888;
+    font-size: 12px;
+}
+
+
 
 iframe,
 body.all-hide iframe {

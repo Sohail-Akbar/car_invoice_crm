@@ -109,6 +109,12 @@ $CSS_FILES_ = [
                             </div>
                             <div class="col-lg-4 col-md-6 col-12">
                                 <div class="form-group">
+                                    <label for="mobile_number" class="form-label">Mobile Number</label>
+                                    <input type="text" class="form-control" id="mobile_number" name="mobile_number">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-12">
+                                <div class="form-group">
                                     <label for="reg_number" class="form-label">Vehicle Registration</label>
                                     <input type="text" class="form-control" id="reg_number" name="reg_number">
                                 </div>
@@ -121,14 +127,12 @@ $CSS_FILES_ = [
                                         <option value="paid">Paid</option>
                                         <option value="unpaid">Unpaid</option>
                                         <option value="partial">Partial</option>
-                                        <option value="cancelled">Cancelled</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6 col-12">
                                 <div class="form-group">
                                     <label for="from_date" class="form-label">From Date</label>
-                                    <!-- <input type="date" class="form-control" id="from_date" name="from_date"> -->
                                     <div class="input-group date bs-datepicker"
                                         data-date="<?= date('d-m-Y', strtotime('-30 days')) ?>"
                                         data-date-format="dd-mm-yyyy">
@@ -154,11 +158,11 @@ $CSS_FILES_ = [
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn px-3 search-btn">
-                                    <i class="fas fa-search mr-2"></i>Search Invoices
+                                <button type="submit" class="btn px-3 search-btn br-5">
+                                    <i class="fas fa-search mr-2"></i> Search Invoices
                                 </button>
-                                <button type="button" id="resetBtn" class="btn btn-outline-secondary px-3">
-                                    <i class="fas fa-redo mr-2"></i>Reset
+                                <button type="button" id="resetBtn" class="btn btn-outline-secondary px-3 br-5">
+                                    <i class="fas fa-redo mr-2"></i> Reset
                                 </button>
                             </div>
                         </div>

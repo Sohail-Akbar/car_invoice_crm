@@ -50,14 +50,15 @@ if ($get_invoice_id) {
     if (!$invoiceItems) $invoiceItems = [];
 
     // $invoiceData
-    $invoiceData = $db->select_one("invoices", "id,notes,discount,write_off,subtotal,discount_percentage", [
+    $invoiceData = $db->select_one("invoices", "*", [
         "id" => $get_invoice_id,
         "company_id" => LOGGED_IN_USER['company_id'],
         "agency_id" => LOGGED_IN_USER['agency_id'],
     ]);
     if (!$invoiceData) $invoiceData = [];
 }
-
+// print_r($invoiceData);
+// die;
 
 // Discount
 $company_discount = $db->select("discount", "*", [
@@ -182,7 +183,8 @@ $company_discount = $db->select("discount", "*", [
                                                     </li>
 
                                                     <!-- Add new & No results -->
-                                                    <li class="add-new-option" data-popup=".add-new-vehicle-model"><i class="fas fa-plus-circle me-1"></i> Add a
+                                                    <!-- data-popup=".add-new-vehicle-model" -->
+                                                    <li class="add-new-option openAddVehicleModal"><i class="fas fa-plus-circle me-1"></i> Add a
                                                         new vehicle</li>
                                                     <li class="no-results" style="display: none;">No Vehicle History found</li>
                                                 </ul>
@@ -219,7 +221,7 @@ $company_discount = $db->select("discount", "*", [
                                     <select name="discount_percentage" id="discountPercentage" class="form-control">
                                         <option value="0" selected>--- Select Discount Type ----</option>
                                         <?php foreach ($company_discount as $discount) { ?>
-                                            <option value="<?= $discount['discount'] ?>"><?= $discount['title']  ?> - <?= $discount['discount']  ?>%</option>
+                                            <option <?= arr_val($invoiceData, "discount_percentage", "") === $discount['discount'] ? "selected" : ""  ?> value="<?= $discount['discount'] ?>"><?= $discount['title']  ?> - <?= $discount['discount']  ?>%</option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -393,7 +395,7 @@ $company_discount = $db->select("discount", "*", [
                     </button>
                 </div>
                 <div class="modal-body bg-white">
-                    <iframe id="myIframe" src="<?= SITE_URL . "user/add-vehicle?add_by=invoice" ?>" class="w-100" style="height:500px"></iframe>
+                    <iframe id="addVehicleIframe" class="w-100" style="height:500px"></iframe>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
         <div class="row m-0">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="label">Title:</label>
+                    <label class="label">Title <span class="required">*</span></label>
                     <select name="title" class="form-control" required="">
                         <option <?= arr_val($customer_data, "title", "") == "" ? 'selected' : '' ?> value="">Select Title</option>
                         <option <?= arr_val($customer_data, "title", "") == "Mr" ? 'selected' : '' ?> value="Mr">Mr</option>
@@ -15,32 +15,32 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="label">First Name:</label>
+                    <label class="label">First Name <span class="required">*</span></label>
                     <input type="text" name="fname" class="form-control" placeholder="Enter Your First Name" required="required" value="<?= arr_val($customer_data, "fname", "") ?>">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class=" label">Last Name</label>
+                    <label class=" label">Last Name <span class="required">*</span></label>
                     <input type="text" name="lname" class="form-control" placeholder="Enter Your Last Name" required="required" value="<?= arr_val($customer_data, "lname", "") ?>">
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="inputEmail" class="label">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" required="" value="<?= arr_val($customer_data, "email", "") ?>">
+                    <label for="inputEmail" class="label">Email <span class="optional">(Optional)</span></label>
+                    <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" value="<?= arr_val($customer_data, "email", "") ?>">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="label">Contact</label>
+                    <label class="label">Contact <span class="required">*</span></label>
                     <input type="text" name="contact" class="form-control" placeholder="Enter contact" required="required" value="<?= arr_val($customer_data, "contact", "") ?>">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="label">Gender:</label>
-                    <select name="gender" class="form-control" required="">
+                    <label class="label">Gender <span class="optional">(Optional)</span></label>
+                    <select name="gender" class="form-control">
                         <option <?= arr_val($customer_data, "gender", "") == "" ? 'selected' : '' ?> value="">Select Gender</option>
                         <option <?= arr_val($customer_data, "gender", "") == "Male" ? 'selected' : '' ?> value="Male">Male</option>
                         <option <?= arr_val($customer_data, "gender", "") == "Female" ? 'selected' : '' ?> value="Female">Female</option>
@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class=" label">Address</label>
+                    <label class=" label">Address <span class="required">*</span></label>
                     <input type="text" class="form-control pac-target-input" placeholder="Enter Address" id="add_customer_address" name="address" autocomplete="off" aria-describedby="basic-addon1" id="autocomplete" onfocus="geolocate()" required="required" value="<?= arr_val($customer_data, "address", "") ?>">
                     <input type="hidden" id="add_customer_lat" name="lat">
                     <input type="hidden" id="add_customer_lng" name="lng">
@@ -57,14 +57,14 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="label">Postcode</label>
-                    <input type="text" class="form-control" placeholder="Postcode" id="add_customer_postcode" name="postcode" aria-describedby="basic-addon1" id="postal_code" readonly required="" value="<?= arr_val($customer_data, "postcode", "") ?>">
+                    <label class="label">Postcode <span class="required">*</span></label>
+                    <input type="text" class="form-control" placeholder="Postcode" id="add_customer_postcode" name="postcode" aria-describedby="basic-addon1" id="postal_code" required="" value="<?= arr_val($customer_data, "postcode", "") ?>">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="label">City</label>
-                    <input type="text" class="form-control" placeholder="City" id="add_customer_city" name="city" aria-describedby="basic-addon1" readonly required="" value="<?= arr_val($customer_data, "city", "") ?>">
+                    <label class="label">City <span class="optional">(Optional)</span></label>
+                    <input type="text" class="form-control" placeholder="City" id="add_customer_city" name="city" aria-describedby="basic-addon1" value="<?= arr_val($customer_data, "city", "") ?>">
                 </div>
             </div>
             <div class="col-md-12 mt-4">

@@ -29,7 +29,7 @@ if (isset($_POST['fetchCarInfo'])) {
     LEFT JOIN invoice_items AS it ON i.id = it.invoice_id
     LEFT JOIN services AS s ON FIND_IN_SET(s.id, it.services_id)
     WHERE c.customer_id = '$customer_id' AND c.id = '$car_id'
-    ORDER BY i.invoice_date DESC
+    ORDER BY i.created_at DESC
     ";
 
     $rows = $db->query($query_sql, ["select_query" => true]);
@@ -78,6 +78,7 @@ if (isset($_POST['fetchCarInfo'])) {
             "amount" => $row["service_amount"]
         ];
     }
+    // print_r($grouped);
     // Display cards
     foreach ($grouped as $invoice_id => $data) {
         $car = $data["car"];

@@ -329,3 +329,21 @@ $(document).on("change", ".payment-status", function () {
         $("#due_amount").text("0.00");
     }
 });
+
+$(document).on('click', '.openAddVehicleModal', function () {
+
+    let customerId = $(".customer-selectbox-parent").find(".selected_id").val();
+
+    if (!customerId) {
+        sAlert('Please select a customer first', "error");
+        return;
+    }
+
+    var url = _SITE_URL + "user/add-vehicle"
+        + "?add_by=invoice"
+        + "&customer_id=" + customerId;
+
+    $('#addVehicleIframe').attr('src', url);
+
+    $('.add-new-vehicle-model').modal('show');
+});

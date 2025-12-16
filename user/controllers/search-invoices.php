@@ -12,6 +12,7 @@ if (isset($_GET['fetchFilteredInvoices'])) {
     $status        = isset($_POST['status']) ? trim($_POST['status']) : '';
     $from_date     = isset($_POST['from_date']) ? trim($_POST['from_date']) : '';
     $to_date       = isset($_POST['to_date']) ? trim($_POST['to_date']) : '';
+    $mobile_number       = isset($_POST['mobile_number']) ? trim($_POST['mobile_number']) : '';
 
     if (!empty($from_date)) $from_date = DateTime::createFromFormat('d-m-Y', $from_date)->format('Y-m-d');
     if (!empty($to_date)) $to_date = DateTime::createFromFormat('d-m-Y', $to_date)->format('Y-m-d');
@@ -47,6 +48,11 @@ if (isset($_GET['fetchFilteredInvoices'])) {
         $sql .= " AND (c.fname LIKE '%" . addslashes($customer_name) . "%' OR c.lname LIKE '%" . addslashes($customer_name) . "%')";
     }
 
+    if (!empty($mobile_number)) {
+        $sql .= " AND (c.contact LIKE '%" . addslashes($mobile_number) . "%')";
+    }
+
+
     if (!empty($reg_number)) {
         $sql .= " AND ch.reg_number LIKE '%" . addslashes($reg_number) . "%'";
     }
@@ -65,7 +71,6 @@ if (isset($_GET['fetchFilteredInvoices'])) {
 
     // Final order
     $sql .= " ORDER BY i.invoice_date DESC, i.id DESC";
-
     // Execute query
     $invoices = $db->query($sql, ["select_query" => true]);
 

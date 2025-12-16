@@ -14,9 +14,9 @@ $(document).ready(function () {
                 {
                     "data": null,
                     "render": function (data, type, row) {
-                        return `<strong>Name: </strong>${row.title} ${row.fname} ${row.lname}<br>
-                                <strong>Email: </strong>${row.email}<br>
-                                <strong>Contact: </strong>${row.contact}`;
+                        return `<a href="customer-profile?id=${row.id}"><strong>Name: </strong>${row.title} ${row.fname} ${row.lname}<br>
+                                ${row.email ? `<strong>Email: </strong>${row.email}<br>` : ""}
+                                <strong>Contact: </strong>${row.contact}</a>`;
                     }
                 },
                 {

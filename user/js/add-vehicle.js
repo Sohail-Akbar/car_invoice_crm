@@ -410,6 +410,7 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
     // header
     $registerVehicleCon.find(".vehicle-information-header").removeClass("mb-4");
     $registerVehicleCon.addClass("d-none");
+    $registerVehicleCon.find(".customer-field").removeClass("d-none");
     // already register vehicle details
     $(".already-register-details").addClass("d-none").html("");
 
@@ -434,6 +435,10 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
             // $(".mot-history-model").modal('show');
             appendFormFields(data);
             $registerVehicleCon.removeClass("d-none");
+            if (GLOBAL_GET.customer_id) {
+                $registerVehicleCon.find("#customersContainer").val(GLOBAL_GET.customer_id).trigger("change");
+                $registerVehicleCon.find(".customer-field").addClass("d-none");
+            }
         }
     } else {
         Swal.fire({
@@ -447,7 +452,7 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
         }).then((result) => {
             if (result.value) {
                 if (GLOBAL_GET.add_by) {
-                    window.location.href = 'registration-vehicle?type=manually&add_by=invoice';
+                    window.location.href = 'registration-vehicle?type=manually&add_by=invoice&customer_id=' + GLOBAL_GET.customer_id;
                 } else {
                     window.location.href = 'registration-vehicle?type=manually';
                 }

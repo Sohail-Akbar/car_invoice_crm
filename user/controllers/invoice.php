@@ -53,7 +53,7 @@ if (isset($_POST['saveInvoice'])) {
                 'total' => $line_total
             ];
 
-            $_services_ids[$qty] = $service_id;
+            $_services_ids[] = $service_id;
         }
     }
 
@@ -219,11 +219,11 @@ if (isset($_POST['saveInvoice'])) {
 
         if ($invoiceUpdate) {
             $db->delete("invoice_items", ["invoice_id" => $invoice_id]);
-            foreach ($_services_ids as $qty => $service_id) {
+            foreach ($valid_services as $service_item) {
                 $db->insert("invoice_items", [
                     "invoice_id" => $invoice_id,
-                    "services_id" => intval($service_id),
-                    "quantity" => intval($qty),
+                    "services_id" => intval($service_item['service_id']),
+                    "quantity" => intval($service_item['quantity']),
                 ]);
             }
 
@@ -302,12 +302,12 @@ if (isset($_POST['saveInvoice'])) {
 
     // Save invoice items
     if ($invoice) {
-        $db->delete("invoice_items", ["invoice_id" => $invoice_id]);
-        foreach ($_services_ids as $qty => $service_id) {
+        $db->delete("invoice_items", ["invoice_id" => $invoice]);
+        foreach ($valid_services as $service_item) {
             $db->insert("invoice_items", [
                 "invoice_id" => $invoice,
-                "services_id" => intval($service_id),
-                "quantity" => intval($qty),
+                "services_id" => intval($service_item['service_id']),
+                "quantity" => intval($service_item['quantity']),
             ]);
         }
 

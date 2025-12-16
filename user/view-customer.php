@@ -56,7 +56,6 @@ $CSS_FILES_ = [
                             <th>#</th>
                             <th>Customer Details</th>
                             <th>Address</th>
-                            <!-- <th>Status</th> -->
                             <th>Actions</th>
                         </tr>
                     </thead>

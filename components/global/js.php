@@ -14,6 +14,7 @@ $fullUrl = strtok($protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], '
     const GLOBAL_GET = <?= json_encode($_GET) ?>;
     const MAIN_PATH = <?= json_encode($fullUrl) ?>;
     const _CURRENCY_SYMBOL = '<?= _CURRENCY_SYMBOL ?>';
+    const _SITE_URL = '<?= SITE_URL ?>';
 </script>
 <?php assets_file([
     "jquery.min.js",

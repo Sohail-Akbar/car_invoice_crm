@@ -242,13 +242,13 @@ function validInput(el) {
     valid = true;
     let value = $(el).val();
     let parent = $(el).parents(".form-group");
-    if ($(el).attr("name") === "email") {
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(value)) {
-            appendError(parent, "Invalid Email", el);
-            valid = false;
-        }
-    }
+    // if ($(el).attr("name") === "email") {
+    //     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //     if (!re.test(value)) {
+    //         appendError(parent, "Invalid Email", el);
+    //         valid = false;
+    //     }
+    // }
     if (valid) {
         if (el.hasAttribute("required")) {
             if (!value) return false;

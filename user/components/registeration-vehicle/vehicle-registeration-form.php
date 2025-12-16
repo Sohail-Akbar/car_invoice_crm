@@ -5,7 +5,7 @@
     <!-- data-callback="addNewVehicleCB" -->
     <form action="mot-history" method="POST" class="ajax_form reset customer-vehicle-form" data-reset="reset" data-callback="addNewVehicleCB">
         <div class="row mt-4">
-            <div class="col-md-8">
+            <div class="col-md-8 customer-field">
                 <div class="form-group">
                     <span class="label">Existing Customer</span>
                     <select name="customer_id" id="customersContainer" class="form-control" required>
@@ -17,7 +17,7 @@
                 </div>
                 <!-- Add new customer button -->
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 customer-field">
                 <label for=""></label><br>
                 <!-- data-toggle="modal" data-target=".add-new-customer-model" -->
                 <button class="btn btn-secondary add-new-customer-btn br-5" type="button">+ &nbsp; Add New Customer</button>
