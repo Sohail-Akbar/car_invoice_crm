@@ -76,6 +76,17 @@ $company_discount = $db->select("discount", "*", [
         .form-group {
             margin-bottom: 0.5rem;
         }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 
@@ -515,10 +526,6 @@ $company_discount = $db->select("discount", "*", [
                 });
             }
         }
-        // Initialize autocomplete **only after modal is shown**
-        $('.add-new-customer-model').on('shown.bs.modal', function() {
-            initAutocomplete();
-        });
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFeQ9V13F9lHKxCry0MmMQaRH32C8zIJY&libraries=places&region=GB&callback=initAutocomplete" async defer></script>
     <?php require_once('./includes/js.php'); ?>

@@ -141,13 +141,13 @@
 .invoice-items-container .invoice-input-item {
     padding: 10px 8px;
     height: 36px;
-    width: 60px;
+    width: 80px;
     border-radius: 0;
     background: #f2f2f7;
     border: none;
     outline: none;
     margin-left: 20px;
-    text-align:center;
+    text-align: center;
 }
 
 .invoice-items-container .remove-row {
