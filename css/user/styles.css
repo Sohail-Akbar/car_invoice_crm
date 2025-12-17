@@ -457,7 +457,7 @@ table.dataTable tbody td {
 /* Basic Search Input Styles */
 
 .custom-table-header .dropdown-menu {
-    transform: translate3d(-102px, 8px, 0px) !important;
+    transform: translate3d(-60px, 8px, 0px) !important;
     min-width: 20px;
 }
 
