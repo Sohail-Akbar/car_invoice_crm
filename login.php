@@ -78,10 +78,11 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['Garage_Remember_Me'])) {
             <div class="login-form content-center">
                 <div class="login-form-container">
                     <div class="logo-img-head">
-                        <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img">
+                        <!-- <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img"> -->
+                        <img src="./images/PR-Auto-Centre-Logo-dark.png" class="logo-img" alt="Logo Img">
                     </div>
                     <div class="heading text-center">
-                        <h3 class="mb-1">Sign in Hillcliffe Garage</h3>
+                        <h3 class="mb-1">Sign in <?= SITE_NAME  ?></h3>
                         <p> Please sign in to access your workshop dashboard.</p>
                     </div>
                     <form action="authorize" method="POST" class="mt-5 ajax_form" autocomplete="off" data-callback="signInCB">
