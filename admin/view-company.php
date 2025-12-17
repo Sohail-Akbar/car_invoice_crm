@@ -63,7 +63,6 @@ $company_admin_data = $db->query($company_admin_sql, ["select_query" => true]);
                             <th>Company Details</th>
                             <th>Admin Details</th>
                             <th>Company Logo</th>
-                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -98,16 +97,6 @@ $company_admin_data = $db->query($company_admin_sql, ["select_query" => true]);
                                         <?php if (isset($user['company_logo'])) { ?>
                                             <img src="<?= _DIR_ . "uploads/" . $user['company_logo'] ?>" style="width:100px;">
                                         <?php } ?>
-                                    </td>
-                                    <td>
-                                        <span class="text-white p-1 bold small-font <?php
-                                                                                    if ($user['verify_status'] != '1') echo 'bg-warning text-dark';
-                                                                                    else echo 'bg-success'; ?>">
-                                            <?php
-                                            if ($user['verify_status'] == '1') echo 'Verified';
-                                            else echo 'unverified';
-                                            ?>
-                                        </span>
                                     </td>
                                     <td>
                                         <div class="align-center child-el-margin-x">
