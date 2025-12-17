@@ -66,10 +66,10 @@ function addInvoiceRow() {
                 </select>
             </div>
             <div class="px-0">
-                <div class="d-flex justify-content-end mr-3">
+                <div class="d-flex justify-content-end mr-4">
                     <input type="number" class="form-control service_quantity invoice-input-item ml-2" step="1" min="1" name="service_quantity[]" value="1">
-                    <input type="number" class="form-control service_amount invoice-input-item" step="any" name="service_amount[]" value="0">
-                    <button type="button" class="btn btn-sm remove-row">
+                    <input type="number" class="form-control service_amount invoice-input-item ml-4" step="any" name="service_amount[]" value="0">
+                    <button type="button" class="btn btn-sm remove-row ml-4">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11.0638 0.506144L7.00014 4.56991C5.64566 3.2159 4.29075 1.86059 2.93606 0.506144C1.36892 -1.06096 -1.06026 1.36904 0.505569 2.93658C1.86048 4.29015 3.21583 5.64568 4.56921 7.00013C3.21521 8.35519 1.86066 9.70971 0.505569 11.0637C-1.06026 12.6303 1.36914 15.0597 2.93606 13.4941C4.29075 12.139 5.64537 10.7844 6.99992 9.43013L11.0636 13.4941C12.6307 15.0608 15.0605 12.6306 13.494 11.0637C12.1394 9.70887 10.7844 8.35421 9.42932 6.99969C10.7842 5.64474 12.1391 4.28993 13.494 2.93527C15.0608 1.36904 12.6309 -1.06096 11.0636 0.507018" fill="#EC1C24" />
                         </svg>

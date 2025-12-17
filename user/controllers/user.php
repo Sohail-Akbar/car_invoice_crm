@@ -13,7 +13,9 @@ if (isset($_POST['update_personal_information'])) {
 			'name' => $name,
 		], ['id' => LOGGED_IN_USER['id']]);
 		if ($update) {
-			returnSuccess('Information Updated Successfully');
+			returnSuccess('Information Updated Successfully',[
+				"redirect" => ""
+			]);
 		}
 	}
 }

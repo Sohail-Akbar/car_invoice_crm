@@ -263,9 +263,9 @@ $company_discount = $db->select("discount", "*", [
                                             </div>
                                             <div class="col-md-6 px-0 col-sm-12">
                                                 <div class="d-flex justify-content-end">
-                                                    <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 12px;">Quantity</span>
-                                                    <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 14px;">Amount</span>
-                                                    <span class="badge badge-white bg-white py-2 px-3" style="font-size: 14px;">#</span>
+                                                    <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 13px;">Quantity</span>
+                                                    <span class="badge badge-white bg-white py-2 px-3 mr-2" style="font-size: 13px;">Amount</span>
+                                                    <span class="badge badge-white bg-white py-2 px-3" style="font-size: 13px;">#</span>
                                                 </div>
                                             </div>
                                         </div>

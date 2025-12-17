@@ -147,6 +147,7 @@
     border: none;
     outline: none;
     margin-left: 20px;
+    text-align:center;
 }
 
 .invoice-items-container .remove-row {
