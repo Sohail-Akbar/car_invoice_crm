@@ -219,7 +219,7 @@ $company_discount = $db->select("discount", "*", [
                                 <div class="form-group">
                                     <label class="label">Discount Type</label>
                                     <select name="discount_percentage" id="discountPercentage" class="form-control">
-                                        <option value="0" selected>--- Select Discount Type ----</option>
+                                        <option value="0" selected>No Discount</option>
                                         <?php foreach ($company_discount as $discount) { ?>
                                             <option <?= arr_val($invoiceData, "discount_percentage", "") === $discount['discount'] ? "selected" : ""  ?> value="<?= $discount['discount'] ?>"><?= $discount['title']  ?> - <?= $discount['discount']  ?>%</option>
                                         <?php } ?>

@@ -87,10 +87,12 @@ if (
                     </a>
                     <div class="submenu" id="customerMenu">
                         <a href="add-customer" class="submenu-item">Add</a>
-                        <a href="view-customer" class="submenu-item">View</a>
+                        <a href="registration-vehicle" class="submenu-item">Search</a>
+                        <a href="view-customer" class="submenu-item">View All Customer</a>
+                        <a href="view-registration-vehicle" class="submenu-item">View All Vehicles</a>
                     </div>
                 </div>
-                <div class="has-submenu">
+                <!-- <div class="has-submenu d-none">
                     <a href="#" class="menu-item" id="registerationMenu">
                         <div>
                             <i class="fas fa-car"></i>
@@ -115,7 +117,7 @@ if (
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <a href="financial-income-reports" class="menu-item">
                     <div>
                         <i class="fas fa-chart-line me-2"></i>
