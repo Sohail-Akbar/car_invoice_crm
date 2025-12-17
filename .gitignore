@@ -13,6 +13,7 @@ composer.phar
 
 # env file
 /includes/inc/env.php
+/includes/inc/config.php
 
 *.zip
 
