@@ -36,8 +36,8 @@
                            </div>
                        </a>
                        <div class="submenu" id="customerMenu">
-                           <a href="add-company" class="submenu-item">Add Company</a>
-                           <a href="view-company" class="submenu-item">View Company</a>
+                           <a href="add-company" class="submenu-item">Add</a>
+                           <a href="view-company" class="submenu-item">View</a>
                        </div>
                    </div>
                <?php } ?>

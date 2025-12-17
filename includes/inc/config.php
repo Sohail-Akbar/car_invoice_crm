@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 require_once "env.php";
 
 define("SITE_NAME", "Garage");
-define("SITE_EMAIL", "garagenoreply@devmedqon.com");
+define("SITE_EMAIL", "noreply@invoice.hillcliffe.com");
 define("CONTACT_EMAIL", "");
 
 
@@ -38,8 +38,8 @@ define('EMAILS', [
 ]);
 
 define('SMTP_HOST', 'smtp.hostinger.com');
-define('SMTP_PASSWORD', '_-bi!DX2TZGHv69');
-define('SMTP_EMAIL', "garagenoreply@devmedqon.com");
+define('SMTP_PASSWORD', 'Hillcliffe_1234@@^^%%');
+define('SMTP_EMAIL', "noreply@invoice.hillcliffe.com");
 
 define("UTC_TIME", new DateTime("now", new DateTimeZone("UTC")));
 define("CREATED_AT", UTC_TIME->format("Y-m-d H:i:s"));
