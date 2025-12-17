@@ -132,7 +132,7 @@ class TCEmails
             $mail->SMTPAuth   = true;
             $mail->Username   = SMTP_EMAIL;        // SMTP email
             $mail->Password   = SMTP_PASSWORD;     // SMTP password
-            $mail->SMTPSecure = 'ssl';             // 'ssl' or 'tls'
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;             // 'ssl' or 'tls'
             $mail->Port       = 465;               // 465 for SSL, 587 for TLS
 
             // From

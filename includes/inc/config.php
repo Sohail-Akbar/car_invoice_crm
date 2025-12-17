@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 require_once "env.php";
 
-define("SITE_NAME", "Garage");
+define("SITE_NAME", "Hillcliffe Grage Ltd");
 define("SITE_EMAIL", "noreply@invoice.hillcliffe.com");
 define("CONTACT_EMAIL", "");
 
