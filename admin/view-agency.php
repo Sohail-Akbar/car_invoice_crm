@@ -64,7 +64,6 @@ $agency_data = $db->query($agency_data, ["select_query" => true]);
                             <th>Branch Details</th>
                             <th>Branch Details</th>
                             <th>Branch Logo</th>
-                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -99,16 +98,6 @@ $agency_data = $db->query($agency_data, ["select_query" => true]);
                                         <?php if (isset($user['agency_logo'])) { ?>
                                             <img src="<?= _DIR_ . "uploads/" . $user['agency_logo'] ?>" style="width:100px;">
                                         <?php } ?>
-                                    </td>
-                                    <td>
-                                        <span class="text-white p-1 bold small-font <?php
-                                                                                    if ($user['verify_status'] != '1') echo 'bg-warning text-dark';
-                                                                                    else echo 'bg-success'; ?>">
-                                            <?php
-                                            if ($user['verify_status'] == '1') echo 'Verified';
-                                            else echo 'unverified';
-                                            ?>
-                                        </span>
                                     </td>
                                     <td>
                                         <div class="align-center child-el-margin-x">
