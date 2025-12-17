@@ -272,9 +272,9 @@ if (isset($_POST['saveInvoice'])) {
         $invoiceType = $proforma ? "Proforma Invoice" : "Invoice";
         $_tc_email->send([
             'template' => 'invoice',
-            'to' => "sohailakbar3324@gmail.com",
+            // 'to' => "sohailakbar3324@gmail.com",
             'to' => $invoice_data['client_email'],
-            // 'to_name' => $invoice_data['client_name'],
+            'to_name' => $invoice_data['client_name'],
             'vars' => [
                 'invoice_type' => $invoiceType,
                 'invoice_no' => $invoice_no,
