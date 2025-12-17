@@ -18,8 +18,8 @@
    <aside class="sidebar" id="sidebar">
        <div class="sidebar-menu">
            <div class="branch-log">
-               <!-- <img src="<?= _DIR_ . "/images/Hillcliffe-Garage-Logo.png" ?>" alt="Branch Logo Img"> -->
-               <img src="<?= _DIR_ . "/images/PR-Auto-Centre-Logo-dark.png" ?>" alt="Branch Logo Img">
+               <img src="<?= _DIR_ . "/images/Hillcliffe-Garage-Logo.png" ?>" alt="Branch Logo Img">
+               <!-- <img src="<?= _DIR_ . "/images/PR-Auto-Centre-Logo-dark.png" ?>" alt="Branch Logo Img"> -->
            </div>
            <div class="sidebar-option-menu">
                <a href="dashboard" class="menu-item">

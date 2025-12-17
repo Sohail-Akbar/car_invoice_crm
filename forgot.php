@@ -81,8 +81,8 @@ $JS_FILES_ = [
             <div class="login-form content-center">
                 <div class="login-form-container">
                     <div class="logo-img-head">
-                        <!-- <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img"> -->
-                        <img src="./images/PR-Auto-Centre-Logo-dark.png" class="logo-img" alt="Logo Img">
+                        <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img">
+                        <!-- <img src="./images/PR-Auto-Centre-Logo-dark.png" class="logo-img" alt="Logo Img"> -->
                     </div>
                     <?php if (!isset($_GET['type'])) { ?>
                         <div class="heading">
