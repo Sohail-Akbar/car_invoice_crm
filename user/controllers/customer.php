@@ -128,6 +128,7 @@ HTML;
             }
         }
 
+        $invoiceDate = date('d F Y', strtotime($invoice['invoice_date']));
 
         echo "
         <div class='card mb-3 shadow-sm mt-5 single-invoice-card'>
@@ -149,7 +150,7 @@ HTML;
                     </div>
                     {$pdf_html}
                 </div>
-                <p class='small text-muted mb-2'>Date: {$invoice['invoice_date']}</p>
+                <p class='small text-muted mb-2'>Date: {$invoiceDate}</p>
 
                 <table class='table table-sm table-bordered mb-3'>
                     <thead class='table-secondary'>
