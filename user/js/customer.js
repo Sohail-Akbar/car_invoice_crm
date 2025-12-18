@@ -37,33 +37,13 @@ $(document).ready(function () {
                     "data": null,
                     "orderable": false,
                     "render": function (data, type, row) {
-                        return `<div class="dropdown">
-                                    <button class="btn dropdown-toggle action-table-btn" type="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-cog"></i> Action
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" href="add-customer?id=${row.id}"><i class="fas fa-edit me-2 text-primary"></i>Edit</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="customer-profile?id=${row.id}"><i class="fa fa-eye text-success" aria-hidden="true"></i>View Profile</a>
-                                        </li> 
-                                        <li>
-                                            <a class="dropdown-item" href="invoice?customer_id=${row.id}"><i class="fas fa-file-alt text-success"></i>Generate Invoice</a>
-                                        </li> 
-                                        <li class="d-none">
-                                            <a class="dropdown-item" href="send-sms?customer_id=${row.id}"><i class="fas fa-envelope me-2 text-warning"></i>Send Message</a>
-                                        </li>
-                                        </ul>
-                                        </div>`;
+                        return `<a href="invoice?customer_id=${row.id}" class="btn br-5 text-white">
+                                    <i class="fas fa-file-alt"></i>
+                            Generate Invoice
+                        </a>`;
                     }
                 }
             ],
-            // <li>
-            //     <button class="no-btn-styles dropdown-item text-danger cp tc-delete-btn" title="Delete" data-target="${row.id}" data-action="customer">
-            //         <i class="fas fa-trash-alt"></i> Delete
-            //      </button>
-            // </li>
             "scrollX": true,
             "initComplete": function () { this.api().columns.adjust().draw(); },
             "drawCallback": function () { this.api().columns.adjust(); }
