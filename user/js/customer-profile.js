@@ -512,3 +512,118 @@ $('select[name="email_template_id"]').on('select2:select', function (e) {
         error: makeError
     });
 });
+
+
+// ------------------------------- Mot History
+
+// Render vehicle history (jQuery)
+async function renderMotHistory(data) {
+    const $container = $("#modalMotContent").empty();
+
+    if (!data.length) {
+        $container.html("<p>No vehicle history available.</p>");
+        return;
+    }
+
+    $.each(data, function (index, test) {
+        // Format dates
+        const testDate = new Date(test.completedDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        const expiryDate = test.expiryDate ? new Date(test.expiryDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }) : 'N/A';
+
+        // Determine status class and icon
+        const statusClass = test.testResult === 'PASSED' ? 'mot-pass' : 'mot-fail';
+        const statusIcon = test.testResult === 'PASSED' ? 'fa-check-circle' : 'fa-times-circle';
+        const statusText = test.testResult === 'PASSED' ? 'Passed' : 'Failed';
+
+        // Format mileage
+        const mileage = test.odometerValue ? `${test.odometerValue} ${test.odometerUnit}` : 'N/A';
+
+        // Filter defects for advisories only
+        const advisories = test.defects.filter(defect => defect.type === 'ADVISORY');
+
+        // Create MOT card
+        const $motCard = $('<div>').addClass('mot-card');
+
+        // Status header
+        const $statusHeader = $('<div>').addClass('mot-status-header');
+        $statusHeader.append(
+            $('<div>').addClass('status ' + statusClass).html(
+                `<i class="fas ${statusIcon}"></i> ${statusText}`
+            )
+        );
+        $statusHeader.append(
+            $('<div>').addClass('test-date').text(testDate)
+        );
+
+        // MOT info box
+        const $infoBox = $('<div>').addClass('mot-info-box');
+        $infoBox.append(
+            $('<div>').addClass('mot-row').html(
+                `<span class="label">MOT test number:</span><span class="value">${test.motTestNumber}</span>`
+            )
+        );
+        $infoBox.append(
+            $('<div>').addClass('mot-row').html(
+                `<span class="label">Mileage:</span><span class="value">${mileage}</span>`
+            )
+        );
+        $infoBox.append(
+            $('<div>').addClass('mot-row').html(
+                `<span class="label">Expiry Date:</span><span class="value">${expiryDate}</span>`
+            )
+        );
+
+        // Advisories section
+        const $advisories = $('<div>').addClass('advisories');
+        $advisories.append(
+            $('<p>').html('<i class="fas fa-file-signature"></i> <strong>Monitor and repair if necessary (advisories):</strong>')
+        );
+
+        const $advisoryList = $('<ul>');
+        if (advisories.length > 0) {
+            $.each(advisories, function (i, advisory) {
+                $advisoryList.append($('<li>').text(advisory.text));
+            });
+        } else {
+            $advisoryList.append($('<li>').text('No advisories'));
+        }
+        $advisories.append($advisoryList);
+
+        // Assemble the card
+        $motCard.append($statusHeader);
+        $motCard.append($('<hr>'));
+        $motCard.append($infoBox);
+        $motCard.append($('<hr>'));
+        $motCard.append($advisories);
+
+        // Add to container
+        $container.append($motCard);
+    });
+}
+
+
+// View Mot Hisotry
+tc.fn.cb.ViewProfileMotHistoryCB = async (form, data) => {
+
+    if (data.status === "success") {
+        if (data.data.vehicleInfo.motTests) {
+            await renderMotHistory(data.data.vehicleInfo.motTests);
+            $(".mot-history-model").modal("show")
+        } else {
+            sAlert("No MOT History Found", "error");
+        }
+    } else {
+        sAlert("No Vehicle History Found", "error");
+    }
+};
+
+// ------------------------------- Mot History
