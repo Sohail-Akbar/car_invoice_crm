@@ -33,7 +33,8 @@ if (isset($data['login'])) {
     }
 
     $user = $db->select_one('users', '*', [
-        'email' => $email
+        'email' => $email,
+        "type" => "staff"
     ]);
     if ($user) {
         $pending_2fa_data = [];
@@ -145,21 +146,23 @@ if (isset($data['verify_otp'])) {
         } else {
             // Clear OTP
             $db->update("users", [
-                "twofa_code" => null,
-                "twofa_expire" => null,
+                // "twofa_code" => null,
+                // "twofa_expire" => null,
                 "verify_status" =>  1,
-                "verify_token" => "",
+                // "verify_token" => "",
                 "token" => $token
             ], [
                 "id" => $user['id']
             ]);
 
+            $user_data = $db->select_one("users", "fname,lname,name,gender,title,email,type,address,contact,city,lat,lng,postcode,token", [
+                "token" => $token
+            ]);
+
             echo json_encode([
                 "status" => "success",
                 "message" => "OTP verify successfully",
-                "data" => [
-                    "token" => $token
-                ]
+                "data" => $user_data
             ]);
         }
         die;

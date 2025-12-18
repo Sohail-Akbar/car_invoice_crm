@@ -86,7 +86,7 @@ $staff_data = $db->select_one("users", "*", [
                         <div class="row m-0">
                             <div class="col-md-6">
                                 <label class="label">Role <span class="optional">(Optional)</span></label>
-                                <select name="role_id" class="form-control" required="">
+                                <select name="role_id" class="form-control">
                                     <option value="">Select Role</option>
                                     <?php foreach ($roles_data as $role) { ?>
                                         <option <?= arr_val($staff_data, "role_id", "") == $role['id'] ? 'selected' : '' ?> value="<?= $role['id']; ?>"><?= $role['text']; ?></option>
