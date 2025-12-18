@@ -106,13 +106,22 @@ $(document).on("click", "#backButton", function () {
 });
 
 
-
+// Customer notes ----------------
 let offset = 0;
-const limit = 10;
+const limit = 5;
+let isLoading = false;
+let hasMore = true;
 
 function loadNotes(reset = false) {
+
+    if (isLoading || !hasMore) return;
+
+    isLoading = true;
+    $('#notesLoader').removeClass('d-none');
+
     if (reset) {
         offset = 0;
+        hasMore = true;
         $('#notesContainer').html('');
     }
 
@@ -123,46 +132,73 @@ function loadNotes(reset = false) {
             fetchCustomerNotes: true,
             customer_id: _GET.id,
             offset: offset,
+            limit: limit,
             from_date: $('#from_date').val(),
             to_date: $('#to_date').val()
         },
         dataType: 'json',
         success: function (res) {
+
             if (res.status === 'success' && res.notes.length > 0) {
+
                 res.notes.forEach(note => {
                     $('#notesContainer').append(`
                         <div class="notes-container mb-3 border rounded p-2">
                             <div class="text-muted small mb-1">
-                                <span><i class="far fa-calendar-alt"></i> ${note.created_at}</span>
-                                <i class="fas fa-trash text-danger cp tc-delete-btn ml-5" title="Delete" data-parent=".notes-container" data-target="${note.id}" data-action="customer_notes"></i>
+                                <i class="far fa-calendar-alt"></i> ${note.created_at}
+                                <i class="fas fa-trash text-danger cp tc-delete-btn float-right"
+                                   data-parent=".notes-container"
+                                   data-target="${note.id}"
+                                   data-action="customer_notes"></i>
                             </div>
                             <div>${note.note}</div>
                         </div>
                     `);
                 });
+
                 offset += limit;
+
+                if (res.notes.length < limit) {
+                    hasMore = false;
+                }
+
             } else {
+                hasMore = false;
+
                 if (offset === 0) {
                     $('#notesContainer').html('<div class="text-center text-muted">No notes found.</div>');
                 }
-                $('#loadMoreNotes').hide();
             }
+        },
+        complete: function () {
+            isLoading = false;
+            $('#notesLoader').addClass('d-none');
         }
     });
 }
 
-// Initial load
+// ✅ Initial Load
 loadNotes();
 
-// Load more button
-$('#loadMoreNotes').on('click', function () {
-    loadNotes();
+// ✅ Infinite Scroll (inside container)
+$('#notesContainer').on('scroll', function () {
+
+    let container = $(this);
+    let scrollTop = container.scrollTop();
+    let containerHeight = container.height();
+    let scrollHeight = container[0].scrollHeight;
+
+    if (scrollTop + containerHeight >= scrollHeight - 50) {
+        loadNotes();
+    }
 });
 
-// Filter notes
-$('#filterNotes').on('click', function () {
+// ✅ Reload on date filter change
+$('#from_date, #to_date').on('change', function () {
     loadNotes(true);
 });
+// Customer notes ----------------
+
 
 // Invoice
 $(document).ready(function () {

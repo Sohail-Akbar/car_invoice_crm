@@ -365,41 +365,33 @@ if (isset($_POST['addCustomerNotes'])) {
 
 
 if (isset($_POST['fetchCustomerNotes'])) {
+
     $customer_id = intval($_POST['customer_id']);
     $offset      = intval($_POST['offset']);
-    $limit       = 10;
+    $limit       = intval($_POST['limit']) ?: 5;
 
     $from_date = !empty($_POST['from_date']) ? $_POST['from_date'] : null;
     $to_date   = !empty($_POST['to_date']) ? $_POST['to_date'] : null;
 
-    $where = [
-        "customer_id" => $customer_id,
-        "company_id"  => LOGGED_IN_USER['company_id'],
-        "agency_id"   => LOGGED_IN_USER['agency_id'],
-    ];
-
-    $sql = "SELECT * FROM customer_notes 
+    $sql = "SELECT id, note, DATE_FORMAT(created_at, '%d %M %Y') AS created_at
+            FROM customer_notes
             WHERE customer_id = {$customer_id}
-            AND company_id = {$where['company_id']}
-            AND agency_id = {$where['agency_id']}";
+            AND company_id = " . LOGGED_IN_USER['company_id'] . "
+            AND agency_id = " . LOGGED_IN_USER['agency_id'];
 
     if ($from_date && $to_date) {
         $sql .= " AND DATE(created_at) BETWEEN '{$from_date}' AND '{$to_date}'";
     }
 
-    $sql .= " ORDER BY created_at DESC LIMIT {$limit} OFFSET {$offset}";
+    $sql .= " ORDER BY id DESC
+              LIMIT {$limit} OFFSET {$offset}";
 
     $notes = $db->query($sql, ['select_query' => true]);
 
     if ($notes) {
 
-        // Loop and decode HTML for each note
         foreach ($notes as &$note) {
-            if (isset($note['note'])) {
-                $note['note'] = htmlspecialchars_decode($note['note'], ENT_QUOTES);
-                // OR:
-                // $note['note'] = html_entity_decode($note['note'], ENT_QUOTES, 'UTF-8');
-            }
+            $note['note'] = html_entity_decode($note['note'], ENT_QUOTES, 'UTF-8');
         }
 
         echo json_encode([
@@ -407,13 +399,14 @@ if (isset($_POST['fetchCustomerNotes'])) {
             'notes'  => $notes
         ]);
     } else {
-
         echo json_encode([
-            'status' => 'error',
+            'status' => 'success',
             'notes'  => []
         ]);
     }
+    exit;
 }
+
 
 
 

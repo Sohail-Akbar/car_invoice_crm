@@ -207,9 +207,13 @@ if (empty($email_template)) $email_template = [];
                             </div>
                         <?php } ?>
                         <div class="view-customer-note <?= LOGGED_IN_USER['type']  !== "customer" ? 'd-none' : 'customer-login' ?>">
-                            <div id="notesContainer" class="mt-3"></div>
+                            <div id="notesContainer" class="mt-3" style="max-height: 180px; overflow-y: auto;"></div>
+
                             <div class="text-center mt-3">
-                                <button id="loadMoreNotes" class="btn btn-outline-secondary btn-sm">Load More</button>
+                                <!-- <button id="loadMoreNotes" class="btn btn-outline-secondary btn-sm">Load More</button> -->
+                                <div id="notesLoader" class="text-center mt-2 d-none">
+                                    <small class="text-muted">Loading more notes...</small>
+                                </div>
                             </div>
                         </div>
                     </div>
