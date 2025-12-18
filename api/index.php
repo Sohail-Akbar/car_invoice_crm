@@ -36,6 +36,10 @@ if ($endpoint === "/login") {
     $_POST['updatePassword'] = true;
 } else if ($endpoint === "/logout") {
     $_POST['accountLogout'] = true;
+} else if ($endpoint === "/get-assigned-tasks") {
+    $_POST['getAssignedTask'] = true;
+} else if ($endpoint === "/get-complete-tasks") {
+    $_POST['getCompleteTask'] = true;
 }
 
 // Define routes
@@ -46,6 +50,8 @@ $routes = [
     '/forgot' => __DIR__ . '/routes/auth.php',
     '/set_password' => __DIR__ . '/routes/auth.php',
     '/logout' => __DIR__ . '/routes/auth.php',
+    '/get-assigned-tasks' => __DIR__ . '/routes/staff.php',
+    '/get-complete-tasks' => __DIR__ . '/routes/staff.php',
 ];
 
 // Switch case for routing

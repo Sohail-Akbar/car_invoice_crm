@@ -186,7 +186,10 @@ if (isset($data['reset_password'])) {
         die;
     }
 
-    $user = $db->select_one('users', '*', ['email' => $email]);
+    $user = $db->select_one('users', '*', [
+        'email' => $email,
+        "type" => "staff"
+    ]);
 
     if (!$user) {
         echo error("You've entered the incorrect email address. Please try again.");
