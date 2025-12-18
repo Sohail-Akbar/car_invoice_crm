@@ -128,8 +128,7 @@ HTML;
             }
         }
 
-        $invoiceDate = date('d F Y', strtotime($invoice['invoice_date']));
-
+        $invoiceDate = empty($invoice['invoice_date']) ? "" : date('d F Y', strtotime($invoice['invoice_date']));
         echo "
         <div class='card mb-3 shadow-sm mt-5 single-invoice-card'>
             <div class='card-header bg-info d-flex justify-content-between align-items-center single-header'>
