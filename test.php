@@ -12,10 +12,8 @@ $options->set('defaultFont', 'Helvetica');
 
 $dompdf = new Dompdf($options);
 
-
 $branch_logo = "http://localhost/projects/car_invoice_crm/images/logo_img.png";
-$signature_img = "http://localhost/projects/car_invoice_crm/images/signature.png";
-
+$signature_img = "http://localhost/projects/car_invoice_crm/images/PR-Auto-Centre-Logo-dark.png";
 
 $html = <<<HTML
 <!DOCTYPE html>
@@ -27,15 +25,34 @@ $html = <<<HTML
     <style>
         body {
             size: A4;
+            margin: 0;
+            padding: 0;
+            position: relative;
         }
 
         @page {
             margin-top: 10mm;
             margin-right: 12mm;
-            margin-bottom: 0mm;
+            margin-bottom: 0mm; 
             margin-left: 12mm;
         }
 
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: -12mm;
+            width: calc(100% + 15mm);
+            background-color: #214F79 !important;
+            color: white;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            padding-bottom:0px !important;
+            padding-left:12mm; 
+        }
+
+        .main-content {
+            padding-bottom: 35mm;
+        }
 
         .m-0 {
             margin: 0px
@@ -76,9 +93,15 @@ $html = <<<HTML
             background-color: #ECF9FF;
         }
 
-        .footer {
-            background-color: #214F79 !important;
+        .footer-table {
             width: 100%;
+            border-collapse: collapse;
+        }
+
+        .footer-table td {
+            width: 50%;
+            padding: 5px 8px;
+            padding-bottom:0px !important;
         }
 
         .invoice-notes {
@@ -88,166 +111,143 @@ $html = <<<HTML
             margin-top: 20px;
             font-size: 14px;
         }
-
-        .footer {
-            margin-left: -12mm;
-            margin-right: -12mm;
-            width: calc(100% + 15mm);
-            background-color: #214F79 !important;
-            padding: 5px 20px;
-            padding-bottom:0px !important;
-            color: #fff;
-            margin-top:30px;
-        }
-
-        .footer-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .footer-table td {
-            width: 50%;
-            padding: 5px 10px;
-        }
+    hr{
+        margin:0px !important;
+        padding:0px !important;
+    }
+    .p-0{
+        padding:0px !important;
+    }
     </style>
 </head>
 
 <body>
-    <div class="invoice-pdf-container">
-        <table style="width:100%; border-collapse: collapse;">
-            <tr>
-                <td style="width:50%; padding-right:20px; vertical-align: top;">
-                    <h1 style="color:#214F79;margin:0px;">Invoice</h1>
-                    <h4 style="margin:0px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice No.</h4>
-                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">#010101</h4>
-                    <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:15px;">Issue On</h4>
-                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">Nov 27, 2025
-                    </h4>
-                </td>
-                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
-                    <img src="{$branch_logo}" style="max-width:150px;">
-                </td>
-            </tr>
-        </table>
-        <div style="padding-left:20px;padding-right:20px;">
-            <hr style="margin-top:10px;border:0.5px solid #ccc;">
+    <div class="main-content">
+        <div class="invoice-pdf-container">
             <table style="width:100%; border-collapse: collapse;">
                 <tr>
                     <td style="width:50%; padding-right:20px; vertical-align: top;">
-                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Bill to
+                        <h1 style="color:#214F79;margin:0px;">Invoice</h1>
+                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Invoice number : <span style="color:#6C6C6D;font-size:13px;">#010101</span></h4>
+                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Issued on: <span style="color:#6C6C6D;font-size:13px;">#010101</span></h4>
+                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Due Date : <span style="color:#6C6C6D;font-size:13px;">#010101</span></h4>
                         </h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:16px;">Intellectual
-                            Bunch Limited</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">123 Business Ave New York,
-                            NY </h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: (555) 123-4567</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">hello@gmail.com</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">(555) 123-4567</h4>
                     </td>
-                    <td style="width:50%; padding-left:20px; vertical-align: top;">
-                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice
-                            Details</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-weight:500;font-size:13px;">Invoice
-                            Date: mm/dd/yyyy</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Due Date: mm/dd/yyyy</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Tax Rate: 11%</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Branch Percentage: 10%</h4>
+                    <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                        <img src="{$signature_img}" style="width:80%;">
                     </td>
                 </tr>
             </table>
+            <div style="padding-left:15px;padding-right:15px;">
+                <hr style="border:0.5px solid #ccc;">
+            </div>
+            <div class="m-0 p-0">
+                <table style="width:100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width:100%; padding-right:20px; vertical-align: top;">
+                            <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Bill to
+                            </h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:16px;">Intellectual
+                                Bunch Limited</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">123 Business Ave New York,
+                                NY </h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: (555) 123-4567</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">hello@gmail.com</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">(555) 123-4567</h4>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table style="margin:0px;">
+                <thead>
+                    <tr>
+                        <th width="5%" style="font-size:14px !important;">#</th>
+                        <th width="65%" style="font-size:14px !important;">Service Description</th>
+                        <th width="30%" style="font-size:14px !important;">Quantity</th>
+                        <th width="30%" style="font-size:14px !important;">Amount</th>
+                        <th width="30%" style="font-size:14px !important;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>testing</td>
+                        <td>1</td>
+                        <td>£200.00</td>
+                        <td>£200.00</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>testing</td>
+                        <td>1</td>
+                        <td>£200.00</td>
+                        <td>£200.00</td>
+                    </tr>
+            </table>
+            <table style="width:100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width:50%; padding-right:20px; vertical-align: bottom;">
+                    </td>
+                    <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                        <table style="margin-top:20px;">
+                            <tbody>
+                                <tr>
+                                    <td>SubTotal:</td>
+                                    <td style="text-align: right;">£1350.00</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold !important;">Vat (11.00%):</td>
+                                    <td style="text-align: right;">$200.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Discount:</td>
+                                    <td style="text-align: right;">£1350.00</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold;">Total Amount:</td>
+                                    <td style="text-align: right;font-weight:bold !important;">$200.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Discount:</td>
+                                    <td style="text-align: right;">£1350.00</td>
+                                </tr>
+                                <tr style="background:#214F79;">
+                                    <td style="color:white;font-weight:bold;">Total Amount:</td>
+                                    <td style="text-align: right; color:white; font-weight:bold;">$200.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <div class="invoice-notes">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum, ex!
+            </div>
+            <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>
         </div>
-        <table style="margin:0px;">
-            <thead>
-                <tr>
-                    <th width="5%">#</th>
-                    <th width="65%">Service Description</th>
-                    <th width="30%">Amount</th>
-                    <th width="30%">Quantity</th>
-                    <th width="30%">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>testing</td>
-                    <td>£200.00</td>
-                    <td>1</td>
-                    <td>£200.00</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>testing</td>
-                    <td>£200.00</td>
-                    <td>1</td>
-                    <td>£200.00</td>
-                </tr>
-            </tbody>
-        </table>
-        <table style="width:100%; border-collapse: collapse;">
-            <tr>
-                <td style="width:50%; padding-right:20px; vertical-align: bottom;">
-                    <img src="{$signature_img}" style="max-width:200px;">
-                    <h1 style="color:#214F79;margin:0px;font-size:15px;">XYZ Name.....</h1>
-                </td>
-                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
-                    <table style="margin-top:20px;">
-                        <tbody>
-                            <tr>
-                                <td>SubTotal:</td>
-                                <td style="text-align: right;">£1350.00</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:bold !important;">Vat (11.00%):</td>
-                                <td style="text-align: right;">$200.00</td>
-                            </tr>
-                            <tr>
-                                <td>Discount:</td>
-                                <td style="text-align: right;">£1350.00</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:bold;">Total Amount:</td>
-                                <td style="text-align: right;font-weight:bold !important;">$200.00</td>
-                            </tr>
-                            <tr>
-                                <td>Discount:</td>
-                                <td style="text-align: right;">£1350.00</td>
-                            </tr>
-                            <tr style="background:#214F79;">
-                                <td style="color:white;font-weight:bold;">Total Amount:</td>
-                                <td style="text-align: right; color:white; font-weight:bold;">$200.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <div class="invoice-notes">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum, ex!
-        </div>
-        <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>
     </div>
+    
     <div class="footer">
         <table class="footer-table">
             <tr>
                 <td style="width:50%; padding-right:20px; vertical-align: top;">
-                    <strong>Terms And Conditions:</strong><br>
-                    <p style="margin-top:5px;">Payment is due within 14 days from the invoice date. <br>
-                    Late payment may incur a 2% monthly fee.</p>
+                    <strong>Payment terms:</strong><br>
+                    <p style="margin-top:5px;font-size:12px;">Payment is due within seven (7) days of the invoice date. Late payments may be subject to a surcharge of 2% per month, calculated from the due date until payment is received.</p>
                 </td>
 
                 <td style="width:50%; padding-left:20px; vertical-align: top;">
                     <table class="footer-table m-0">
                         <tr>
                             <td style="width:50%; vertical-align: top;">
-                                <strong>Contact Us:</strong><br>
-                                <p style="margin-top:5px;">(555) 123-4567<br>
-                                (555) 123-4567<br></p>
+                                <strong>Address:</strong><br>
+                                <p style="margin-top:5px; font-size:12px;">48 Catley Road, Sheffield, S9 5JF </p>
                             </td>
 
                             <td style="width:50%; vertical-align: top;">
                                 <strong>Find Us:</strong><br>
-                                <p style="margin-top:5px;">hello@gmail.com<br>
-                                hello@gmail.com</p>
+                                <p style="margin-top:5px;font-size:12px">0114 2619965<br>
+                                www.hillcliffe.com <br>
+                                info@hillcliffe.com</p>
                             </td>
                         </tr>
                     </table>
@@ -259,8 +259,6 @@ $html = <<<HTML
 
 </html>
 HTML;
-// echo $html;
-// die;
 
 $dompdf->loadHtml($html);
 $dompdf->setPaper("A4", "portrait");

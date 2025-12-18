@@ -407,11 +407,11 @@ function saveInvoicePDF($invoice_data = [])
 <table style="margin:0px;">
     <thead>
         <tr>
-            <th width="5%">#</th>
-            <th width="65%">Service Description</th>
-            <th width="30%">Amount</th>
-            <th width="30%">Quantity</th>
-            <th width="30%">Total</th>
+            <th width="5%" style="font-size:14px !important;">#</th>
+            <th width="65%" style="font-size:14px !important;">Service Description</th>
+            <th width="30%" style="font-size:14px !important;">Quantity</th>
+            <th width="30%" style="font-size:14px !important;">Amount</th>
+            <th width="30%" style="font-size:14px !important;">Total</th>
         </tr>
     </thead>
     <tbody>';
@@ -423,8 +423,8 @@ function saveInvoicePDF($invoice_data = [])
         <tr>
             <td>' . ($index + 1) . '</td>
             <td>' . htmlspecialchars($service['description']) . '</td>
-            <td>' . _CURRENCY_SYMBOL . number_format($service['amount'], 2) . '</td>
             <td>' . $service['quantity'] . '</td>
+            <td>' . _CURRENCY_SYMBOL . number_format($service['amount'], 2) . '</td>
             <td>' . _CURRENCY_SYMBOL . number_format($lineTotal, 2) . '</td>
         </tr>';
     }
@@ -456,15 +456,34 @@ function saveInvoicePDF($invoice_data = [])
     <style>
         body {
             size: A4;
+            margin: 0;
+            padding: 0;
+            position: relative;
         }
 
         @page {
             margin-top: 10mm;
             margin-right: 12mm;
-            margin-bottom: 0mm;
+            margin-bottom: 0mm; 
             margin-left: 12mm;
         }
 
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: -12mm;
+            width: calc(100% + 15mm);
+            background-color: #214F79 !important;
+            color: white;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            padding-bottom:0px !important;
+            padding-left:12mm; 
+        }
+
+        .main-content {
+            padding-bottom: 35mm;
+        }
 
         .m-0 {
             margin: 0px
@@ -505,9 +524,15 @@ function saveInvoicePDF($invoice_data = [])
             background-color: #ECF9FF;
         }
 
-        .footer {
-            background-color: #214F79 !important;
+        .footer-table {
             width: 100%;
+            border-collapse: collapse;
+        }
+
+        .footer-table td {
+            width: 50%;
+            padding: 5px 8px;
+            padding-bottom:0px !important;
         }
 
         .invoice-notes {
@@ -517,140 +542,118 @@ function saveInvoicePDF($invoice_data = [])
             margin-top: 20px;
             font-size: 14px;
         }
-
-        .footer {
-            margin-left: -12mm;
-            margin-right: -12mm;
-            width: calc(100% + 15mm);
-            background-color: #214F79 !important;
-            padding: 5px 20px;
-            padding-bottom:0px !important;
-            color: #fff;
-            margin-top:30px;
-        }
-
-        .footer-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .footer-table td {
-            width: 50%;
-            padding: 5px 10px;
-        }
-        .d-none{
-            display:none !important;
-        }
+    hr{
+        margin:0px !important;
+        padding:0px !important;
+    }
+    .p-0{
+        padding:0px !important;
+    }
+    .d-none{
+        display:none !important;
+    }
     </style>
 </head>
 
 <body>
-    <div class="invoice-pdf-container">
-        <table style="width:100%; border-collapse: collapse;">
-            <tr>
-                <td style="width:50%; padding-right:20px; vertical-align: top;">
-                    <h1 style="color:#214F79;margin:0px;">{$invoiceTitle}</h1>
-                    <h4 style="margin:0px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice No.</h4>
-                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">{$invoice_no}</h4>
-                    <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:15px;">Issued on</h4>
-                    <h4 style="margin:0px;margin-top:5px;color:#010101;font-weight:500;font-size:15px;">{$invoice_date}
-                    </h4>
-                </td>
-                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
-                    <img src="{$branch_logo}" style="width:100%;">
-                </td>
-            </tr>
-        </table>
-        <div style="padding-left:20px;padding-right:20px;">
-            <hr style="margin-top:10px;border:0.5px solid #ccc;">
+    <div class="main-content">
+        <div class="invoice-pdf-container">
             <table style="width:100%; border-collapse: collapse;">
                 <tr>
                     <td style="width:50%; padding-right:20px; vertical-align: top;">
-                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Bill to
+                        <h1 style="color:#214F79;margin:0px;">{$invoiceTitle}</h1>
+                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Invoice number : <span style="color:#6C6C6D;font-size:13px;"> #{$invoice_no}</span></h4>
+                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Issued on: <span style="color:#6C6C6D;font-size:13px;"> {$invoice_date}</span></h4>
+                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Due Date : <span style="color:#6C6C6D;font-size:13px;"> $due_date</span></h4>
                         </h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:16px;">{$client_name}</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_address}</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: {$client_contact}</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_email}</h4>
                     </td>
-                    <td style="width:50%; padding-left:20px; vertical-align: top;">
-                        <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Invoice
-                            Details</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-weight:500;font-size:13px;">Invoice
-                            Date: {$invoice_date}</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Due Date: {$due_date}</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Tax Rate: {$tax_rate}%</h4>
-                        <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Branch Discount: {$discount_percentage}%</h4>
+                    <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                        <img src="{$branch_logo}" style="width:80%;">
                     </td>
                 </tr>
             </table>
+            <div style="padding-left:15px;padding-right:15px;">
+                <hr style="border:0.5px solid #ccc;">
+            </div>
+            <div class="m-0 p-0">
+                <table style="width:100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width:100%; padding-right:20px; vertical-align: top;">
+                            <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Bill to
+                            </h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:16px;">{$client_name}</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_address}</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: {$client_contact}</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_email}</h4>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            {$services_table}
+            <table style="width:100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width:50%; padding-right:20px; vertical-align: bottom;">
+                    </td>
+                    <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
+                        <table style="margin-top:20px;">
+                            <tbody>
+                                <tr>
+                                    <td>SubTotal:</td>
+                                    <td style="text-align: right;">{$subtotal}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold !important;">Vat ({$tax_rate}%):</td>
+                                    <td style="text-align: right;">{$tax_amount}</td>
+                                </tr>
+                                <tr>
+                                    <td>Discount:</td>
+                                    <td style="text-align: right;">{$discount_amount}</td>
+                                </tr>
+                                <tr style="background:#F2F2F7;">
+                                    <td style="font-weight:bold;">Total Amount:</td>
+                                    <td style="text-align: right; font-weight:bold;">{$total_amount}</td>
+                                </tr>
+                                <tr class="{$is_proforma_div_hide}">
+                                    <td>Paid:</td>
+                                    <td style="text-align: right;">{$paid_amount}</td>
+                                </tr>
+                                <tr class="{$is_proforma_div_hide}" style="background:#214F79; ">
+                                    <td style="color:white;">Due Amount:</td>
+                                    <td style="text-align: right;color:white;">{$due_amount}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <div class="invoice-notes {$is_client_note}">
+                {$client_note}
+            </div>
+            <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>
         </div>
-        {$services_table}
-        <table style="width:100%; border-collapse: collapse;">
-            <tr>
-                <td style="width:50%; padding-right:20px; vertical-align: bottom;">
-                    <img class="d-none" src="{$signature_img}" style="max-width:200px;">
-                    <h1 class="d-none" style="color:#214F79;margin:0px;font-size:15px;">{$company_name}</h1>
-                </td>
-                <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
-                    <table style="margin-top:20px;">
-                        <tbody>
-                            <tr>
-                                <td>SubTotal:</td>
-                                <td style="text-align: right;">{$subtotal}</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:bold !important;">Vat ({$tax_rate}%):</td>
-                                <td style="text-align: right;">{$tax_amount}</td>
-                            </tr>
-                            <tr>
-                                <td>Discount:</td>
-                                <td style="text-align: right;">{$discount_amount}</td>
-                            </tr>
-                             <tr style="background:#F2F2F7;">
-                                <td style="font-weight:bold;">Total Amount:</td>
-                                <td style="text-align: right; font-weight:bold;">{$total_amount}</td>
-                            </tr>
-                            <tr class="{$is_proforma_div_hide}">
-                                <td>Paid:</td>
-                                <td style="text-align: right;">{$paid_amount}</td>
-                            </tr>
-                            <tr class="{$is_proforma_div_hide}" style="background:#214F79; ">
-                                <td style="color:white;">Due Amount:</td>
-                                <td style="text-align: right;color:white;">{$due_amount}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <div class="invoice-notes {$is_client_note}">
-            {$client_note}
-        </div>
-        <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>
     </div>
+    
     <div class="footer">
         <table class="footer-table">
             <tr>
                 <td style="width:50%; padding-right:20px; vertical-align: top;">
-                    <strong>Terms And Conditions:</strong><br>
-                    <p style="margin-top:5px;">Payment is due within 07 days from the invoice date. <br>
-                    Late payment may incur a 2% monthly fee.</p>
+                    <strong>Payment terms:</strong><br>
+                    <p style="margin-top:5px;font-size:12px;">Payment is due within seven (7) days of the invoice date. Late payments may be subject to a surcharge of 2% per month, calculated from the due date until payment is received.</p>
                 </td>
 
                 <td style="width:50%; padding-left:20px; vertical-align: top;">
                     <table class="footer-table m-0">
                         <tr>
                             <td style="width:50%; vertical-align: top;">
-                                <strong>Contact Us:</strong><br>
-                                <p style="margin-top:5px;">{$company_phone}<br>
-                                {$l_user_contact}<br></p>
+                                <strong>Address:</strong><br>
+                                <p style="margin-top:5px; font-size:12px;">{$company_address}</p>
                             </td>
 
                             <td style="width:50%; vertical-align: top;">
                                 <strong>Find Us:</strong><br>
-                                <p style="margin-top:5px;">{$company_email}<br>
-                                {$l_user_email}</p>
+                                <p style="margin-top:5px;font-size:12px">{$company_phone}<br>
+                                www.hillcliffe.com <br>
+                                info@hillcliffe.com</p>
                             </td>
                         </tr>
                     </table>
