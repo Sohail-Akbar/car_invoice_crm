@@ -505,9 +505,9 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
             // Insert row
             let row = `
                 <tr>
-                    <td>${customerDetails}</td>
-                    <td>${vehicleDetails}</td>
-                    <td>${vehicle.make} ${vehicle.model}</td>
+                    <td><a href="customer-profile?id=${single_customer.id}">${vehicle.make} ${vehicle.model}</a></td>
+                    <td><a href="customer-profile?id=${single_customer.id}">${vehicleDetails}</a></td>
+                    <td><a href="customer-profile?id=${single_customer.id}">${customerDetails}</a></td>
                     <td>${actions}</td>
                 </tr>
             `;
@@ -535,6 +535,7 @@ tc.fn.cb.motHistoryCB = async (form, data) => {
         });
         return false;
     } else if (data.status === "error" && (_GET.search_by === "name" || _GET.search_by === "phone" || _GET.search_by === "reg_no")) {
+        $('#vehicleHistoryTable tbody').empty();
         sAlert(data.data, data.status);
         return false;
     }

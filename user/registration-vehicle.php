@@ -141,9 +141,16 @@ $existing_customers = $db->select("users", "*", [
                     </div>
                 </div>
             <?php }  ?>
-            <?php if (isset($_GET['search_by'])) { ?>
+            <?php if (isset($_GET['search_by'])) {
+                $heading_ = "Search Vehicle Registration Number";
+                if ($_GET['search_by'] === "name") {
+                    $heading_ = "Search by Customer Name";
+                } else if ($_GET['search_by'] === "phone") {
+                    $heading_ = "Search by Telephone Number";
+                }
+            ?>
                 <div class="pull-away my-3">
-                    <h3 class="heading text-clr">Search Registration Vehicle</h3>
+                    <h3 class="heading text-clr"><?= $heading_  ?></h3>
                     <div class="d-flex">
                         <a href="registration-vehicle" title="Go Back" class="btn content-center br-5 transparent-btn">
                             <svg width="7" height="12" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -221,9 +228,9 @@ $existing_customers = $db->select("users", "*", [
                                 <table id="vehicleHistoryTable" class="display" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th>Registration Number</th>
+                                            <th>Details</th>
                                             <th>Customer Details</th>
-                                            <th>Vehicle Details</th>
-                                            <th>Vehicle</th>
                                             <!-- <th>Status</th> -->
                                             <th>Actions</th>
                                         </tr>
