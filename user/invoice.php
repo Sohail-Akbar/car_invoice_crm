@@ -101,7 +101,7 @@ $company_discount = $db->select("discount", "*", [
             </a>
         </div>
         <div class="card px-0">
-            <form action="invoice" method="POST" class="ajax_form">
+            <form action="invoice" method="POST" class="ajax_form" data-callback="invoiceCB">
                 <div class="row mx-0">
                     <div class="col-xl-6 col-md-12">
                         <div class="row mx-0">
@@ -366,7 +366,14 @@ $company_discount = $db->select("discount", "*", [
                                 <input type="hidden" name="customer_id" value="<?= $get_customer_id ?>">
                             <?php } ?>
                             <input type="hidden" name="saveInvoice" value="<?= bc_code(); ?>">
-                            <button type="submit" class="btn"><i class="fas fa-save    "></i> Save Invoice</button>
+                            <div class="invoice-submit-btn-container mt-4">
+                                <input type="hidden" name="submit_type" value="">
+                                <?php if (!$get_invoice_id) { ?>
+                                    <button type="submit" class="btn invoice-submit-btn br-5 mb-2" data-submit-type="save_and_print_invoice"><i class="fas fa-save"></i> Save & Print Invoice</button>
+                                    <button type="submit" class="btn invoice-submit-btn br-5 mb-2" data-submit-type="save_and_view_profile"><i class="fas fa-save"></i> Save & View Profile</button>
+                                <?php } ?>
+                                <button type="submit" class="btn invoice-submit-btn br-5 mb-2" data-submit-type="save_invoice"><i class="fas fa-save"></i> Save Invoice</button>
+                            </div>
                         </div>
                     </div>
                 </div>

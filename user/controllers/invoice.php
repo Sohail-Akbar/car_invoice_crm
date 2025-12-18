@@ -27,6 +27,7 @@ if (isset($_POST['saveInvoice'])) {
     $agency_id = LOGGED_IN_USER['agency_id'];
     $customer_id = intval($_POST['customer_id']);
     $write_off = isset($_POST['write_off']) ? 1 : 0;
+    $submit_type = arr_val($_POST, "submit_type", "");
 
     if (empty($customer_id)) {
         returnError("Please select a customer before saving the invoice.");
@@ -228,7 +229,7 @@ if (isset($_POST['saveInvoice'])) {
             }
 
             returnSuccess("Invoice Update Successfully", [
-                "redirect" => "customer-profile?id=$customer_id"
+                "redirect" => "customer-profile?id=$customer_id",
             ]);
         }
         die;
@@ -311,7 +312,11 @@ if (isset($_POST['saveInvoice'])) {
             ]);
         }
 
-        returnSuccess("Invoice created successfully.", ["redirect" => ""]);
+        returnSuccess("Invoice created successfully.", [
+            "redirect" => $submit_type === "save_and_view_profile" ?  "customer-profile?id=$customer_id" :  "",
+            "submit_type" => $submit_type,
+            "pdf" => $pdf['filename']
+        ]);
     } else {
         returnError("Failed to create invoice.");
     }

@@ -368,3 +368,27 @@ $(document).on('click', '.openAddVehicleModal', function () {
 
     $('.add-new-vehicle-model').modal('show');
 });
+
+
+// invoice submit buttons 
+$(document).on("click", ".invoice-submit-btn", function (e) {
+    e.preventDefault();
+    let $parent = $(this).parents(".invoice-submit-btn-container");
+    $parent.find("button").attr("type", "button");
+    $(this).attr("type", "submit");
+    $parent.find(`[name="submit_type"]`).val($(this).data("submit-type"));
+    $(this).parents("form").submit();
+});
+
+// Save invoice call back
+tc.fn.cb.invoiceCB = async (form, data) => {
+    if (data.status === 'success') {
+        if (data.submit_type === "save_and_print_invoice") {
+            let pdf_file = _SITE_URL + "/uploads/invoices/" + data.pdf;
+            window.open(pdf_file, '_blank');
+        }
+        location.href = data.redirect;
+    } else {
+        sAlert(data.data, 'error');
+    }
+};
