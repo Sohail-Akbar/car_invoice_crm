@@ -12,20 +12,14 @@ $(document).ready(function () {
             "lengthChange": true,
             "columns": [
                 { "data": "index" },
+                { "data": "reg_number" },
+                { "data": "details" },
                 {
                     "data": "customer_details",
                     "render": function (data) {
                         return data;
                     }
                 },
-                { "data": "reg_number" },
-                { "data": "details" },
-                // {
-                //     "data": "status",
-                //     "render": function (data) {
-                //         return data;
-                //     }
-                // },
                 { "data": "id", "visible": false }
             ],
             "order": [[0, "desc"]],

@@ -60,9 +60,9 @@ if (!$mot_history) $mot_history = [];
                     <thead class="thead-light">
                         <tr>
                             <th>#</th>
-                            <th>Customer Details</th>
-                            <th>Registration No</th>
+                            <th>Registration Number</th>
                             <th>Details</th>
+                            <th>Customer Detail</th>
                             <th class="d-none">Status</th>
                             <th class="d-none"></th>
                         </tr>

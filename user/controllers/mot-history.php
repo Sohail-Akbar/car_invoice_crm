@@ -536,14 +536,18 @@ if (isset($_GET['fetchVehicleData'])) {
         $email_html = "";
         if (!empty($customer['email'])) $email_html = "<strong>Email:</strong> {$customer['email']}<br>";
 
-        $customerHTML = "<strong>Name:</strong> {$customer['title']} {$customer['fname']} {$customer['lname']}<br>
+        $customerHTML = "<a href='customer-profile?id={$row['customer_id']}'>
+                        <strong>Name:</strong> {$customer['title']} {$customer['fname']} {$customer['lname']}<br>
                          {$email_html}
-                         <strong>Contact:</strong> {$customer['contact']}";
+                         <strong>Contact:</strong> {$customer['contact']}
+                         </a>";
 
-        $detailsHTML = "<strong>Make:</strong> {$row['make']}<br>
+        $detailsHTML = "<a href='customer-profile?id={$row['customer_id']}'>
+                        <strong>Make:</strong> {$row['make']}<br>
                         <strong>Model:</strong> {$row['model']}<br>
                         <strong>Engine Size:</strong> {$row['engineSize']}<br>
-                        <strong>Expiry Date:</strong> {$row['expiryDate']}";
+                        <strong>Expiry Date:</strong> {$row['expiryDate']}
+                        </a>";
 
         $statusClass = ($row['is_active'] == '1') ? 'bg-success' : 'bg-warning text-dark';
         $statusText = ($row['is_active'] == '1') ? 'Active' : 'Inactive';
@@ -552,7 +556,7 @@ if (isset($_GET['fetchVehicleData'])) {
         $data[] = [
             "index" => $count++,
             "customer_details" => $customerHTML,
-            "reg_number" => $row['reg_number'],
+            "reg_number" => "<a href='customer-profile?id={$row['customer_id']}'>{$row['reg_number']}</a>",
             "details" => $detailsHTML,
             "status" => $statusHTML,
             "id" => $row['id']
