@@ -183,7 +183,16 @@ $(document).on("change", "#customerSelectBox", function () {
 window.addEventListener("message", function (event) {
     if (event.data.type === "FORM_SUBMITTED") {
         $("modal").modal("hide");
-        location.reload();
+        let vehicleData = event.data.vehicleData;
+        $(".vehicle-history-container").find(".search-container").after(`<li role="option" data-id="${vehicleData.vehicle_id}" data-name="${vehicleData.reg_number}">
+                                                        <div class="customer-info">
+                                                            <div class="customer-name">${vehicleData.reg_number}</div>
+                                                        </div>
+                                                    </li>`);
+
+        $(".vehicle-history-container").find(`[role="option"][data-id="${vehicleData.vehicle_id}"]`).trigger("click");
+        $(".modal").modal("hide");
+        // location.reload();
         console.log("Iframe form submitted!");
         // Yahan aap apna callback ya koi bhi action kar sakte ho
     }
@@ -310,7 +319,16 @@ $(document).on("focusout", ".service_amount", function () {
 // Add new customer callback
 tc.fn.cb.addCustomerCB = async (form, data) => {
     if (data.status === 'success') {
-        location.href = "";
+        let customer = data.single_customer;
+
+        $(".customer-selectbox-parent").find(".search-container").after(`<li role="option" data-id="${customer.id}" data-name="${customer.title + " " + customer.fname + " " + customer.lname}">
+                                                        <div class="customer-info">
+                                                            <div class="customer-name">${customer.title + " " + customer.fname + " " + customer.lname}</div>
+                                                        </div>
+                                                    </li>`);
+
+        $(".customer-selectbox-parent").find(`[role="option"][data-id="${customer.id}"]`).trigger("click");
+        $(".modal").modal("hide");
     } else {
         sAlert(data.data, 'error');
     }

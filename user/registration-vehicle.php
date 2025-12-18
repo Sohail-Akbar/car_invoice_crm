@@ -7,11 +7,13 @@ $JS_FILES_ = [
     _DIR_ . "js/select2.min.js",
     _DIR_ . "js/jquery.dataTables.min.js",
     _DIR_ . "js/bootstrap.bundle.min.js",
+    _DIR_ . "js/bootstrap-datepicker.min.js"
 ];
 $CSS_FILES_ = [
     "register-vehicle.css",
     _DIR_ . "css/select2.min.css",
     _DIR_ .  "css/jquery.dataTables.min.css",
+    _DIR_ . "css/bootstrap-datepicker.min.css"
 ];
 
 $custom_register = _get_param("type", "");

@@ -10,9 +10,9 @@
     <h3 class="heading mb-4 custom-heading text-clr">Manually Registration Vehicle</h3>
     <form action="mot-history" method="POST" class="ajax_form" data-callback="manuallyVehicleRegisterationCB">
         <div class="row mt-4">
-            <div class="col-md-8">
+            <div class="col-md-8 customer-selectbox-header">
                 <div class="form-group">
-                    <span class="label">Existing Customer</span>
+                    <span class="label">Existing Customer <span class="required">*</span></span>
                     <select name="customer_id" id="customersContainer" class="form-control" required>
                         <option value="">Select Customer</option>
                         <?php foreach ($existing_customers as $customer) { ?>
@@ -30,79 +30,108 @@
                 <div class="row m-0">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="reg_number">Reg Number:</label>
+                            <label class="label" for="reg_number">Reg Number <span class="required">*</span></label>
                             <input type="text" class="form-control" id="reg_number" name="reg_number" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="make">make:</label>
+                            <label class="label" for="make">make <span class="required">*</span></label>
                             <input type="text" class="form-control" id="make" name="make" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="model">model:</label>
+                            <label class="label" for="model">model <span class="required">*</span></label>
                             <input type="text" class="form-control" id="model" name="model" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="firstUsedDate">first Used Date:</label>
-                            <input type="date" class="form-control" id="firstUsedDate" name="firstUsedDate" required>
+                            <label class="label" for="firstUsedDate">first Used Date <span class="required">*</span></label>
+                            <div class="input-group date bs-datepicker"
+                                data-date-format="dd-mm-yyyy">
+
+                                <input class="form-control" type="text" id="firstUsedDate" name="firstUsedDate" readonly required />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="fuelType">fuel Type:</label>
+                            <label class="label" for="fuelType">fuel Type <span class="required">*</span></label>
                             <input type="text" class="form-control" id="fuelType" name="fuelType" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="primaryColour">primary Colour:</label>
+                            <label class="label" for="primaryColour">primary Colour <span class="required">*</span></label>
                             <input type="text" class="form-control" id="primaryColour" name="primaryColour" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="registrationDate">registration Date:</label>
-                            <input type="date" class="form-control" id="registrationDate" name="registrationDate"
-                                value="<?= date('Y-m-d') ?>" required>
+                            <label class="label" for="registrationDate">registration Date <span class="required">*</span></label>
+                            <div class="input-group date bs-datepicker"
+                                data-date="<?= date('d-m-Y') ?>"
+                                data-date-format="dd-mm-yyyy">
+
+                                <input class="form-control" type="text" id="registrationDate" name="registrationDate" readonly required />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="manufactureDate">manufacture Date:</label>
-                            <input type="date" class="form-control" id="manufactureDate" name="manufactureDate" required>
+                            <label class="label" for="manufactureDate">manufacture Date <span class="required">*</span></label>
+                            <!-- <input type="date" class="form-control" id="manufactureDate" name="manufactureDate" required> -->
+                            <div class="input-group date bs-datepicker"
+                                data-date-format="dd-mm-yyyy">
+
+                                <input class="form-control" type="text" id="manufactureDate" name="manufactureDate" readonly required />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="engineSize">engine Size:</label>
+                            <label class="label" for="engineSize">engine Size <span class="required">*</span></label>
                             <input type="text" class="form-control" id="engineSize" name="engineSize" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="hasOutstandingRecall">has Outstanding Recall:</label>
+                            <label class="label" for="hasOutstandingRecall">has Outstanding Recall <span class="required">*</span></label>
                             <input type="text" class="form-control" id="hasOutstandingRecall" name="hasOutstandingRecall" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="label" for="expiryDate">expiry Date:</label>
-                            <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                            <label class="label" for="expiryDate">expiry Date <span class="required">*</span></label>
+                            <div class="input-group date bs-datepicker"
+                                data-date-format="dd-mm-yyyy">
+
+                                <input class="form-control" type="text" id="expiryDate" name="expiryDate" readonly required />
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

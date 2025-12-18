@@ -674,6 +674,14 @@ if (isset($_POST['createCustomer'])) {
             "type" => "customer"
         ]);
 
+        $single_customer = $db->select_one("users", "*", [
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id"  => LOGGED_IN_USER['agency_id'],
+            "is_active" => 1,
+            "type" => "customer",
+            "id" => $id ? $id : $save
+        ]);
+
         $token = bin2hex(random_bytes(16)); // 32-character token
 
         // $redirect_url = "view-customer";
@@ -687,7 +695,8 @@ if (isset($_POST['createCustomer'])) {
 
         returnSuccess($message, [
             "redirect" => $redirectTo ? $redirectTo : "view-customer",
-            "customer" => $customers
+            "customer" => $customers,
+            "single_customer" => $single_customer
         ]);
     } else {
         returnError("Error saving customer. Please try again.");

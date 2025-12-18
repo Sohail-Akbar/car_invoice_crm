@@ -138,6 +138,7 @@ if (isset($_POST['getCustomersVehicleData'])) {
 
 // Fetch Registeration Car Data
 if (isset($_POST['fetchRegistrationCar'])) {
+    // search by vehicle id
     if (isset($_POST['vehicle_id'])) {
         $vehicle_id = intval(arr_val($_POST, 'vehicle_id', 0));
         $customer_id = intval(arr_val($_POST, 'customer_id', 0));
@@ -159,6 +160,11 @@ if (isset($_POST['fetchRegistrationCar'])) {
             exit;
         }
 
+        $firstUsedDate = DateTime::createFromFormat('d-m-Y', $vehicle_data['firstUsedDate'])->format('Y-m-d');
+        $registrationDate = DateTime::createFromFormat('d-m-Y', $vehicle_data['registrationDate'])->format('Y-m-d');
+        $expiryDate = DateTime::createFromFormat('d-m-Y', $vehicle_data['expiryDate'])->format('Y-m-d');
+        $manufactureDate = DateTime::createFromFormat('d-m-Y', $vehicle_data['manufactureDate'])->format('Y-m-d');
+
         $data = [
             "company_id" => LOGGED_IN_USER['company_id'],
             "agency_id" => LOGGED_IN_USER['agency_id'],
@@ -166,14 +172,14 @@ if (isset($_POST['fetchRegistrationCar'])) {
             "reg_number" => $vehicle_data['reg_number'],
             "make" =>  $vehicle_data['make'] ?? '',
             "model" =>  $vehicle_data['model'] ?? '',
-            "firstUsedDate" =>  $vehicle_data['firstUsedDate'] ?? '',
+            "firstUsedDate" =>  $firstUsedDate ?? '',
             "primaryColour" =>  $vehicle_data['primaryColour'] ?? '',
-            "registrationDate" =>  $vehicle_data['registrationDate'] ?? '',
+            "registrationDate" =>  $registrationDate ?? '',
             "fuelType" =>  $vehicle_data['fuelType'] ?? '',
-            "manufactureDate" =>  $vehicle_data['manufactureDate'] ?? '',
+            "manufactureDate" =>  $manufactureDate ?? '',
             "engineSize" =>  $vehicle_data['engineSize'] ?? '',
             "hasOutstandingRecall" =>  $vehicle_data['hasOutstandingRecall'] ?? '',
-            "expiryDate" =>  $vehicle_data['expiryDate'] ?? '',
+            "expiryDate" =>  $expiryDate ?? '',
             // preserve manual flag if present, otherwise mark as non-manual
             "is_manual" => isset($vehicle_data['is_manual']) ? $vehicle_data['is_manual'] : 0
         ];
@@ -250,22 +256,42 @@ if (isset($_POST['fetchRegistrationCar'])) {
     if ($vehicleData && isset($vehicleData['response'])) {
         $vehicleInfo = $vehicleData['response'];
 
+        $firstUsedDate = !empty($vehicleInfo['firstUsedDate'])
+            ? (new DateTime($vehicleInfo['firstUsedDate']))->format('d-m-Y')
+            : null;
+        $registrationDate = !empty($vehicleInfo['registrationDate'])
+            ? (new DateTime($vehicleInfo['registrationDate']))->format('d-m-Y')
+            : null;
+        $manufactureDate = !empty($vehicleInfo['manufactureDate'])
+            ? (new DateTime($vehicleInfo['manufactureDate']))->format('d-m-Y')
+            : null;
+        $expiryDate = !empty($vehicleInfo['motTests'][0]['expiryDate'])
+            ? (new DateTime($vehicleInfo['motTests'][0]['expiryDate']))->format('d-m-Y')
+            : null;
+
+
         // Extract main vehicle details
         $mainDetails = [
             'reg_number' => $vehicleInfo['registration'] ?? '',
             'make' => $vehicleInfo['make'] ?? '',
             'model' => $vehicleInfo['model'] ?? '',
-            'firstUsedDate' => $vehicleInfo['firstUsedDate'] ?? '',
+            'firstUsedDate' => $firstUsedDate ?? '',
             'fuelType' => $vehicleInfo['fuelType'] ?? '',
             'primaryColour' => $vehicleInfo['primaryColour'] ?? '',
-            'registrationDate' => $vehicleInfo['registrationDate'] ?? '',
-            'manufactureDate' => $vehicleInfo['manufactureDate'] ?? '',
+            'registrationDate' => $registrationDate ?? '',
+            'manufactureDate' => $manufactureDate ?? '',
             'engineSize' => $vehicleInfo['engineSize'] ?? '',
             'hasOutstandingRecall' => $vehicleInfo['hasOutstandingRecall'] ?? '',
-            "expiryDate" => $vehicleInfo['motTests'][0]['expiryDate'] ?? ''
+            "expiryDate" => $expiryDate ?? ''
         ];
 
+        // save vehicle with customer id
         if ($customerId) {
+
+            $firstUsedDate = DateTime::createFromFormat('d-m-Y', $mainDetails['firstUsedDate'])->format('Y-m-d');
+            $registrationDate = DateTime::createFromFormat('d-m-Y', $mainDetails['registrationDate'])->format('Y-m-d');
+            $expiryDate = DateTime::createFromFormat('d-m-Y', $mainDetails['expiryDate'])->format('Y-m-d');
+            $manufactureDate = DateTime::createFromFormat('d-m-Y', $mainDetails['manufactureDate'])->format('Y-m-d');
 
             $data = [
                 "company_id" => LOGGED_IN_USER['company_id'],
@@ -274,14 +300,14 @@ if (isset($_POST['fetchRegistrationCar'])) {
                 "reg_number" =>  $mainDetails['reg_number'],
                 "make" =>  $mainDetails['make'],
                 "model" =>  $mainDetails['model'],
-                "firstUsedDate" =>  $mainDetails['firstUsedDate'],
+                "firstUsedDate" =>  $firstUsedDate,
                 "primaryColour" =>  $mainDetails['primaryColour'],
-                "registrationDate" =>  $mainDetails['registrationDate'],
+                "registrationDate" =>  $registrationDate,
                 "fuelType" =>  $mainDetails['fuelType'],
-                "manufactureDate" =>  $mainDetails['manufactureDate'],
+                "manufactureDate" =>  $manufactureDate,
                 "engineSize" =>  $mainDetails['engineSize'],
                 "hasOutstandingRecall" =>  $mainDetails['hasOutstandingRecall'],
-                "ExpiryDate" =>  $mainDetails['expiryDate']
+                "ExpiryDate" =>  $expiryDate
             ];
 
             $save = $db->insert("customer_car_history", $data);
@@ -290,11 +316,19 @@ if (isset($_POST['fetchRegistrationCar'])) {
             if ($save) {
                 returnSuccess("Vehicle data saved successfully.", [
                     "redirect" => "invoice?customer_id=$customerId&vehicle_id=$save",
+                    "vehicle_data" => [
+                        "reg_number" =>  $mainDetails['reg_number'],
+                        "make" =>  $mainDetails['make'],
+                        "model" =>  $mainDetails['model'],
+                        "vehicle_id" => $save
+                    ]
                 ]);
             } else {
                 returnError('Failed to save vehicle data.');
             }
-        } else {
+        }
+        // fetch vehicle details with save and update only fetch with reg no
+        else {
             returnSuccess($vehicleInfo, $mainDetails);
         }
     } else {
@@ -304,45 +338,50 @@ if (isset($_POST['fetchRegistrationCar'])) {
 
 
 if (isset($_POST['manuallyRegistrationCar'])) {
+
     $customerId = arr_val($_POST, 'customer_id', '');
     $reg_number = arr_val($_POST, 'reg_number', '');
     $make = arr_val($_POST, 'make', '');
     $model = arr_val($_POST, 'model', '');
-    $firstUsedDate = arr_val($_POST, 'firstUsedDate', '');
+
+    // 🔹 Date conversions for DB
+    $firstUsedDate    = dbDateFormat(arr_val($_POST, 'firstUsedDate', ''));
+    $registrationDate = dbDateFormat(arr_val($_POST, 'registrationDate', ''));
+    $manufactureDate  = dbDateFormat(arr_val($_POST, 'manufactureDate', ''));
+    $expiryDate       = dbDateFormat(arr_val($_POST, 'expiryDate', ''));
+
     $fuelType = arr_val($_POST, 'fuelType', '');
     $primaryColour = arr_val($_POST, 'primaryColour', '');
-    $registrationDate = arr_val($_POST, 'registrationDate', '');
-    $manufactureDate = arr_val($_POST, 'manufactureDate', '');
     $engineSize = arr_val($_POST, 'engineSize', '');
     $hasOutstandingRecall = arr_val($_POST, 'hasOutstandingRecall', '');
-    $expiryDate = arr_val($_POST, 'expiryDate', '');
 
-    // Vehicle reg no validation
+    // 🔹 Vehicle reg validation
     $existingRecordReg = $db->select_one("customer_car_history", "id", [
-        "reg_number" =>  $reg_number,
-        "is_active" => 1
+        "reg_number" => $reg_number,
+        "is_active"  => 1
     ]);
 
     if ($existingRecordReg) {
-        returnError("A record with this registration number already exists. Please check and try again.");
+        returnError("A record with this registration number already exists.");
         exit;
     }
 
+    // 🔹 Final data for DB
     $data = [
         "company_id" => LOGGED_IN_USER['company_id'],
-        "agency_id" => LOGGED_IN_USER['agency_id'],
+        "agency_id"  => LOGGED_IN_USER['agency_id'],
         "customer_id" => $customerId,
-        "reg_number" =>  $reg_number,
+        "reg_number" => $reg_number,
         "make" => $make,
         "model" => $model,
-        "firstUsedDate" => $firstUsedDate,
+        "firstUsedDate" => $firstUsedDate,        // YYYY-MM-DD
         "primaryColour" => $primaryColour,
-        "registrationDate" => $registrationDate,
+        "registrationDate" => $registrationDate,  // YYYY-MM-DD
         "fuelType" => $fuelType,
-        "manufactureDate" => $manufactureDate,
+        "manufactureDate" => $manufactureDate,    // YYYY-MM-DD
         "engineSize" => $engineSize,
         "hasOutstandingRecall" => $hasOutstandingRecall,
-        "expiryDate" => $expiryDate,
+        "expiryDate" => $expiryDate,               // YYYY-MM-DD
         "is_manual" => 1
     ];
 
@@ -351,11 +390,18 @@ if (isset($_POST['manuallyRegistrationCar'])) {
     if ($save) {
         returnSuccess("Vehicle data saved successfully.", [
             "redirect" => "view-registration-vehicle",
+            "vehicle_data" => [
+                "reg_number" => $reg_number,
+                "make" => $make,
+                "model" => $model,
+                "vehicle_id" => $save
+            ]
         ]);
     } else {
         returnError('Failed to save vehicle data.');
     }
 }
+
 
 
 // Vehicle Information Update
@@ -487,8 +533,11 @@ if (isset($_GET['fetchVehicleData'])) {
             "is_active" => 1
         ]);
 
+        $email_html = "";
+        if (!empty($customer['email'])) $email_html = "<strong>Email:</strong> {$customer['email']}<br>";
+
         $customerHTML = "<strong>Name:</strong> {$customer['title']} {$customer['fname']} {$customer['lname']}<br>
-                         <strong>Email:</strong> {$customer['email']}<br>
+                         {$email_html}
                          <strong>Contact:</strong> {$customer['contact']}";
 
         $detailsHTML = "<strong>Make:</strong> {$row['make']}<br>

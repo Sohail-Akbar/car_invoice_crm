@@ -186,8 +186,8 @@ if (isset($_POST['saveInvoice'])) {
             $invoiceType = $proforma ? "Proforma Invoice" : "Invoice";
             $_tc_email->send([
                 'template' => 'invoice',
-                'to' => $invoice_data['client_email'],
-                // 'to' => "sohailakbar3324@gmail.com",
+                // 'to' => $invoice_data['client_email'],
+                'to' => "sohailakbar3324@gmail.com",
                 'to_name' => $invoice_data['client_name'],
                 'vars' => [
                     'invoice_type' => $invoiceType,
@@ -272,8 +272,8 @@ if (isset($_POST['saveInvoice'])) {
         $invoiceType = $proforma ? "Proforma Invoice" : "Invoice";
         $_tc_email->send([
             'template' => 'invoice',
-            // 'to' => "sohailakbar3324@gmail.com",
-            'to' => $invoice_data['client_email'],
+            'to' => "sohailakbar3324@gmail.com",
+            // 'to' => $invoice_data['client_email'],
             'to_name' => $invoice_data['client_name'],
             'vars' => [
                 'invoice_type' => $invoiceType,
@@ -584,8 +584,8 @@ function saveInvoicePDF($invoice_data = [])
         <table style="width:100%; border-collapse: collapse;">
             <tr>
                 <td style="width:50%; padding-right:20px; vertical-align: bottom;">
-                    <img src="{$signature_img}" style="max-width:200px;">
-                    <h1 style="color:#214F79;margin:0px;font-size:15px;">{$company_name}</h1>
+                    <img class="d-none" src="{$signature_img}" style="max-width:200px;">
+                    <h1 class="d-none" style="color:#214F79;margin:0px;font-size:15px;">{$company_name}</h1>
                 </td>
                 <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
                     <table style="margin-top:20px;">

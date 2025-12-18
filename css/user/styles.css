@@ -716,6 +716,15 @@ body.all-hide .navbar {
     display: none !important;
 }
 
+body.all-hide .customer-selectbox-header,
+body.all-hide .add-new-customer-btn {
+    display: none !important;
+}
+
+.bs-datepicker input[readonly] {
+    background-color: white;
+}
+
 body.all-hide #mainContent {
     margin: 0px !important;
     padding-top: 0px;

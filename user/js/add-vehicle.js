@@ -484,7 +484,9 @@ tc.fn.cb.addCustomerCB = async (form, data) => {
         sAlert("Customer created successfully", 'success');
         form[0].reset();
         $('.add-new-customer-model').modal('hide');
-        window.parent.postMessage({ type: "FORM_SUBMITTED" }, "*");
+        window.parent.postMessage({
+            type: "FORM_SUBMITTED"
+        }, "*");
     } else {
         sAlert(data.data, 'error');
     }
@@ -493,7 +495,10 @@ tc.fn.cb.addCustomerCB = async (form, data) => {
 // Add new customer callback
 tc.fn.cb.addNewVehicleCB = async (form, data) => {
     if (data.status === 'success') {
-        window.parent.postMessage({ type: "FORM_SUBMITTED" }, "*");
+        window.parent.postMessage({
+            type: "FORM_SUBMITTED",
+            vehicleData: data.vehicle_data
+        }, "*");
         location.href = data.redirect;
     } else {
         sAlert(data.data, 'error');

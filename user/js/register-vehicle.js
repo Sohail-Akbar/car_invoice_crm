@@ -890,7 +890,10 @@ tc.fn.cb.addCustomerData = async (form, data) => {
 
 tc.fn.cb.manuallyVehicleRegisterationCB = async (form, data) => {
     if (data.status === 'success') {
-        window.parent.postMessage({ type: "FORM_SUBMITTED" }, "*");
+        window.parent.postMessage({
+            type: "FORM_SUBMITTED",
+            vehicleData: data.vehicle_data
+        }, "*");
         location.href = data.redirect;
     } else {
         sAlert(data.data, 'error');
