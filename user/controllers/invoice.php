@@ -444,6 +444,8 @@ function saveInvoicePDF($invoice_data = [])
     $l_user_email = LOGGED_IN_USER['email'];
 
     $is_client_note = empty($client_note) ? "d-none" : "";
+    $is_tax_rate = $invoice_data['tax_rate'] ? "" : "d-none";
+    $is_discount_amount = $invoice_data['discount_amount'] ? "" : "d-none";
 
     // HTML content for the invoice
     $html = <<<HTML
@@ -607,11 +609,11 @@ function saveInvoicePDF($invoice_data = [])
                                     <td>SubTotal:</td>
                                     <td style="text-align: right;">{$subtotal}</td>
                                 </tr>
-                                <tr>
-                                    <td style="font-weight:bold !important;">Vat ({$tax_rate}%):</td>
+                                <tr class="{$is_tax_rate}">
+                                    <td style="font-weight:bold !important;">VAT ({$tax_rate}%):</td>
                                     <td style="text-align: right;">{$tax_amount}</td>
                                 </tr>
-                                <tr>
+                                <tr class="{$is_discount_amount}">
                                     <td>Discount:</td>
                                     <td style="text-align: right;">{$discount_amount}</td>
                                 </tr>
