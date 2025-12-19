@@ -20,48 +20,68 @@ $(document).ready(function () {
 });
 
 
-// On tab click
-$(document).on('click', '#carTabs .nav-link', function (e) {
-    e.preventDefault();
-    $('#carTabs .nav-link').removeClass('active');
-    $(this).addClass('active');
+let invoiceOffset = 0;
+const invoiceLimit = 5;
+let loadingInvoices = false;
+let allInvoicesLoaded = false;
 
-    let carId = $(this).data('id'),
-        customerId = _GET['id']; // assuming _GET provides customer id
+function showVehicleDetails(vehicle_id, customer_id, container, reset = true) {
+    if (reset) {
+        invoiceOffset = 0;
+        allInvoicesLoaded = false;
+        container.html(''); // clear container
+    }
 
-    let $container = $(".cars-info-container");
-    $container.html('<div class="text-center py-4 text-muted">Loading...</div>');
+    container.data("car-id", vehicle_id);
 
-    showVehicleDetails(carId, customerId, $container);
-});
+    function loadBatch() {
+        if (loadingInvoices || allInvoicesLoaded) return;
 
+        loadingInvoices = true;
+        container.append('<div id="loadingSpinner" class="text-center my-3">Loading...</div>');
 
-// Vehicle invoices
-function showVehicleDetails(vehicle_id, customer_id, container) {
-    let data = {
-        car_id: vehicle_id,
-        customer_id: customer_id,
-        fetchCarInfo: true
-    };
+        $.ajax({
+            url: "controllers/customer",
+            method: "POST",
+            data: {
+                fetchCarInfo: true,
+                car_id: vehicle_id,
+                customer_id: customer_id,
+                limit: invoiceLimit,
+                offset: invoiceOffset
+            },
+            success: function (res) {
+                $("#loadingSpinner").remove();
+                const data = JSON.parse(res);
+                if (data.status === "end") {
+                    allInvoicesLoaded = true;
+                    if (invoiceOffset === 0) container.append('<p class="text-center text-muted my-3">No invoices found</p>');
+                    return;
+                }
+                container.append(data.html);
+                invoiceOffset += invoiceLimit;
+                loadingInvoices = false;
+            },
+            error: function (xhr) {
+                $("#loadingSpinner").remove();
+                console.error(xhr.responseText);
+                container.append('<div class="alert alert-danger">Error loading data</div>');
+                loadingInvoices = false;
+            }
+        });
+    }
 
-    $.ajax({
-        url: "controllers/customer",
-        method: "POST",
-        data: data,
-        success: function (res) {
-            // show HTML directly in container
-            container.html(res);
-            // $('.select2').select2({
-            //     placeholder: "Select one or more options",
-            //     allowClear: true
-            // });
-        },
-        error: function (xhr) {
-            console.error(xhr.responseText);
-            container.html('<div class="alert alert-danger">Error loading car details.</div>');
+    // Load first batch
+    loadBatch();
+
+    // Infinite scroll
+    container.off("scroll").on("scroll", function () {
+        if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight - 50) {
+            loadBatch();
         }
     });
 }
+
 
 
 
@@ -69,31 +89,45 @@ function showVehicleDetails(vehicle_id, customer_id, container) {
 tc.fn.cb.assignedStaffCB = async (form, data) => {
     sAlert(data.data, data.status);
     if (data.status === 'success') {
-
         // form reset 
         form[0].reset();
         // popup close
         $('.modal').modal('hide');
+
+        invoiceOffset = 0;
+        loadingInvoices = false;
+        allInvoicesLoaded = false;
+
+        // reload invoices for this car
         setTimeout(() => {
-            console.log(data.invoice_id);
-            showVehicleDetails(data.invoice_id, _GET.id, $("#viewInvoicesContainer"));
+            showVehicleDetails(data.invoice_id, _GET.id, $("#viewInvoicesContainer"), true);
         }, 200);
     }
 }
+
 
 // View Work Carried 
 $(document).on("click", ".view-work-carried-btn", function () {
     let car_id = $(this).data("vehicle-id");
     let $container = $("#carsInfoContainer");
-    showVehicleDetails(car_id, _GET.id, $container);
+
+    invoiceOffset = 0;
+    loadingInvoices = false;
+    allInvoicesLoaded = false;
+
+    showVehicleDetails(car_id, _GET.id, $container, true);
     $(".view-work-carried-model").modal("show");
 });
 
-// View Invoices
+
 $(document).on("click", ".view-invoices-btn", function () {
     let car_id = $(this).data("vehicle-id");
     let $container = $("#viewInvoicesContainer");
-    showVehicleDetails(car_id, _GET.id, $container);
+    invoiceOffset = 0;
+    loadingInvoices = false;
+    allInvoicesLoaded = false;
+
+    showVehicleDetails(car_id, _GET.id, $container, true);
     $(this).parents(".vehicle-list-container").addClass("d-none");
     $(".invoices-container").removeClass("d-none");
 });
@@ -227,15 +261,15 @@ $(document).ready(function () {
                 { "data": "due_date", "width": "30%" },
                 {
                     "data": "total_amount",
-                    "render": data => '$' + parseFloat(data).toFixed(2)
+                    "render": data => __CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "paid_amount",
-                    "render": data => '$' + parseFloat(data).toFixed(2)
+                    "render": data => __CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "due_amount",
-                    "render": data => '$' + parseFloat(data).toFixed(2)
+                    "render": data => __CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "status",
@@ -295,15 +329,15 @@ $(document).ready(function () {
                 { "data": "due_date" },
                 {
                     "data": "total_amount",
-                    "render": data => _CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
+                    "render": data => __CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "paid_amount",
-                    "render": data => _CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
+                    "render": data => __CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "due_amount",
-                    "render": data => _CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
+                    "render": data => __CURRENCY_SYMBOL + parseFloat(data).toFixed(2)
                 },
                 {
                     "data": "pdf_file",
