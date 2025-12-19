@@ -96,10 +96,17 @@ function addInvoiceRow() {
 
 // Event: Service change updates amount
 $(document).on("change", ".service_id", function () {
-    const amount = parseFloat($(this).find("option:selected").data("amount")) || 0;
-    $(this).closest(".row").find(".service_amount").val(amount);
+    const rawAmount = $(this).find("option:selected").data("amount");
+    const amount = toNumber(rawAmount, 0);
+
+    $(this)
+        .closest(".row")
+        .find(".service_amount")
+        .val(amount.toFixed(2)); // always 2 decimals
+
     calculateTotals();
 });
+
 // Event: Tax or Paid input changes
 $(document).on("input", "#tax_rate, #paid_amount", calculateTotals);
 
