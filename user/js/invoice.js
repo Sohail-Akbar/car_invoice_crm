@@ -1,36 +1,48 @@
+function toNumber(val, fallback = 0) {
+    if (val === null || val === undefined) return fallback;
+
+    // remove currency symbols, commas, spaces
+    val = val.toString().replace(/[^0-9.-]/g, '');
+
+    let num = parseFloat(val);
+    return isNaN(num) ? fallback : num;
+}
+
+
 // Function to calculate subtotal, tax, total, due
 function calculateTotals() {
     let subtotal = 0;
 
     $(".invoice-services-container .row").each(function () {
-        let amount = parseFloat($(this).find(".service_amount").val()) || 0;
-        let qty = parseInt($(this).find(".service_quantity").val()) || 1;
+        let amount = toNumber($(this).find(".service_amount").val(), 0);
+        let qty = toNumber($(this).find(".service_quantity").val(), 1);
+
         subtotal += amount * qty;
     });
 
     // TAX
-    const taxRate = parseFloat($("#tax_rate").val()) || 0;
+    const taxRate = toNumber($("#tax_rate").val(), 0);
     const tax = subtotal * (taxRate / 100);
 
     // BRANCH DISCOUNT %
-    let branchDiscountPercentage = parseFloat($("#discountPercentage").val()) || 0;
+    let branchDiscountPercentage = toNumber($("#discountPercentage").val(), 0);
 
     // CUSTOM DISCOUNT AMOUNT
-    let customDiscountAmount = parseFloat($("#discountAmount").val()) || 0;
+    let customDiscountAmount = toNumber($("#discountAmount").val(), 0);
 
     // BRANCH % discount amount
     let branchDiscountAmount = (subtotal * branchDiscountPercentage) / 100;
 
-    // TOTAL DISCOUNT = branch % + user custom discount
+    // TOTAL DISCOUNT
     let totalDiscount = branchDiscountAmount + customDiscountAmount;
 
     // FINAL TOTAL
     const totalBeforeDiscount = subtotal + tax;
-    const total = totalBeforeDiscount - totalDiscount;
+    const total = Math.max(totalBeforeDiscount - totalDiscount, 0);
 
     // PAID / DUE
-    const paid = parseFloat($("#paid_amount").val()) || 0;
-    const due = total - paid;
+    const paid = toNumber($("#paid_amount").val(), 0);
+    const due = Math.max(total - paid, 0);
 
     // OUTPUT
     $("#subtotal").text(subtotal.toFixed(2));
@@ -38,8 +50,8 @@ function calculateTotals() {
     $("#discount_show").text(totalDiscount.toFixed(2));
     $("#total_amount").text(total.toFixed(2));
     $("#due_amount").text(due.toFixed(2));
-    // $(".payment-status").trigger("change");
 }
+
 
 
 

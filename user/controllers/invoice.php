@@ -43,7 +43,7 @@ if (isset($_POST['saveInvoice'])) {
         $qty = intval($_POST['service_quantity'][$key] ?? 1);
         $amount = floatval($service_amounts[$key] ?? 0);
 
-        if ($service_id && $amount > 0 && $qty > 0) {
+        if ($service_id) {
             $line_total = $amount * $qty;
             $subtotal += $line_total;
 
@@ -147,7 +147,7 @@ if (isset($_POST['saveInvoice'])) {
         'client_email' => $customer_data['email'],
         'tax_rate' => $tax_rate,
         'paid_amount' => $paid_amount,
-        'services' => $services_final,
+        'services' => array_reverse($services_final),
         'notes' => $notes,
         "proforma" => $proforma,
         "subtotal" => $subtotal,
