@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Users';
+$page_name = 'View Registration Vehicle';
 
 $JS_FILES_ = [
     "vehicle-register.js",

@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'VAT Management';
+$page_name = 'Settings';
 
 $JS_FILES_ = [];
 

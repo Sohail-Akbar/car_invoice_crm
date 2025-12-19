@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Invoice Services';
+$page_name = 'View All Tasks';
 
 $JS_FILES_ = [];
 

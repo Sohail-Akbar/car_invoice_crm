@@ -1,6 +1,6 @@
 <!-- Meta -->
 <?php
-$page_name .= " - User";
+$page_name .= " ";
 require_once global_file('meta'); ?>
 
 <!-- CSS -->

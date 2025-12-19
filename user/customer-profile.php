@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Customer Profile';
 
 $JS_FILES_ = [
     "customer-profile.js",

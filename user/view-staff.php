@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Users';
+$page_name = 'View All Staff';
 
 $JS_FILES_ = [
     _DIR_ . "js/jquery.dataTables.min.js",

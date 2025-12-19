@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Users';
+$page_name = 'Completed Task';
 
 $JS_FILES_ = [
     "customer.js",

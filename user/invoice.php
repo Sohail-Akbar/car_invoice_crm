@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Invoice';
 
 $JS_FILES_ = [
     "invoice.js",

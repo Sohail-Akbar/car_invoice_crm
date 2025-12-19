@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Financial Income Reports';
 
 $JS_FILES_ = [
     _DIR_ . "js/jquery.dataTables.min.js",

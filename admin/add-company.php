@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Add Company';
 
 $CSS_FILES_ = [
     "wickedpicker.min.css",

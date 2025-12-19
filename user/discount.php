@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Discount';
 
 $JS_FILES_ = [];
 

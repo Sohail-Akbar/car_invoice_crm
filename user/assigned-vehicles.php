@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Assigned Vehicle';
 
 $JS_FILES_ = [];
 

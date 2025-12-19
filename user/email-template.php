@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Email Template';
 
 $JS_FILES_ = [
     _DIR_ . "js/select2.min.js",

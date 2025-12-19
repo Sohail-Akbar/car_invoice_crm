@@ -1,6 +1,6 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Dashboard';
+$page_name = 'Invoice Serach';
 
 $JS_FILES_ = [
     _DIR_ . "js/bootstrap-datepicker.min.js"
