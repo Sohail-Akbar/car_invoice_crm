@@ -890,3 +890,9 @@ body.all-hide iframe {
 .d-block {
     display: inline-block !important;
 }
+
+#viewInvoicesContainer,
+#carsInfoContainer {
+    height: 500px;
+    overflow: auto;
+}

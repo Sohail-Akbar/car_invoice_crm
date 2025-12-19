@@ -5,6 +5,8 @@ require_once(DIR . 'includes/db.php');
 if (isset($_POST['fetchCarInfo'])) {
     $car_id = $_POST['car_id'];
     $customer_id = $_POST['customer_id'];
+    $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 5;   // default 5
+    $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0; // default 0
 
     $query_sql = "
     SELECT 
@@ -30,12 +32,12 @@ if (isset($_POST['fetchCarInfo'])) {
     LEFT JOIN services AS s ON FIND_IN_SET(s.id, it.services_id)
     WHERE c.customer_id = '$customer_id' AND c.id = '$car_id'
     ORDER BY i.created_at DESC
+    LIMIT $limit OFFSET $offset
     ";
-
     $rows = $db->query($query_sql, ["select_query" => true]);
 
     if (empty($rows)) {
-        echo "<p class='text-muted'>No service history found for this car.</p>";
+        echo json_encode(["status" => "end"]); // no more invoices
         exit;
     }
 
@@ -78,6 +80,7 @@ if (isset($_POST['fetchCarInfo'])) {
             "amount" => $row["service_amount"]
         ];
     }
+    ob_start();
     // print_r($grouped);
     // Display cards
     foreach ($grouped as $invoice_id => $data) {
@@ -294,6 +297,13 @@ HTML;
             </div>
         </div>";
     }
+    $html = ob_get_clean();
+
+    echo json_encode([
+        "status" => "success",
+        "html" => $html
+    ]);
+    exit;
 }
 
 
