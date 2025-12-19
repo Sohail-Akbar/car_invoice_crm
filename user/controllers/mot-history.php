@@ -212,8 +212,6 @@ if (isset($_POST['fetchRegistrationCar'])) {
     // Existing customer vehicle information
     $existingRecord = $db->select_one("customer_car_history", "*", [
         'reg_number' => $regNumber,
-        "company_id" => LOGGED_IN_USER['company_id'],
-        "agency_id" => LOGGED_IN_USER['agency_id'],
         "is_active" => 1
     ]);
     if (empty($existingRecord)) $existingRecord = [];
