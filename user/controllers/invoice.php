@@ -533,6 +533,7 @@ function saveInvoicePDF($invoice_data = [])
             width: 50%;
             padding: 5px 8px;
             padding-bottom:0px !important;
+            font-size:14px !important;
         }
 
         .invoice-notes {
@@ -552,6 +553,11 @@ function saveInvoicePDF($invoice_data = [])
     .d-none{
         display:none !important;
     }
+    .footer p{
+        padding:0px !important;
+        margin:0px !important;
+        margin-bottom:5px !important;
+    }
     </style>
 </head>
 
@@ -562,9 +568,9 @@ function saveInvoicePDF($invoice_data = [])
                 <tr>
                     <td style="width:50%; padding-right:20px; vertical-align: top;">
                         <h1 style="color:#214F79;margin:0px;">{$invoiceTitle}</h1>
-                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Invoice number : <span style="color:#6C6C6D;font-size:13px;"> #{$invoice_no}</span></h4>
-                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Issued on: <span style="color:#6C6C6D;font-size:13px;"> {$invoice_date}</span></h4>
-                        <h4 style="margin:0px;margin-top:5px;font-size:15px;">Due Date : <span style="color:#6C6C6D;font-size:13px;"> $due_date</span></h4>
+                        <h4 style="margin:0px;margin-top:5px;font-size:14px;">Invoice number : <span style="color:#6C6C6D;font-size:13px;"> #{$invoice_no}</span></h4>
+                        <h4 style="margin:0px;margin-top:5px;font-size:14px;">Issued on: <span style="color:#6C6C6D;font-size:13px;"> {$invoice_date}</span></h4>
+                        <h4 style="margin:0px;margin-top:5px;font-size:14px;">Due Date : <span style="color:#6C6C6D;font-size:13px;"> $due_date</span></h4>
                         </h4>
                     </td>
                     <td style="width:50%; padding-left:20px; vertical-align: top;text-align: right;">
@@ -581,8 +587,8 @@ function saveInvoicePDF($invoice_data = [])
                         <td style="width:100%; padding-right:20px; vertical-align: top;">
                             <h4 style="margin:0px;margin-bottom:10px;margin-top:10px;color:#6C6C6D;font-size:15px;">Bill to
                             </h4>
-                            <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:16px;">{$client_name}</h4>
-                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_address}</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:14px;">{$client_name}</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:14px;">{$client_address}</h4>
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: {$client_contact}</h4>
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_email}</h4>
                         </td>
@@ -629,34 +635,16 @@ function saveInvoicePDF($invoice_data = [])
             <div class="invoice-notes {$is_client_note}">
                 {$client_note}
             </div>
-            <h3 style="color:#214F79; margin-top:20px;">Thank you for your Business.</h3>
+            <h3 style="color:#214F79; margin-top:20px;font-size:16px;">Thank you for your Business.</h3>
         </div>
     </div>
     
     <div class="footer">
         <table class="footer-table">
             <tr>
-                <td style="width:50%; padding-right:20px; vertical-align: top;">
-                    <strong>Payment terms:</strong><br>
-                    <p style="margin-top:5px;font-size:12px;">Payment is due within seven (7) days of the invoice date. Late payments may be subject to a surcharge of 2% per month, calculated from the due date until payment is received.</p>
-                </td>
-
-                <td style="width:50%; padding-left:20px; vertical-align: top;">
-                    <table class="footer-table m-0">
-                        <tr>
-                            <td style="width:50%; vertical-align: top;">
-                                <strong>Address:</strong><br>
-                                <p style="margin-top:5px; font-size:12px;">{$company_address}</p>
-                            </td>
-
-                            <td style="width:50%; vertical-align: top;">
-                                <strong>Find Us:</strong><br>
-                                <p style="margin-top:5px;font-size:12px">{$company_phone}<br>
-                                www.hillcliffe.com <br>
-                                info@hillcliffe.com</p>
-                            </td>
-                        </tr>
-                    </table>
+                <td style="width:100%; padding-right:20px; vertical-align: top;text-align: center;">
+                    <p style="margin-top:5px;font-size:12px;">48 Catley Road, Sheffield, S9 5JF</p>
+                    <p style="margin-top:5px;font-size:12px;">0114 2619965, www.hillcliffe.com , info@hillcliffe.com </p>
                 </td>
             </tr>
         </table>
