@@ -16,48 +16,12 @@ if (
 } else {
     $user_img = $uploaded_img;
 }
-
-// $query = "
-//     SELECT 
-//         COUNT(*) AS total_orders,
-//         SUM(
-//             CASE 
-//                 WHEN write_off = 1 THEN 0
-//                 ELSE CAST(total_amount AS DECIMAL(10,2))
-//             END
-//         ) AS total_income,
-//         SUM(
-//             CASE 
-//                 WHEN write_off = 1 THEN 0
-//                 ELSE CAST(paid_amount AS DECIMAL(10,2))
-//             END
-//         ) AS total_paid,
-
-//         SUM(CAST(due_amount AS DECIMAL(10,2))) AS total_due
-
-//     FROM invoices
-//     WHERE company_id = " . LOGGED_IN_USER['company_id'] . "
-//     AND agency_id = " . LOGGED_IN_USER['agency_id'] . "
-//     AND status IN ('paid', 'partial','unpaid')
-// ";
-
-// $result = $db->query($query, ["select_query" => true]);
-// // Safe defaults
-// $total_orders = $total_income = $total_paid = $total_due = 0;
-
-// if (!empty($result)) {
-//     $total_orders = intval($result[0]['total_orders']);
-//     $total_income = floatval($result[0]['total_income']);
-//     $total_paid   = floatval($result[0]['total_paid']);
-//     $total_due    = floatval($result[0]['total_due']);
-// }
 ?>
 <!-- Left Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-menu">
         <div class="branch-log">
-            <img src="<?= _DIR_ . "/images/Hillcliffe-Garage-Logo.png" ?>" alt="Branch Logo Img">
-            <!-- <img src="<?= _DIR_ . "/images/PR-Auto-Centre-Logo-dark.png" ?>" alt="Branch Logo Img"> -->
+            <img src="<?= _DIR_ . "/images/PR-Auto-Centre-Logo-dark.png" ?>" alt="Branch Logo Img">
         </div>
         <div class="sidebar-option-menu">
             <?php if (LOGGED_IN_USER['type'] === "agency") { ?>

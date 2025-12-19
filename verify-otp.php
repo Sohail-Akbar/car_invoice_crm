@@ -192,8 +192,7 @@ $session = isset($_SESSION["pending_2fa"])  ? $_SESSION["pending_2fa"] : [];
             <div class="login-form content-center">
                 <div class="login-form-container">
                     <div class="logo-img-head">
-                        <img src="./images/Hillcliffe-Garage-Logo.png" class="logo-img" alt="Logo Img">
-                        <!-- <img src="./images/PR-Auto-Centre-Logo-dark.png" class="logo-img" alt="Logo Img"> -->
+                        <img src="./images/PR-Auto-Centre-Logo-dark.png" class="logo-img" alt="Logo Img">
                     </div>
                     <div class="heading">
                         <h3 class="mt-4 text-center mb-2">Enter OTP <?= ENV === "local" ? arr_val($session, "otp", "") : "" ?></h3>

@@ -381,8 +381,7 @@ function saveInvoicePDF($invoice_data = [])
         $user_img = "uploads/" . LOGGED_IN_USER['image'];
     }
     $branch_logo = SITE_URL . $user_img;
-    $branch_logo = SITE_URL . "images/Hillcliffe-Garage-Logo.png";
-    // $branch_logo = SITE_URL . "images/PR-Auto-Centre-Logo-dark.png";
+    $branch_logo = SITE_URL . "images/PR-Auto-Centre-Logo-dark.png";
     // Signature img
     $signature_img = SITE_URL . "images/signature.png";
     // Invoice Title
@@ -645,8 +644,8 @@ function saveInvoicePDF($invoice_data = [])
         <table class="footer-table">
             <tr>
                 <td style="width:100%; padding-right:20px; vertical-align: top;text-align: center;">
-                    <p style="margin-top:5px;font-size:12px;">48 Catley Road, Sheffield, S9 5JF</p>
-                    <p style="margin-top:5px;font-size:12px;">0114 2619965, www.hillcliffe.com , info@hillcliffe.com </p>
+                    <p style="margin-top:5px;font-size:12px;">90 Prospect Rd, Heeley, Sheffield S2 3EN</p>
+                    <p style="margin-top:5px;font-size:12px;">+44 114 255 1820, www.prospectroadautocentre.com, info@prospectroadautocentre.com</p>
                 </td>
             </tr>
         </table>
