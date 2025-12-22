@@ -4,7 +4,7 @@
             $count = 1;
             foreach ($cars as $index => $car) { ?>
              <div class="pull-away single-vehicle mt-3" data-id="<?= $car['id'] ?>">
-                 <span><?= $count ?> - <?= htmlspecialchars($car['make'] . ' ' . $car['model']) ?></span>
+                 <span><?= $count ?> - <?= htmlspecialchars($car['make'] . ' ' . $car['model']) ?> (<?= $car['reg_number'] ?>)</span>
                  <div class="buttons">
                      <form action="mot-history" method="POST" class="ajax_form d-block" data-callback="ViewProfileMotHistoryCB">
                          <input type="hidden" name="reg" value="<?= $car['reg_number'] ?>">
