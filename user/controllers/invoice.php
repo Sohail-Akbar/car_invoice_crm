@@ -161,6 +161,20 @@ if (isset($_POST['saveInvoice'])) {
 
     // Update Invoice 
     if ($invoice_id) {
+        // invlice
+        $_invoice_data = $db->select_one("invoices", "mot_id", [
+            "id" => $invoice_id,
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+        ]);
+        $vehicle_data = $db->select_one("customer_car_history", "reg_number,make,model", [
+            "id" => $_invoice_data['mot_id'],
+            "company_id" => LOGGED_IN_USER['company_id'],
+            "agency_id" => LOGGED_IN_USER['agency_id'],
+        ]);
+        $invoice_data["vehicle_name"] = htmlspecialchars($vehicle_data['make'] . ' ' . $vehicle_data['model']) . " (" . $vehicle_data['reg_number'] . ")";
+
+
         $data = [
             "invoice_no" => $invoice_no,
             "invoice_date" => $invoice_date,
@@ -242,6 +256,13 @@ if (isset($_POST['saveInvoice'])) {
         returnError("Please select a Vehicle (Reg No.) before saving the invoice.");
         exit;
     }
+
+    $vehicle_data = $db->select_one("customer_car_history", "reg_number,make,model", [
+        "id" => $mot_id,
+        "company_id" => LOGGED_IN_USER['company_id'],
+        "agency_id" => LOGGED_IN_USER['agency_id'],
+    ]);
+    $invoice_data["vehicle_name"] = htmlspecialchars($vehicle_data['make'] . ' ' . $vehicle_data['model']) . " (" . $vehicle_data['reg_number'] . ")";
 
     $data = [
         "company_id" => $company_id,
@@ -399,6 +420,7 @@ function saveInvoicePDF($invoice_data = [])
     $client_address = $invoice_data['client_address'];
     $client_contact = $invoice_data['client_contact'];
     $client_email = $invoice_data['client_email'];
+    $vehicle_name = $invoice_data['vehicle_name'];
     // Serviices Table
     $services = $invoice_data['services'];
 
@@ -592,6 +614,7 @@ function saveInvoicePDF($invoice_data = [])
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:14px;">{$client_address}</h4>
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: {$client_contact}</h4>
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_email}</h4>
+                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Vehicle: {$vehicle_name}</h4>
                         </td>
                     </tr>
                 </table>
