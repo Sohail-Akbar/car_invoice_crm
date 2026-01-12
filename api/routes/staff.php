@@ -4,9 +4,9 @@
 if (isset($_POST['getAssignedTask'])) {
     $user =  validateBearerToken("token");
 
-    $staff_id = $user['id'];
-    $company_id = $user['company_id'];
-    $agency_id  = $user['agency_id'];
+    $staff_id = (int) $user['id'];
+    $company_id = (int) $user['company_id'];
+    $agency_id  = (int) $user['agency_id'];
 
     // Fetch assigned customers and vehicles
     $assigned_tasks = $db->query("
@@ -19,24 +19,26 @@ if (isset($_POST['getAssignedTask'])) {
         u.email,
         i.id AS invoice_id,
         i.invoice_no,
-        cch.reg_number,
-        cch.make,
-        cch.model,
-        cch.primaryColour,
-        cch.fuelType,
+        MIN(cch.reg_number) AS reg_number,
+        MIN(cch.make) AS make,
+        MIN(cch.model) AS model,
+        MIN(cch.primaryColour) AS primaryColour,
+        MIN(cch.fuelType) AS fuelType,
         i.status,
         i.due_date,
         i.total_amount
     FROM customer_staff cs
-    INNER JOIN users u ON cs.customer_id = u.id
+    INNER JOIN users u ON cs.customer_id = u.id 
     INNER JOIN invoices i ON cs.invoice_id = i.id
-    INNER JOIN customer_car_history cch ON cch.customer_id = u.id
+    INNER JOIN customer_car_history cch 
+        ON cch.customer_id = u.id 
+        AND cch.is_active = 1
     WHERE cs.staff_id = $staff_id
       AND cs.is_active = 1
       AND u.type = 'customer'
       AND cs.company_id = $company_id
       AND cs.agency_id = $agency_id
-      AND cch.is_active = 1
+    GROUP BY i.id
     ORDER BY i.due_date ASC
 ", [
         "select_query" => true,

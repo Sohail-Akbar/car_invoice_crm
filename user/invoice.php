@@ -252,6 +252,16 @@ $company_discount = $db->select("discount", "*", [
                                         class="form-control py-2" value="<?= $discount_amount_val; ?>">
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="label">Mileage (Miles)</label>
+                                    <input type="number"
+                                        name="mileage"
+                                        id="mileage"
+                                        placeholder="e.g. 45320"
+                                        class="form-control py-2" value="<?= arr_val($invoiceData, "mileage"); ?>">
+                                </div>
+                            </div>
                             <!-- Invoice Items -->
                             <div class="col-md-12 px-0">
                                 <div class="form-group">

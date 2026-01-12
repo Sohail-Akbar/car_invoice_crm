@@ -100,7 +100,7 @@ if (
                 <a href="assigned-vehicles" class="menu-item">
                     <div>
                         <i class="fas fa-users"></i>
-                        <span class="menu-text">Assigned Vehicles - (<?= isset($assigned_tasks) ? count($assigned_tasks) : "0" ?>)</span>
+                        <span class="menu-text">Assigned Vehicles</span>
                     </div>
                 </a>
                 <a href="completed-tasks" class="menu-item">

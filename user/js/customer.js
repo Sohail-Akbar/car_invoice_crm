@@ -10,7 +10,12 @@ $(document).ready(function () {
             "pageLength": 10,
             "lengthChange": true,
             "columns": [
-                { "data": "id", "render": function (data, type, row, meta) { return meta.row + 1; } },
+                {
+                    "data": null,
+                    "render": function (data, type, row, meta) {
+                        return meta.settings._iDisplayStart + meta.row + 1;
+                    }
+                },
                 {
                     "data": null,
                     "render": function (data, type, row) {
