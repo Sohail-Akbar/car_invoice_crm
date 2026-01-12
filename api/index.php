@@ -40,6 +40,8 @@ if ($endpoint === "/login") {
     $_POST['getAssignedTask'] = true;
 } else if ($endpoint === "/get-complete-tasks") {
     $_POST['getCompleteTask'] = true;
+} else if ($endpoint === "/view-task") {
+    $_POST['viewTask'] = true;
 }
 
 // Define routes
@@ -51,6 +53,7 @@ $routes = [
     '/set_password' => __DIR__ . '/routes/auth.php',
     '/logout' => __DIR__ . '/routes/auth.php',
     '/get-assigned-tasks' => __DIR__ . '/routes/staff.php',
+    '/view-task' => __DIR__ . '/routes/staff.php',
     '/get-complete-tasks' => __DIR__ . '/routes/staff.php',
 ];
 
