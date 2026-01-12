@@ -98,10 +98,14 @@ if (isset($_POST['fetchCarInfo'])) {
             SELECT cs.id AS cs_id, cs.is_active, st.title, st.fname, st.lname, st.email,st.type
             FROM customer_staff cs
             INNER JOIN users st ON cs.staff_id = st.id AND st.type = 'staff'
-            WHERE cs.customer_id = '$customer_id' AND cs.invoice_id = '$invoice_id' AND cs.is_active = 1
+            WHERE cs.customer_id = '$customer_id' AND cs.invoice_id = '$invoice_id'
         ", ["select_query" => true]);
         $assigned_staff_ids = [];
-
+        // print_r($assigned_staff);
+        $completed_task_html = "";
+        // if (!empty($assigned_staff) && $assigned_staff[0]['is_active'] == 0) {
+        //     $completed_task_html = "<span class='badge badge-success ml-2'>Completed</span>";
+        // }
 
         $pdf_html = "";
         if (!empty($invoice['pdf_file']) && file_exists(_DIR_ . "/uploads/invoices/{$invoice['pdf_file']}")) {
@@ -139,7 +143,7 @@ HTML;
         echo "
         <div class='card mb-3 shadow-sm mt-5 single-invoice-card'>
             <div class='card-header bg-info d-flex justify-content-between align-items-center single-header'>
-                <div><strong>{$car['make']} {$car['model']}</strong> ({$car['reg_number']})</div>
+                <div><strong>{$car['make']} {$car['model']}</strong> ({$car['reg_number']}) {$completed_task_html}</div>
                 <div class='action-btns'>
                     {$add_staff_btn_html}
                     {$update_payment_btn_html}
