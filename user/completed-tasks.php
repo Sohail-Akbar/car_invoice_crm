@@ -11,45 +11,6 @@ $CSS_FILES_ = [
 ];
 
 
-$staff_id = LOGGED_IN_USER_ID;
-$company_id = LOGGED_IN_USER['company_id'];
-$agency_id  = LOGGED_IN_USER['agency_id'];
-
-// Fetch assigned customers and vehicles
-$assigned_tasks = $db->query("
-    SELECT 
-        cs.id AS cs_id,
-        u.id AS customer_id,
-        u.fname,
-        u.lname,
-        u.contact,
-        u.email,
-        i.id AS invoice_id,
-        i.invoice_no,
-        cch.reg_number,
-        cch.make,
-        cch.model,
-        cch.primaryColour,
-        cch.fuelType,
-        i.status,
-        i.due_date,
-        i.total_amount
-    FROM customer_staff cs
-    INNER JOIN users u ON cs.customer_id = u.id
-    INNER JOIN invoices i ON cs.invoice_id = i.id
-    INNER JOIN customer_car_history cch ON cch.customer_id = u.id
-    WHERE cs.staff_id = $staff_id
-      AND cs.is_active = 1
-      AND u.type = 'customer'
-      AND cs.company_id = $company_id
-      AND cs.agency_id = $agency_id
-      AND cch.is_active = 1
-    ORDER BY i.due_date ASC
-", [
-    "select_query" => true,
-]);
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,9 +65,9 @@ $assigned_tasks = $db->query("
                     },
                     "pageLength": 10,
                     "columns": [{
-                            "data": "id",
+                            "data": null,
                             "render": function(data, type, row, meta) {
-                                return meta.row + 1;
+                                return meta.settings._iDisplayStart + meta.row + 1;
                             }
                         },
                         {
@@ -127,7 +88,7 @@ $assigned_tasks = $db->query("
                                 let text = "";
                                 let color = "";
 
-                                if (data == 0) {
+                                if (data == "Completed") {
                                     text = "Completed";
                                     color = "bg-success";
                                 } else {

@@ -153,16 +153,18 @@ if (isset($_POST['markTaskDone'])) {
 
 if (isset($_GET['fetchCompletedTasks'])) {
 
-    $draw = intval($_POST['draw']);
-    $start = intval($_POST['start']);
+    $draw   = intval($_POST['draw']);
+    $start  = intval($_POST['start']);
     $length = intval($_POST['length']);
-    $searchValue = $_POST['search']['value'];
+    $searchValue = $_POST['search']['value'] ?? '';
 
-    $staff_id   = LOGGED_IN_USER_ID;
-    $company_id = LOGGED_IN_USER['company_id'];
-    $agency_id  = LOGGED_IN_USER['agency_id'];
+    $staff_id   = (int) LOGGED_IN_USER_ID;
+    $company_id = (int) LOGGED_IN_USER['company_id'];
+    $agency_id  = (int) LOGGED_IN_USER['agency_id'];
 
-    // ✅ Base Query: Completed Tasks
+    // =======================
+    // MAIN DATA QUERY
+    // =======================
     $sql = "
         SELECT 
             cs.id,
@@ -171,52 +173,72 @@ if (isset($_GET['fetchCompletedTasks'])) {
             u.fname,
             u.lname,
             i.invoice_no,
-            i.status,
             i.id AS invoice_id,
-            cch.make,
-            cch.model,
-            cch.reg_number
+            MIN(cch.make) AS make,
+            MIN(cch.model) AS model,
+            MIN(cch.reg_number) AS reg_number
         FROM customer_staff cs
         INNER JOIN users u ON cs.customer_id = u.id
         INNER JOIN invoices i ON cs.invoice_id = i.id
-        INNER JOIN customer_car_history cch ON cch.customer_id = u.id
-        WHERE cs.staff_id = '$staff_id'
-          AND cs.company_id = '$company_id'
-          AND cs.agency_id = '$agency_id'
+        INNER JOIN customer_car_history cch 
+            ON cch.customer_id = u.id 
+            AND cch.is_active = 1
+        WHERE cs.staff_id = $staff_id
+          AND cs.company_id = $company_id
+          AND cs.agency_id = $agency_id
           AND cs.is_active = 0
           AND cs.completed_at IS NOT NULL
     ";
 
+    // 🔍 Search filter
     if (!empty($searchValue)) {
-        $sql .= " AND (u.fname LIKE '%$searchValue%' 
-                    OR u.lname LIKE '%$searchValue%' 
-                    OR i.invoice_no LIKE '%$searchValue%' 
-                    OR cch.reg_number LIKE '%$searchValue%')";
+        $searchValue = addslashes($searchValue);
+        $sql .= "
+            AND (
+                u.fname LIKE '%$searchValue%' 
+                OR u.lname LIKE '%$searchValue%' 
+                OR i.invoice_no LIKE '%$searchValue%' 
+                OR cch.reg_number LIKE '%$searchValue%'
+            )
+        ";
     }
 
-    // ✅ Count total
-    $totalQuery = $db->query("
-        SELECT COUNT(*) AS total 
-        FROM customer_staff 
-        WHERE staff_id = '$staff_id' 
-          AND company_id = '$company_id' 
-          AND agency_id = '$agency_id'
-          AND completed_at IS NOT NULL
-    ", ["select_query" => true]);
-    $totalRecords = $totalQuery[0]['total'];
+    // 🔐 Prevent duplicate tasks
+    $sql .= " GROUP BY cs.invoice_id ";
 
-    // ✅ Pagination
+    // =======================
+    // TOTAL RECORDS (FIXED)
+    // =======================
+    $countSql = "
+        SELECT COUNT(DISTINCT cs.invoice_id) AS total
+        FROM customer_staff cs
+        WHERE cs.staff_id = $staff_id
+          AND cs.company_id = $company_id
+          AND cs.agency_id = $agency_id
+          AND cs.is_active = 0
+          AND cs.completed_at IS NOT NULL
+    ";
+
+    $totalQuery   = $db->query($countSql, ["select_query" => true]);
+    $totalRecords = $totalQuery[0]['total'] ?? 0;
+
+    // =======================
+    // PAGINATION
+    // =======================
     $sql .= " ORDER BY cs.completed_at DESC LIMIT $start, $length";
     $tasks = $db->query($sql, ["select_query" => true]);
 
+    // =======================
+    // RESPONSE FORMAT
+    // =======================
     $data = [];
     foreach ($tasks as $task) {
         $data[] = [
             "id" => $task['id'],
-            "customer_name" => $task['fname'] . " " . $task['lname'],
-            "vehicle" => $task['make'] . " " . $task['model'] . " (" . $task['reg_number'] . ")",
+            "customer_name" => $task['fname'] . ' ' . $task['lname'],
+            "vehicle" => $task['make'] . ' ' . $task['model'] . ' (' . $task['reg_number'] . ')',
             "invoice_no" => $task['invoice_no'],
-            "status" => $task['is_active'],
+            "status" => 'Completed',
             "completed_at" => date("d M Y H:i", strtotime($task['completed_at'])),
             "invoice_id" => $task['invoice_id']
         ];

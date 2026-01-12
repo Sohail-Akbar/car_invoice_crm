@@ -24,6 +24,8 @@ if (isset($_POST['fetchCarInfo'])) {
         i.pdf_file,
         i.proforma,
         i.notes,
+        i.mileage,
+        it.quantity,
         s.text AS service_name,
         s.amount AS service_amount
     FROM customer_car_history AS c
@@ -64,6 +66,7 @@ if (isset($_POST['fetchCarInfo'])) {
                 "invoice" => [
                     "invoice_no" => $row["invoice_no"],
                     "invoice_date" => $row["invoice_date"],
+                    "mileage" => $row["mileage"],
                     "status" => $row["status"],
                     "total_amount" => $row["total_amount"],
                     "paid_amount" => $row["paid_amount"],
@@ -77,6 +80,7 @@ if (isset($_POST['fetchCarInfo'])) {
 
         $grouped[$invoice_id]["services"][] = [
             "name" => $row["service_name"],
+            "quantity" => $row["quantity"],
             "amount" => $row["service_amount"]
         ];
     }
@@ -152,15 +156,20 @@ HTML;
                     </div>
                     {$pdf_html}
                 </div>
-                <p class='small text-muted mb-2'>Date: {$invoiceDate}</p>
+                <p class='small text-muted'>Date: {$invoiceDate}</p>
+                <p class='small text-muted mb-2'>Mileage: {$invoice['mileage']} Miles</p>
 
                 <table class='table table-sm table-bordered mb-3'>
                     <thead class='table-secondary'>
-                        <tr><th>Service</th><th>Amount (" . _CURRENCY_SYMBOL . ")</th></tr>
+                        <tr>
+                            <th>Service</th>
+                            <th>Quantity</th>
+                            <th>Amount (" . _CURRENCY_SYMBOL . ")</th>
+                        </tr>
                     </thead>
                     <tbody>";
         foreach ($data["services"] as $srv) {
-            echo "<tr><td>{$srv['name']}</td><td>{$srv['amount']}</td></tr>";
+            echo "<tr><td>{$srv['name']}</td><td>{$srv['quantity']}</td><td>{$srv['amount']}</td></tr>";
         }
         echo "
                     </tbody>

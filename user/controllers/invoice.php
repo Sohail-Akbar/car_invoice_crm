@@ -28,6 +28,7 @@ if (isset($_POST['saveInvoice'])) {
     $customer_id = intval($_POST['customer_id']);
     $write_off = isset($_POST['write_off']) ? 1 : 0;
     $submit_type = arr_val($_POST, "submit_type", "");
+    $mileage = arr_val($_POST, "mileage", "");
 
     if (empty($customer_id)) {
         returnError("Please select a customer before saving the invoice.");
@@ -156,7 +157,8 @@ if (isset($_POST['saveInvoice'])) {
         "discount_amount" => $discount_amount,
         "total_amount" => $total_amount,
         "due_amount" => $due_amount,
-        "write_off" => $write_off
+        "write_off" => $write_off,
+        "mileage" => $mileage
     ];
 
     // Update Invoice 
@@ -191,6 +193,7 @@ if (isset($_POST['saveInvoice'])) {
             "discount_percentage" => $discount_percentage,
             "total_amount" => $total_amount,
             "due_amount" => $due_amount,
+            "mileage" => $mileage,
         ];
 
         $pdf = saveInvoicePDF($invoice_data);
@@ -284,6 +287,7 @@ if (isset($_POST['saveInvoice'])) {
         "notes" => $notes,
         "proforma" => $proforma,
         "write_off" => $write_off,
+        "mileage" => $mileage,
     ];
 
 
@@ -420,7 +424,10 @@ function saveInvoicePDF($invoice_data = [])
     $client_address = $invoice_data['client_address'];
     $client_contact = $invoice_data['client_contact'];
     $client_email = $invoice_data['client_email'];
+    $is_client_email = empty($client_email) ? "d-none" : "";
     $vehicle_name = $invoice_data['vehicle_name'];
+    $mileage = $invoice_data['mileage'];
+    $is_mileage = empty($mileage) ? "d-none" : "";
     // Serviices Table
     $services = $invoice_data['services'];
 
@@ -613,8 +620,11 @@ function saveInvoicePDF($invoice_data = [])
                             <h4 style="margin:0px;margin-top:5px;color:#214F79;font-weight:500;font-size:14px;">{$client_name}</h4>
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:14px;">{$client_address}</h4>
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Phone: {$client_contact}</h4>
-                            <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_email}</h4>
+                            <h4 class="{$is_client_email}" style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">{$client_email}</h4>
                             <h4 style="margin:0px;margin-top:5px;color:#6C6C6D;font-size:13px;">Vehicle: {$vehicle_name}</h4>
+                            <h4 style="margin:0px;margin-top:3px;color:#6C6C6D;font-size:13px;" class="{$is_mileage}">
+                                Mileage: {$mileage} Miles
+                            </h4>
                         </td>
                     </tr>
                 </table>

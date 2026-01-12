@@ -4,13 +4,10 @@ $page_name = 'Assigned Vehicle';
 
 $JS_FILES_ = [];
 
+$staff_id   = (int) LOGGED_IN_USER_ID;
+$company_id = (int) LOGGED_IN_USER['company_id'];
+$agency_id  = (int) LOGGED_IN_USER['agency_id'];
 
-
-$staff_id = LOGGED_IN_USER_ID;
-$company_id = LOGGED_IN_USER['company_id'];
-$agency_id  = LOGGED_IN_USER['agency_id'];
-
-// Fetch assigned customers and vehicles
 $assigned_tasks = $db->query("
     SELECT 
         cs.id AS cs_id,
@@ -21,28 +18,31 @@ $assigned_tasks = $db->query("
         u.email,
         i.id AS invoice_id,
         i.invoice_no,
-        cch.reg_number,
-        cch.make,
-        cch.model,
-        cch.primaryColour,
-        cch.fuelType,
+        MIN(cch.reg_number) AS reg_number,
+        MIN(cch.make) AS make,
+        MIN(cch.model) AS model,
+        MIN(cch.primaryColour) AS primaryColour,
+        MIN(cch.fuelType) AS fuelType,
         i.status,
         i.due_date,
         i.total_amount
     FROM customer_staff cs
-    INNER JOIN users u ON cs.customer_id = u.id
+    INNER JOIN users u ON cs.customer_id = u.id 
     INNER JOIN invoices i ON cs.invoice_id = i.id
-    INNER JOIN customer_car_history cch ON cch.customer_id = u.id
+    INNER JOIN customer_car_history cch 
+        ON cch.customer_id = u.id 
+        AND cch.is_active = 1
     WHERE cs.staff_id = $staff_id
       AND cs.is_active = 1
       AND u.type = 'customer'
       AND cs.company_id = $company_id
       AND cs.agency_id = $agency_id
-      AND cch.is_active = 1
+    GROUP BY i.id
     ORDER BY i.due_date ASC
 ", [
     "select_query" => true,
 ]);
+
 
 ?>
 <!DOCTYPE html>
@@ -166,7 +166,7 @@ $assigned_tasks = $db->query("
                             <p><strong>Reg. Number:</strong> <?= htmlspecialchars($task['reg_number']) ?></p>
                             <p><strong>Color:</strong> <?= htmlspecialchars($task['primaryColour']) ?></p>
                             <p><strong>Fuel Type:</strong> <?= htmlspecialchars($task['fuelType']) ?></p>
-                            <p><strong>Due Date:</strong> <?= htmlspecialchars($task['due_date']) ?></p>
+                            <p><strong>Due Date:</strong> <?= displayDateFormat(htmlspecialchars($task['due_date'])) ?></p>
                             <p><strong>Contact:</strong> <?= htmlspecialchars($task['contact']) ?> | <?= htmlspecialchars($task['email']) ?></p>
                         </div>
 

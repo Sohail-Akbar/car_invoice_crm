@@ -648,6 +648,7 @@ function generateOTP($length = 6)
     return $otp;
 }
 
+// Database date format
 function dbDateFormat($date)
 {
     if (empty($date)) {
@@ -656,4 +657,15 @@ function dbDateFormat($date)
 
     $dt = DateTime::createFromFormat('d-m-Y', $date);
     return $dt ? $dt->format('Y-m-d') : null;
+}
+
+// Display date format
+function displayDateFormat($date)
+{
+    if (empty($date)) {
+        return null;
+    }
+
+    $dt = DateTime::createFromFormat('Y-m-d', $date);
+    return $dt ? $dt->format('d F Y') : null;
 }
