@@ -498,8 +498,8 @@ function url(...$paths)
 // Generate Invoice No
 function generateInvoiceNo()
 {
-    // Generate a random 5-digit number
-    $randomNumber = mt_rand(10000, 99999);
+    // Generate a random 6-digit number
+    $randomNumber = mt_rand(100000, 999999);
     return "INV-" . $randomNumber;
 }
 
