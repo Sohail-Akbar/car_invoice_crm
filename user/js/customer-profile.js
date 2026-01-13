@@ -386,7 +386,12 @@ $(document).ready(function () {
             "scrollCollapse": true,
             "autoWidth": false,
             "columns": [
-                { "data": "id", "width": "10%" },
+                {
+                    "data": null,
+                    "render": function (data, type, row, meta) {
+                        return meta.settings._iDisplayStart + meta.row + 1;
+                    }
+                },
                 { "data": "invoice_type", "width": "30%" },
                 { "data": "created_at", "width": "30%" },
                 {
