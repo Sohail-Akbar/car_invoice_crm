@@ -541,12 +541,12 @@ if (isset($_GET['fetchVehicleData'])) {
                          {$email_html}
                          <strong>Contact:</strong> {$customer['contact']}
                          </a>";
-
+        $expiryDate_ = displayDateFormat($row['expiryDate']);
         $detailsHTML = "<a href='customer-profile?id={$row['customer_id']}'>
                         <strong>Make:</strong> {$row['make']}<br>
                         <strong>Model:</strong> {$row['model']}<br>
                         <strong>Engine Size:</strong> {$row['engineSize']}<br>
-                        <strong>Expiry Date:</strong> {$row['expiryDate']}
+                        <strong>Expiry Date:</strong> {$expiryDate_}
                         </a>";
 
         $statusClass = ($row['is_active'] == '1') ? 'bg-success' : 'bg-warning text-dark';
