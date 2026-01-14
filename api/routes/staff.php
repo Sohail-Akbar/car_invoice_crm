@@ -12,6 +12,7 @@ if (isset($_POST['getAssignedTask'])) {
     $assigned_tasks = $db->query("
     SELECT 
         cs.id AS cs_id,
+        cs.video_url,
         u.id AS customer_id,
         u.fname,
         u.lname,
@@ -93,6 +94,7 @@ if (isset($_POST['getCompleteTask'])) {
     $assigned_tasks = $db->query("
     SELECT 
         cs.id AS cs_id,
+        cs.video_url,
         u.id AS customer_id,
         u.fname,
         u.lname,
@@ -132,4 +134,38 @@ if (isset($_POST['getCompleteTask'])) {
         "data" => $assigned_tasks
     ]);
     die;
+}
+
+
+// Mark Task Done
+if (isset($_POST['markTaskDone'])) {
+    $user =  validateBearerToken("token");
+    $cs_id = intval($_POST['cs_id']);
+    $video_url = arr_val($_POST, 'video_url', '');
+
+    if (!$cs_id) {
+        returnError("Customer Staff ID is required");
+        die;
+    }
+
+    // Update the customer_staff record as completed
+    $update = $db->update("customer_staff", [
+        "is_active" => 0, // mark as done
+        "completed_at" => date("Y-m-d H:i:s"),
+        "video_url" => $video_url
+    ], [
+        "id" => $cs_id
+    ]);
+
+    if ($update) {
+        echo json_encode([
+            "status" => "success",
+            "message" => "Task marked as done",
+            "data" => []
+        ]);
+        die;
+    } else {
+        returnError("Failed to update task");
+        die;
+    }
 }
