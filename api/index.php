@@ -42,6 +42,8 @@ if ($endpoint === "/login") {
     $_POST['getCompleteTask'] = true;
 } else if ($endpoint === "/view-task") {
     $_POST['viewTask'] = true;
+} else if ($endpoint === "/mark-task-done") {
+    $_POST['markTaskDone'] = true;
 }
 
 // Define routes
@@ -55,6 +57,7 @@ $routes = [
     '/get-assigned-tasks' => __DIR__ . '/routes/staff.php',
     '/view-task' => __DIR__ . '/routes/staff.php',
     '/get-complete-tasks' => __DIR__ . '/routes/staff.php',
+    '/mark-task-done' => __DIR__ . '/routes/staff.php',
 ];
 
 // Switch case for routing
