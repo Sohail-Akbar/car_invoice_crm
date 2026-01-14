@@ -25,6 +25,7 @@ if (isset($_POST['getAssignedTask'])) {
         MIN(cch.model) AS model,
         MIN(cch.primaryColour) AS primaryColour,
         MIN(cch.fuelType) AS fuelType,
+        cch.is_active,
         i.status,
         i.due_date,
         i.total_amount
@@ -107,6 +108,7 @@ if (isset($_POST['getCompleteTask'])) {
         MIN(cch.model) AS model,
         MIN(cch.primaryColour) AS primaryColour,
         MIN(cch.fuelType) AS fuelType,
+        cch.is_active,
         i.status,
         i.due_date,
         i.total_amount
