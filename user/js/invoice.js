@@ -128,6 +128,7 @@ $(document).ready(function () {
             todayHighlight: true
         }).datepicker('update', new Date());
     });
+    $(".payment-status").trigger("change");
     // if customer id and vehicle id is existing 
     if (_GET.customer_id) {
         $(".customer-selectbox-parent").find(`[role="option"][data-id="${_GET.customer_id}"]`).trigger("click");

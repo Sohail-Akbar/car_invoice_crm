@@ -61,7 +61,7 @@ if (isset($_POST['viewTask'])) {
 
     $invoice_id = $_POST["invoice_id"];
     // Fetch Services for this invoice
-    $services_data = $db->query("SELECT s.text AS service_name
+    $services_data = $db->query("SELECT s.text AS service_name, ii.id AS invoice_item_id, ii.is_completed
     FROM invoice_items ii
     INNER JOIN services s ON ii.services_id = s.id
     WHERE ii.invoice_id = '$invoice_id'
@@ -80,6 +80,33 @@ if (isset($_POST['viewTask'])) {
         "message" => "Fetch Services for the invoice successfully",
         "data" => $services_data
     ]);
+}
+
+// is completed service
+if (isset($_POST['markServiceCompleted'])) {
+    $user =  validateBearerToken("token");
+    $invoice_item_id = intval($_POST['invoice_item_id']);
+    if (!$invoice_item_id) {
+        returnError("Invoice Item ID is required");
+        die;
+    }
+    // Update the invoice_items record as completed
+    $update = $db->update("invoice_items", [
+        "is_completed" => 1, // mark as completed
+    ], [
+        "id" => $invoice_item_id
+    ]);
+    if ($update) {
+        echo json_encode([
+            "status" => "success",
+            "message" => "Service marked as completed",
+            "data" => []
+        ]);
+        die;
+    } else {
+        returnError("Failed to update service");
+        die;
+    }
 }
 
 

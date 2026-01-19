@@ -213,9 +213,9 @@ $company_discount = $db->select("discount", "*", [
                                 <div class="form-group">
                                     <label class="label">Status</label>
                                     <select name="status" class="form-control payment-status py-2">
-                                        <option value="unpaid">Unpaid</option>
-                                        <option value="paid">Paid</option>
-                                        <option value="partial">Partial</option>
+                                        <option <?= arr_val($invoiceData, "status") == "unpaid" ? "selected" : "" ?> value="unpaid">Unpaid</option>
+                                        <option <?= arr_val($invoiceData, "status") == "paid" ? "selected" : "" ?> value="paid">Paid</option>
+                                        <option <?= arr_val($invoiceData, "status") == "partial" ? "selected" : "" ?> value="partial">Partial</option>
                                     </select>
                                 </div>
                             </div>
