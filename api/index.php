@@ -2,7 +2,7 @@
 session_start();
 if (!defined('_DIR_')) define('_DIR_', '../');
 
-// Display errors for debugging (remove in production)
+// Display errors for debugging (remove in productions)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
