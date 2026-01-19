@@ -406,7 +406,7 @@ function saveInvoicePDF($invoice_data = [])
         $user_img = "uploads/" . LOGGED_IN_USER['image'];
     }
     $branch_logo = SITE_URL . $user_img;
-    $branch_logo = SITE_URL . "images/Hillcliffe-Garage-Logo.png";
+    $branch_logo = SITE_URL . "images/PR-Auto-Centre-Logo-dark.png";
     // Signature img
     $signature_img = SITE_URL . "images/signature.png";
     // Invoice Title
