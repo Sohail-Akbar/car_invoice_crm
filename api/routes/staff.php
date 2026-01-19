@@ -86,13 +86,14 @@ if (isset($_POST['viewTask'])) {
 if (isset($_POST['markServiceCompleted'])) {
     $user =  validateBearerToken("token");
     $invoice_item_id = intval($_POST['invoice_item_id']);
+    $is_completed = intval($_POST['is_completed']);
     if (!$invoice_item_id) {
         returnError("Invoice Item ID is required");
         die;
     }
     // Update the invoice_items record as completed
     $update = $db->update("invoice_items", [
-        "is_completed" => 1, // mark as completed
+        "is_completed" => $is_completed, // mark as completed
     ], [
         "id" => $invoice_item_id
     ]);
