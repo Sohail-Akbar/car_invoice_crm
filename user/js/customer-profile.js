@@ -291,7 +291,7 @@ $(document).ready(function () {
                         return `<a class="btn btn-view text-white" href="${SITE_URL}/uploads/invoices/${data}" target="_blank" style="padding:5px 10px;font-size:12px;">
                                     <i class="fas fa-eye"></i> View Invoice
                                 </a>
-                                <a class="btn btn-view text-white d-none" href="invoice?id=${row.id}&customer_id=${_GET.id}" style="padding:5px 10px;font-size:12px;">
+                                <a class="btn btn-view text-white" href="invoice?id=${row.id}&customer_id=${_GET.id}" style="padding:5px 10px;font-size:12px;">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>`;
                     },

@@ -33,6 +33,12 @@ if (
                         <span class="menu-text">Dashboard</span>
                     </div>
                 </a>
+                <a href="booking" class="menu-item">
+                    <div>
+                        <i class="fas fa-file-invoice"></i>
+                        <span class="menu-text">Booking Cars</span>
+                    </div>
+                </a>
                 <a href="invoice" class="menu-item">
                     <div>
                         <i class="fas fa-file-invoice"></i>
