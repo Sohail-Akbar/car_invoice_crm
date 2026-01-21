@@ -147,8 +147,8 @@ $('#calendar').fullCalendar({
     },
 
     select: function (start, end) {
-        $('[name="startTime"]').val(moment(start).format('DD-MM-YYYY HH:mm'));
-        $('[name="endTime"]').val(moment(end).format('DD-MM-YYYY HH:mm'));
+        $('[name="startTime"]').val(moment(start).format('DD-MM-YYYY hh:mm A'));
+        $('[name="endTime"]').val(moment(end).format('DD-MM-YYYY hh:mm A'));
         $('.add-new-appointment-model').modal("show");
     },
 
