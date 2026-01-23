@@ -153,7 +153,6 @@ $('#calendar').fullCalendar({
     },
 
     eventClick: function (event) {
-
         $(".view-appointment-details-model").modal("show");
 
         $.ajax({
@@ -247,7 +246,7 @@ $(document).on("click", ".delete-appointment-btn", function () {
 
 // edit appointment
 $(document).on("click", ".edit-appointment-btn", function () {
-    let appointmentId = $(this).data("id");
+    let appointmentId = $(this).attr("data-id");
 
     if (appointmentId) {
         $(".view-appointment-details-model").modal("hide");
