@@ -4,6 +4,7 @@ $page_name = 'Booking Vehicles';
 
 $CSS_FILES_ = [
     "calendar.css",
+    "fullcalendar.min.css",
 ];
 $JS_FILES_ = [
     "moment.js",
@@ -172,21 +173,6 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
     </div>
 
     <!-- View Appointment Modal -->
-    <!-- <div class="modal fade view-appointment-details-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="max-width: 80%; box-shadow: 0 0 10px #5555;">
-            <div class="modal-content bg-white">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">View Appointment Details</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body bg-white">
-                    <h1>sohail</h1>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <div class="modal fade view-appointment-details-model" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" style="max-width: 80%;">
             <div class="modal-content bg-white">
@@ -223,7 +209,20 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
 
                         <!-- LEFT -->
                         <div class="col-md-12 mt-3 app-info py-4 px-3">
-                            <h5 class="mb-3 text-clr">Appointment Information</h5>
+                            <div class="pull-away">
+                                <h5 class="mb-3 text-clr">Appointment Information</h5>
+                                <!-- edit and delete -->
+                                <div>
+                                    <button class="btn btn-sm mr-2 br-5 edit-appointment-btn">
+                                        <i class="fas fa-edit    "></i>
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-sm br-5 delete-appointment-btn">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
                             <hr>
                             <table class="table">
                                 <tr>

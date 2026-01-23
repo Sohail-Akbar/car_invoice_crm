@@ -669,3 +669,32 @@ function displayDateFormat($date)
     $dt = DateTime::createFromFormat('Y-m-d', $date);
     return $dt ? $dt->format('d F Y') : null;
 }
+
+
+function generateInvoiceNo_()
+{
+    global $db;
+
+    $sql = "SELECT invoice_no 
+            FROM invoices 
+            ORDER BY id DESC 
+            LIMIT 1";
+
+    $result = $db->conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        // INV-000001 → 1
+        preg_match('/INV-(\d+)/', $row['invoice_no'], $matches);
+        $lastNumber = (int) $matches[1];
+        $nextNumber = $lastNumber + 1;
+    } else {
+        $nextNumber = 1;
+    }
+
+    // Minimum 6 digits, lekin limit nahi
+    $digits = max(6, strlen((string)$nextNumber));
+
+    return 'INV-' . str_pad($nextNumber, $digits, '0', STR_PAD_LEFT);
+}

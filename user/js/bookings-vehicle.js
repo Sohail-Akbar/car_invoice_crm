@@ -180,6 +180,9 @@ $('#calendar').fullCalendar({
                     $("#app_name").text(a.fname + ' ' + a.lname || 'No Name');
                     $("#app_email").text(a.email || 'No Email');
                     $("#app_contact").text(a.contact || 'No Contact');
+                    // actions
+                    $(".edit-appointment-btn").attr("data-id", a.id);
+                    $(".delete-appointment-btn").attr("data-id", a.id);
 
                     // Store appointment id for invoice
                     $("#generateInvoiceBtn").data("id", a.id);
@@ -201,9 +204,86 @@ $('#calendar').fullCalendar({
         if (cellDate.isSame(today, 'day')) {
             cell.css('background-color', '#fff3cd'); // light yellow
         }
+    },
+});
+
+// delete appointment
+$(document).on("click", ".delete-appointment-btn", function () {
+    let appointmentId = $(this).data("id");
+    if (appointmentId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "controllers/appointment",
+                    method: "POST",
+                    data: {
+                        appointment_id: appointmentId,
+                        deleteAppointment: true
+                    },
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.status === "success") {
+                            Swal.fire('Deleted!', 'Appointment deleted successfully.', 'success');
+                            $('#calendar').fullCalendar('refetchEvents');
+                            location.reload();
+                        } else {
+                            Swal.fire('Error!', res.data, 'error');
+                        }
+                    },
+                    error: makeError
+                });
+            }
+        });
     }
 });
 
+// edit appointment
+$(document).on("click", ".edit-appointment-btn", function () {
+    let appointmentId = $(this).data("id");
+
+    if (appointmentId) {
+        $(".view-appointment-details-model").modal("hide");
+        $.ajax({
+            url: "controllers/appointment",
+            method: "POST",
+            data: {
+                appointment_id: appointmentId,
+                fetchSingleAppointment: true
+            },
+            dataType: "json",
+            success: function (res) {
+                if (res.status === "success") {
+                    let a = res.appointment;
+
+                    $('[name="startTime"]').val(moment(a.start_datetime).format('DD-MM-YYYY hh:mm A'));
+                    $('[name="endTime"]').val(moment(a.end_datetime).format('DD-MM-YYYY hh:mm A'));
+
+                    $(`.customer-selectbox-parent`).find(`.custom-select-dropdown [role="option"][data-id="${a.customer_id}"]`).trigger("click");
+                    setTimeout(() => {
+                        $(`.vehicle-history-container`).find(`.custom-select-dropdown [role="option"][data-id="${a.vehicle_id}"]`).trigger("click");
+                    }, 1000);
+                    $("#appointment_notes").val(a.description);
+
+                    $('[name="appointment_id"]').val(a.id);
+
+                    $('.add-new-appointment-model').modal("show");
+                    $(".add-new-appointment-model .modal-title").text("Edit Appointment");
+                    // add input 
+                    $(".add-new-appointment-model").find("form").append(`<input type="hidden" name="app_id" value="${a.id}" />`)
+                }
+            },
+            error: makeError
+        });
+    }
+});
 
 $('.fc-right button span.fa').each(function () {
     var $span = $(this);
