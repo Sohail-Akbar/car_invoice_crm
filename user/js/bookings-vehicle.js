@@ -373,9 +373,6 @@ function customerSelectCB(customer) {
                                                         </div>
                                                     </li>`);
                         $("#motHistoryDiv").removeClass("d-none");
-                        if (_GET.vehicle_id) {
-                            $(".vehicle-history-container").find(`[role="option"][data-id="${_GET.vehicle_id}"]`).trigger("click");
-                        }
 
                         $(".invoice-right-container .customer-name").text(data.fname + " " + data.lname);
                         $(".invoice-right-container .customer-address").text(data.address);
@@ -411,4 +408,11 @@ window.addEventListener("message", function (event) {
         console.log("Iframe form submitted!");
         // Yahan aap apna callback ya koi bhi action kar sakte ho
     }
+});
+
+
+$('.modal').on('hide.bs.modal', function (e) {
+    $(".add-new-appointment-model").find(`[action="appointment"]`)[0].reset();
+    $(".add-new-appointment-model .modal-title").text("Appointment");
+    $(".add-new-appointment-model").find(`form [name="app_id"]`).remove();
 });
