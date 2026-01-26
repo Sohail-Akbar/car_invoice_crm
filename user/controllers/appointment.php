@@ -224,11 +224,15 @@ if (isset($_GET['fetchBookings'])) {
             WHERE a.company_id = '$company_id' AND a.agency_id = '$agency_id'";
 
     if (!empty($searchValue)) {
-        $sql .= " AND (c.fname LIKE '%$searchValue%' 
-                    OR c.lname LIKE '%$searchValue%'
-                    OR c.email LIKE '%$searchValue%'
-                    OR c.contact LIKE '%$searchValue%'
-                    OR c.city LIKE '%$searchValue%')";
+        $sql .= " AND (
+        c.fname LIKE '%$searchValue%' 
+        OR c.lname LIKE '%$searchValue%'
+        OR c.email LIKE '%$searchValue%'
+        OR c.contact LIKE '%$searchValue%'
+        OR c.city LIKE '%$searchValue%'
+        OR a.title LIKE '%$searchValue%'
+        OR a.description LIKE '%$searchValue%'
+    )";
     }
 
     // Total records
@@ -237,14 +241,21 @@ if (isset($_GET['fetchBookings'])) {
 
     // Filtered records
     $filteredQuery = $db->query(
-        "SELECT COUNT(*) as total FROM appointments a JOIN users c ON a.customer_id = c.id WHERE a.company_id = '$company_id' AND a.agency_id = '$agency_id'" .
-            (!empty($searchValue) ? " AND (c.fname LIKE '%$searchValue%' 
-                    OR c.lname LIKE '%$searchValue%' 
-                    OR c.email LIKE '%$searchValue%' 
-                    OR c.contact LIKE '%$searchValue%' 
-                    OR c.city LIKE '%$searchValue%')" : ""),
+        "SELECT COUNT(*) as total FROM appointments a 
+     JOIN users c ON a.customer_id = c.id 
+     WHERE a.company_id = '$company_id' AND a.agency_id = '$agency_id'" .
+            (!empty($searchValue) ? " AND (
+        c.fname LIKE '%$searchValue%' 
+        OR c.lname LIKE '%$searchValue%' 
+        OR c.email LIKE '%$searchValue%' 
+        OR c.contact LIKE '%$searchValue%' 
+        OR c.city LIKE '%$searchValue%'
+        OR a.title LIKE '%$searchValue%'
+        OR a.description LIKE '%$searchValue%'
+     )" : ""),
         ["select_query" => true]
     );
+
     $filteredRecords = $filteredQuery[0]['total'];
 
     // Add LIMIT for pagination
