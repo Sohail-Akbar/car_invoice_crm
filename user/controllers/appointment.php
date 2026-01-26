@@ -205,3 +205,77 @@ if (isset($_POST['deleteAppointment'])) {
         returnError("Failed to delete appointment");
     }
 }
+
+
+// Fetch all bookings
+if (isset($_GET['fetchBookings'])) {
+
+    $draw = intval($_POST['draw']);
+    $start = intval($_POST['start']);
+    $length = intval($_POST['length']);
+    $searchValue = $_POST['search']['value'] ?? '';
+
+    $company_id = LOGGED_IN_USER['company_id'];
+    $agency_id = LOGGED_IN_USER['agency_id'];
+
+    $sql = "SELECT a.*, c.fname, c.lname, c.email, c.contact, c.address, c.city 
+            FROM appointments a
+            JOIN users c ON a.customer_id = c.id
+            WHERE a.company_id = '$company_id' AND a.agency_id = '$agency_id'";
+
+    if (!empty($searchValue)) {
+        $sql .= " AND (c.fname LIKE '%$searchValue%' 
+                    OR c.lname LIKE '%$searchValue%'
+                    OR c.email LIKE '%$searchValue%'
+                    OR c.contact LIKE '%$searchValue%'
+                    OR c.city LIKE '%$searchValue%')";
+    }
+
+    // Total records
+    $totalQuery = $db->query("SELECT COUNT(*) as total FROM appointments WHERE company_id = '$company_id' AND agency_id = '$agency_id'", ["select_query" => true]);
+    $totalRecords = $totalQuery[0]['total'];
+
+    // Filtered records
+    $filteredQuery = $db->query(
+        "SELECT COUNT(*) as total FROM appointments a JOIN users c ON a.customer_id = c.id WHERE a.company_id = '$company_id' AND a.agency_id = '$agency_id'" .
+            (!empty($searchValue) ? " AND (c.fname LIKE '%$searchValue%' 
+                    OR c.lname LIKE '%$searchValue%' 
+                    OR c.email LIKE '%$searchValue%' 
+                    OR c.contact LIKE '%$searchValue%' 
+                    OR c.city LIKE '%$searchValue%')" : ""),
+        ["select_query" => true]
+    );
+    $filteredRecords = $filteredQuery[0]['total'];
+
+    // Add LIMIT for pagination
+    $sql .= " ORDER BY a.id DESC LIMIT $start, $length";
+
+    $bookingData = $db->query($sql, ["select_query" => true]);
+
+    $data = [];
+    foreach ($bookingData as $row) {
+        $data[] = [
+            "id" => $row['id'],
+            "customer_id" => $row['customer_id'],
+            "fname" => $row['fname'],
+            "lname" => $row['lname'],
+            "email" => $row['email'],
+            "contact" => $row['contact'],
+            "address" => $row['address'],
+            "vehicle_id" => $row['vehicle_id'],
+            "start_datetime" => $row['start_datetime'],
+            "end_datetime" => $row['end_datetime'],
+            "created_at" => $row['created_at'],
+            "title" => $row['title'],
+            "description" => $row['description'],
+        ];
+    }
+
+    echo json_encode([
+        "draw" => $draw,
+        "recordsTotal" => $totalRecords,
+        "recordsFiltered" => $filteredRecords,
+        "data" => $data
+    ]);
+    exit;
+}

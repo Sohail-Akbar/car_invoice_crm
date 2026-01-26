@@ -1,16 +1,18 @@
 <?php
 require_once('includes/db.php');
-$page_name = 'Booking Vehicles';
+$page_name = 'View Booking Lists';
+
 
 $CSS_FILES_ = [
     "flatpickr.min.css",
     "calendar.css",
-    "fullcalendar.min.css",
+    _DIR_ .  "css/jquery.dataTables.min.css",
 ];
 $JS_FILES_ = [
     "flatpickr.js",
     "moment.js",
-    "fullcalendar.min.js",
+    _DIR_ . "js/jquery.dataTables.min.js",
+    _DIR_ . "js/bootstrap.bundle.min.js",
     "bookings-vehicle.js",
 ];
 
@@ -20,6 +22,7 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
     "is_active" => 1,
     "type" => "customer"
 ], ["order_by" => "id desc"]);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,15 +33,53 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
 
 <body>
     <?php require_once('./includes/header.php'); ?>
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-        <div class="calendar-header">
-            <div id="calendar"></div>
-            <button type="button" class="btn content-center br-5 py-1 add-appointment-btn">
-                +
-            </button>
+    <main class="main-content view-customer-container" id="mainContent">
+        <div class="card">
+            <div class="custom-table-header pull-away">
+                <div class="search-container">
+                    <input type="text" class="search-input search-minimal form-control" placeholder="Type to search...">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="d-flex content-center">
+                    <div class="btn-group dropleft content-center br-5">
+                        <button type="button" class="btn dropdown-toggle table-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Entries
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 7H20M6.99994 12H16.9999M10.9999 17H12.9999" stroke="#454545" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">5</a>
+                            <a class="dropdown-item" href="#">25</a>
+                            <a class="dropdown-item" href="#">50</a>
+                            <a class="dropdown-item" href="#">100</a>
+                        </div>
+                    </div>
+                    <a href="booking" class="btn ml-3 add-customer-btn br-5">+ &nbsp;Add New Booking</a>
+                </div>
+            </div>
+            <div class="table-responsive table-custom-design mt-5">
+                <table class="table table-striped" id="bookingList" style="width:100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Customer Details</th>
+                            <th>Vehicle</th>
+                            <th>Description</th>
+                            <th>Time</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </main>
+
 
     <!-- Add Appointment -->
     <div class="modal fade add-new-appointment-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -179,89 +220,6 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
         </div>
     </div>
 
-    <!-- View Appointment Modal -->
-    <div class="modal fade view-appointment-details-model" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" style="max-width: 80%;">
-            <div class="modal-content bg-white">
-
-                <!-- HEADER -->
-                <div class="modal-header text-white" style=" background-color: transparent !important;border: none !important;">
-                    <div class="col-md-9">
-                        <h3 class="modal-title heading mb-4 custom-heading text-clr"> Appointment Details</h3>
-                    </div>
-                    <button type="button" class="close text-dark" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-
-                <!-- BODY -->
-                <div class="modal-body bg-white mx-4">
-                    <div class="row">
-                        <!-- RIGHT -->
-                        <div class="col-md-12">
-                            <div class="customer-info">
-                                <div class="media">
-                                    <img class="mr-3" width="50px" src="../images/users/avatar.png" alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <h5 class="mt-0 mb-0" id="app_name"></h5>
-                                        <div>
-                                            <span id="app_email"></span>
-                                            <span class="mx-2">|</span>
-                                            <span id="app_contact"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- LEFT -->
-                        <div class="col-md-12 mt-3 app-info py-4 px-3">
-                            <div class="pull-away">
-                                <h5 class="mb-3 text-clr">Appointment Information</h5>
-                                <!-- edit and delete -->
-                                <div>
-                                    <button class="btn btn-sm mr-2 br-5 edit-appointment-btn">
-                                        <i class="fas fa-edit    "></i>
-                                        Edit
-                                    </button>
-                                    <button class="btn btn-sm br-5 delete-appointment-btn">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                            <hr>
-                            <table class="table">
-                                <tr>
-                                    <th>Vehicle</th>
-                                    <td id="app_title"></td>
-                                </tr>
-                                <tr>
-                                    <th>Time</th>
-                                    <td>
-                                        <span id="app_start" class="ml-0"></span> to <span id="app_end"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Description</th>
-                                    <td id="app_desc"></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FOOTER -->
-                <div class="modal-footer" style="border:none;">
-                    <a href="" class="btn br-5 text-white" id="generateInvoiceBtn">
-                        <i class="fa fa-file-invoice"></i> Generate Invoice
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
 
     <script>
         var autocompletes = {};
@@ -374,7 +332,86 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFeQ9V13F9lHKxCry0MmMQaRH32C8zIJY&libraries=places&region=GB&callback=initAutocomplete" async defer></script>
+    </script>
     <?php require_once('./includes/js.php'); ?>
+    <script>
+        $(document).ready(function() {
+            if ($("#bookingList").length) {
+                let bookingTable = $('#bookingList').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "controllers/appointment?fetchBookings=true",
+                        "type": "POST"
+                    },
+                    "pageLength": 10,
+                    "lengthChange": true,
+                    "columns": [{ // Serial number
+                            "data": null,
+                            "render": function(data, type, row, meta) {
+                                return meta.settings._iDisplayStart + meta.row + 1;
+                            }
+                        },
+                        { // Customer Details
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return `<a href="customer-profile?id=${row.customer_id}">
+                                <strong>Name:</strong> ${row.fname} ${row.lname}<br>
+                                ${row.email ? `<strong>Email:</strong> ${row.email}<br>` : ""}
+                                <strong>Contact:</strong> ${row.contact}<br>
+                                <strong>Address:</strong> ${row.address}</a>`;
+                            }
+                        },
+                        {
+                            "data": "title"
+                        },
+                        {
+                            "data": "description"
+                        },
+                        { // Time
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return `${moment(row.start_datetime).format('DD MMM YYYY hh:mm A')} - ${moment(row.end_datetime).format('DD MMM YYYY hh:mm A')}`;
+                            }
+                        },
+                        { // Created At
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return moment(row.created_at).format('DD MMM YYYY hh:mm A');
+                            }
+                        },
+                        { // Actions
+                            "data": null,
+                            "orderable": false,
+                            "render": function(data, type, row) {
+                                return `
+                            <i class="fas fa-edit edit-appointment-btn" data-id="${row.id}"></i>
+                            <i class="fas fa-trash delete-appointment-btn text-danger" data-id="${row.id}"></i>`;
+                            }
+                        }
+                    ],
+                    "scrollX": true,
+                    "initComplete": function() {
+                        this.api().columns.adjust().draw();
+                    },
+                    "drawCallback": function() {
+                        this.api().columns.adjust();
+                    }
+                });
+
+                // Search input
+                $('.search-input').on('keyup', function() {
+                    bookingTable.search(this.value).draw();
+                });
+
+                // Entries dropdown
+                $('.dropdown-item').on('click', function() {
+                    var length = parseInt($(this).text());
+                    bookingTable.page.len(length).draw();
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

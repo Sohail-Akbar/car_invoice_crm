@@ -1,3 +1,308 @@
+
+let businessHoursData = [];
+
+/* ===========================
+   FETCH GARAGE WORKING HOURS
+=========================== */
+function loadGarageTimetable(callback) {
+    $.ajax({
+        url: 'controllers/garage-setting',
+        type: 'POST',
+        data: { fetchGarageTimetable: true },
+        dataType: 'json',
+        success: function (res) {
+            if (res.status === 'success') {
+                businessHoursData = res.businessHours;
+                callback();
+            }
+        }
+    });
+}
+
+/* ===========================
+   MAP DB → FULLCALENDAR
+=========================== */
+function mapBusinessHours(data) {
+    return data.map(d => ({
+        daysOfWeek: d.daysOfWeek,
+        dow: d.daysOfWeek,
+        start: d.startTime.slice(0, 5), // "08:00:00" -> "08:00"
+        end: d.endTime.slice(0, 5)
+    }));
+}
+
+
+function initCalendar() {
+    $('#calendar').fullCalendar({
+        themeSystem: 'bootstrap4',
+        defaultView: 'agendaDay',
+        defaultDate: moment(),
+        editable: false,
+        selectable: true,
+        slotDuration: '00:30:00',
+        snapDuration: '00:30:00',
+        minTime: '00:00:00',
+        maxTime: '24:00:00',
+        allDaySlot: false,
+        eventOverlap: false,
+        slotEventOverlap: false,
+
+        header: {
+            left: 'title',
+            center: 'month,agendaWeek,agendaDay',
+            right: 'today prev,next'
+        },
+
+        /* 🔹 TIME BASED GARAGE CONTROL */
+        businessHours: mapBusinessHours(businessHoursData),
+        // selectConstraint: "businessHours",
+        // eventConstraint: "businessHours",
+
+        events: [],
+
+
+        viewRender: function (view) {
+            let startDate = view.start.format('YYYY-MM-DD');
+            let endDate = view.end.format('YYYY-MM-DD');
+
+
+            // 🔹 Fetch Appointments
+            $.ajax({
+                url: 'controllers/appointment',
+                type: 'POST',
+                data: {
+                    start: startDate,
+                    end: endDate,
+                    fetchAppointments: true
+                },
+                dataType: 'json',
+                success: function (response) {
+                    $('#calendar').fullCalendar('removeEvents');
+                    $('#calendar').fullCalendar('addEventSource', response);
+                }
+            });
+        },
+        select: function (start, end) {
+            let startPicker = flatpickr("#startTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+            let endPicker = flatpickr("#endTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+
+            startPicker.setDate(moment(start).format('DD-MM-YYYY hh:mm A'));
+            endPicker.setDate(moment(end).format('DD-MM-YYYY hh:mm A'));
+
+            $('.add-new-appointment-model').modal("show");
+        },
+        eventClick: function (event) {
+            $(".view-appointment-details-model").modal("show");
+            $.ajax({
+                url: "controllers/appointment",
+                method: "POST",
+                data: { appointment_id: event.id, fetchSingleAppointment: true },
+                dataType: "json",
+                success: function (res) {
+                    if (res.status === "success") {
+                        let a = res.appointment;
+                        $("#app_title").text(a.title || 'No Title');
+                        $("#app_desc").text(a.description || 'No Description');
+                        $("#app_start").text(moment(a.start_datetime).format('DD MMM YYYY hh:mm A'));
+                        $("#app_end").text(moment(a.end_datetime).format('DD MMM YYYY hh:mm A'));
+                        $("#app_name").text(a.fname + ' ' + a.lname || 'No Name');
+                        $("#app_email").text(a.email || 'No Email');
+                        $("#app_contact").text(a.contact || 'No Contact');
+                        $(".edit-appointment-btn").attr("data-id", a.id);
+                        $(".delete-appointment-btn").attr("data-id", a.id);
+                        $("#generateInvoiceBtn").data("id", a.id);
+                        $("#generateInvoiceBtn").attr("href", "invoice?customer_id=" + a.customer_id + "&appointment_id=" + a.id + "&vehicle_id=" + a.vehicle_id);
+                    }
+                },
+                error: makeError
+            });
+        },
+
+        // 🔹 Highlight days based on timetable
+        dayRender: function (date, cell) {
+            let today = moment().local().startOf('day');
+            let cellDate = moment(date).local().startOf('day');
+
+            // Highlight today
+            if (cellDate.isSame(today, 'day')) {
+                cell.css('background-color', '#fff3cd'); // light yellow
+            }
+
+            // Determine day of week 0 = Sunday, 1 = Monday ...
+            let dayOfWeek = cellDate.day();
+
+
+            // Check if this day is in businessHoursData
+            let isWorkingDay = businessHoursData.some(bh => bh.daysOfWeek.includes(dayOfWeek));
+
+            if (isWorkingDay) {
+                cell.css('background-color', '#fff'); // light green for working day
+            } else {
+                if (businessHoursData.length) {
+                    cell.css('background-color', '#f8d7da'); // light red for off day
+                } else {
+                    cell.css('background-color', '#fff');
+                }
+            }
+
+        },
+        eventAfterRender: function (event, element, view) {
+            if (view.name === 'month') {
+                // event.start se day nikaal lo
+                let day = event.start.date();    // day number
+                let month = event.start.month(); // 0-11
+                let year = event.start.year();
+
+                // Calendar me day cell select karo
+                $('#calendar .fc-day[data-date]').each(function () {
+                    let cellDate = $(this).data('date'); // "YYYY-MM-DD"
+                    let d = moment(cellDate, 'YYYY-MM-DD');
+                    if (d.year() === year && d.month() === month && d.date() === day) {
+                        $(this).css({
+                            'background-color': '#cce5ff',
+                            "border": "1px solid #fff"
+                        }); // blue light
+                    }
+                });
+            }
+        }
+
+    });
+
+    $('.fc-right button span.fa').each(function () {
+        var $span = $(this);
+        var $i = $('<i />').attr('class', $span.attr('class')).html($span.html());
+        $span.replaceWith($i);
+    });
+}
+/* ===========================
+   LOAD & START
+=========================== */
+$(document).ready(function () {
+    loadGarageTimetable(function () {
+        initCalendar();
+    });
+});
+
+// function initCalendar() {
+//     $('#calendar').fullCalendar({
+//         themeSystem: 'bootstrap4',
+//         defaultView: 'agendaDay',
+//         defaultDate: moment(),
+//         editable: false,
+//         selectable: true,
+//         slotDuration: '00:30:00',
+//         snapDuration: '00:30:00',
+//         minTime: '00:00:00',
+//         maxTime: '24:00:00',
+//         allDaySlot: false,
+//         header: {
+//             left: 'title',
+//             center: 'month,agendaWeek,agendaDay',
+//             right: 'today prev,next'
+//         },
+//         events: [],
+//         viewRender: function (view) {
+//             let startDate = view.start.format('YYYY-MM-DD');
+//             let endDate = view.end.format('YYYY-MM-DD');
+
+
+//             // 🔹 Fetch Appointments
+//             $.ajax({
+//                 url: 'controllers/appointment',
+//                 type: 'POST',
+//                 data: {
+//                     start: startDate,
+//                     end: endDate,
+//                     fetchAppointments: true
+//                 },
+//                 dataType: 'json',
+//                 success: function (response) {
+//                     $('#calendar').fullCalendar('removeEvents');
+//                     $('#calendar').fullCalendar('addEventSource', response);
+//                 }
+//             });
+//         },
+//         select: function (start, end) {
+//             let startPicker = flatpickr("#startTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+//             let endPicker = flatpickr("#endTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+
+//             startPicker.setDate(moment(start).format('DD-MM-YYYY hh:mm A'));
+//             endPicker.setDate(moment(end).format('DD-MM-YYYY hh:mm A'));
+
+//             $('.add-new-appointment-model').modal("show");
+//         },
+//         eventClick: function (event) {
+//             $(".view-appointment-details-model").modal("show");
+//             $.ajax({
+//                 url: "controllers/appointment",
+//                 method: "POST",
+//                 data: { appointment_id: event.id, fetchSingleAppointment: true },
+//                 dataType: "json",
+//                 success: function (res) {
+//                     if (res.status === "success") {
+//                         let a = res.appointment;
+//                         $("#app_title").text(a.title || 'No Title');
+//                         $("#app_desc").text(a.description || 'No Description');
+//                         $("#app_start").text(moment(a.start_datetime).format('DD MMM YYYY hh:mm A'));
+//                         $("#app_end").text(moment(a.end_datetime).format('DD MMM YYYY hh:mm A'));
+//                         $("#app_name").text(a.fname + ' ' + a.lname || 'No Name');
+//                         $("#app_email").text(a.email || 'No Email');
+//                         $("#app_contact").text(a.contact || 'No Contact');
+//                         $(".edit-appointment-btn").attr("data-id", a.id);
+//                         $(".delete-appointment-btn").attr("data-id", a.id);
+//                         $("#generateInvoiceBtn").data("id", a.id);
+//                         $("#generateInvoiceBtn").attr("href", "invoice?customer_id=" + a.customer_id + "&appointment_id=" + a.id + "&vehicle_id=" + a.vehicle_id);
+//                     }
+//                 },
+//                 error: makeError
+//             });
+//         },
+
+//         // 🔹 Highlight days based on timetable
+//         dayRender: function (date, cell) {
+//             let today = moment().local().startOf('day');
+//             let cellDate = moment(date).local().startOf('day');
+
+//             // Highlight today
+//             if (cellDate.isSame(today, 'day')) {
+//                 cell.css('background-color', '#fff3cd'); // light yellow
+//             }
+
+//             // Determine day of week 0 = Sunday, 1 = Monday ...
+//             let dayOfWeek = cellDate.day();
+
+
+//             $.ajax({
+//                 url: 'controllers/garage-setting',
+//                 type: 'POST',
+//                 data: { fetchGarageTimetable: true },
+//                 dataType: 'json',
+//                 success: function (res) {
+//                     if (res.status === 'success') {
+//                         businessHoursData = res.businessHours; // store for later use
+
+//                         // Check if this day is in businessHoursData
+//                         let isWorkingDay = businessHoursData.some(bh => bh.daysOfWeek.includes(dayOfWeek));
+
+//                         if (isWorkingDay) {
+//                             cell.css('background-color', '#fff'); // light green for working day
+//                         } else {
+//                             cell.css('background-color', '#f8d7da'); // light red for off day
+//                         }
+//                     }
+//                 }
+//             });
+//         }
+//     });
+
+//     $('.fc-right button span.fa').each(function () {
+//         var $span = $(this);
+//         var $i = $('<i />').attr('class', $span.attr('class')).html($span.html());
+//         $span.replaceWith($i);
+//     });
+// }
+
 // $('#calendar').fullCalendar({
 //     themeSystem: 'bootstrap4',
 
@@ -5,18 +310,14 @@
 //     defaultDate: moment(),
 
 //     editable: false,
-//     businessHours: false,
+//     selectable: true,
 
-//     selectable: true,        // ⭐ multiple select enable
-//     selectHelper: true,
-//     // unselectAuto: false,
-
-//     allDaySlot: false,
-
-//     slotDuration: '00:15:00',
-//     snapDuration: '00:15:00',
+//     slotDuration: '00:30:00',
+//     snapDuration: '00:30:00',
 //     minTime: '00:00:00',
 //     maxTime: '24:00:00',
+
+//     allDaySlot: false,
 
 //     header: {
 //         left: 'title',
@@ -24,33 +325,9 @@
 //         right: 'today prev,next'
 //     },
 
-//     // 🔹 HARD CODED EVENTS
 //     events: [],
 
-//     // 🔹 NEW BOOKING SELECT
-//     select: function (start, end) {
-//         var startTime = moment(start).format('DD-MM-YYYY HH:mm');
-//         var endTime = moment(end).format('DD-MM-YYYY HH:mm');
-
-//         $('.add-new-appointment-model').modal("show");
-//         $('[name="startTime"]').val(startTime);
-//         $('[name="endTime"]').val(endTime);
-//         $(".add-new-customer-container").addClass("d-none");
-//         $(".add-new-appointment-container").removeClass("d-none");
-//     },
-
-//     // 🔹 EVENT RENDER
-//     eventRender: function (event, element) {
-//         if (event.icon) {
-//             element.find(".fc-title")
-//                 .prepend("<i class='fa fa-" + event.icon + "'></i> ");
-//         }
-
-//         // Optional: show tooltip
-//         if (event.description) {
-//             element.attr('title', event.description);
-//         }
-//     },
+//     // 🔥 THIS CONTROLS NEXT / PREV / TODAY
 //     viewRender: function (view) {
 
 //         let startDate = view.start.format('YYYY-MM-DD');
@@ -80,131 +357,83 @@
 //         });
 //     },
 
-//     // 🔹 CLICK ON EXISTING EVENT
+//     select: function (start, end) {
+//         // Initialize Flatpickr
+//         let startPicker = flatpickr("#startTime", {
+//             enableTime: true,
+//             dateFormat: "d-m-Y h:i K", // dd-mm-yyyy hh:mm AM/PM
+//             time_24hr: false
+//         });
+
+//         let endPicker = flatpickr("#endTime", {
+//             enableTime: true,
+//             dateFormat: "d-m-Y h:i K",
+//             time_24hr: false
+//         });
+
+//         // Set values dynamically
+//         startPicker.setDate(moment(start).format('DD-MM-YYYY hh:mm A'));
+//         endPicker.setDate(moment(end).format('DD-MM-YYYY hh:mm A'));
+
+//         $('.add-new-appointment-model').modal("show");
+//     },
+
 //     eventClick: function (event) {
-//         $('#modal-view-event .event-title').text(event.title);
-//         $('#modal-view-event .event-body').html(
-//             "<strong>Time:</strong> " + moment(event.start).format('DD-MM-YYYY HH:mm') +
-//             " - " + moment(event.end).format('DD-MM-YYYY HH:mm') +
-//             "<br><strong>Description:</strong> " + (event.description || 'No description')
-//         );
-//         $('#modal-view-event').modal();
-//     }
+//         $(".view-appointment-details-model").modal("show");
+
+//         $.ajax({
+//             url: "controllers/appointment",
+//             method: "POST",
+//             data: {
+//                 appointment_id: event.id,
+//                 fetchSingleAppointment: true
+//             },
+//             dataType: "json",
+//             success: function (res) {
+
+//                 if (res.status === "success") {
+
+//                     let a = res.appointment;
+
+//                     // Appointment Info
+//                     $("#app_title").text(a.title || 'No Title');
+//                     $("#app_desc").text(a.description || 'No Description');
+//                     $("#app_start").text(moment(a.start_datetime).format('DD MMM YYYY hh:mm A'));
+//                     $("#app_end").text(moment(a.end_datetime).format('DD MMM YYYY hh:mm A'));
+
+//                     // Customer Info
+//                     $("#app_name").text(a.fname + ' ' + a.lname || 'No Name');
+//                     $("#app_email").text(a.email || 'No Email');
+//                     $("#app_contact").text(a.contact || 'No Contact');
+//                     // actions
+//                     $(".edit-appointment-btn").attr("data-id", a.id);
+//                     $(".delete-appointment-btn").attr("data-id", a.id);
+
+//                     // Store appointment id for invoice
+//                     $("#generateInvoiceBtn").data("id", a.id);
+//                     $("#generateInvoiceBtn").attr("href", "invoice?customer_id=" + a.customer_id + "&appointment_id=" + a.id + "&vehicle_id=" + a.vehicle_id);
+//                 }
+//             },
+//             error: makeError
+//         });
+//     },
+
+//     // 🔹 Highlight Today
+//     dayRender: function (date, cell) {
+//         // Use local date for comparison
+//         let today = moment().local().startOf('day');
+
+//         // FullCalendar's date may be UTC or with time zone offset
+//         let cellDate = moment(date).local().startOf('day');
+
+//         if (cellDate.isSame(today, 'day')) {
+//             cell.css('background-color', '#fff3cd'); // light yellow
+//         }
+//     },
 // });
 
-$('#calendar').fullCalendar({
-    themeSystem: 'bootstrap4',
 
-    defaultView: 'agendaDay',
-    defaultDate: moment(),
 
-    editable: false,
-    selectable: true,
-
-    slotDuration: '00:30:00',
-    snapDuration: '00:30:00',
-    minTime: '00:00:00',
-    maxTime: '24:00:00',
-
-    allDaySlot: false,
-
-    header: {
-        left: 'title',
-        center: 'month,agendaWeek,agendaDay',
-        right: 'today prev,next'
-    },
-
-    events: [],
-
-    // 🔥 THIS CONTROLS NEXT / PREV / TODAY
-    viewRender: function (view) {
-
-        let startDate = view.start.format('YYYY-MM-DD');
-        let endDate = view.end.format('YYYY-MM-DD');
-
-        console.log('View Changed');
-        console.log(startDate, endDate);
-
-        // 🔹 AJAX CALL
-        $.ajax({
-            url: 'controllers/appointment',
-            type: 'POST',
-            data: {
-                start: startDate,
-                end: endDate,
-                fetchAppointments: true
-            },
-            dataType: 'json',
-            success: function (response) {
-
-                // Remove old events
-                $('#calendar').fullCalendar('removeEvents');
-
-                // Add new events
-                $('#calendar').fullCalendar('addEventSource', response);
-            }
-        });
-    },
-
-    select: function (start, end) {
-        $('[name="startTime"]').val(moment(start).format('DD-MM-YYYY hh:mm A'));
-        $('[name="endTime"]').val(moment(end).format('DD-MM-YYYY hh:mm A'));
-        $('.add-new-appointment-model').modal("show");
-    },
-
-    eventClick: function (event) {
-        $(".view-appointment-details-model").modal("show");
-
-        $.ajax({
-            url: "controllers/appointment",
-            method: "POST",
-            data: {
-                appointment_id: event.id,
-                fetchSingleAppointment: true
-            },
-            dataType: "json",
-            success: function (res) {
-
-                if (res.status === "success") {
-
-                    let a = res.appointment;
-
-                    // Appointment Info
-                    $("#app_title").text(a.title || 'No Title');
-                    $("#app_desc").text(a.description || 'No Description');
-                    $("#app_start").text(moment(a.start_datetime).format('DD MMM YYYY hh:mm A'));
-                    $("#app_end").text(moment(a.end_datetime).format('DD MMM YYYY hh:mm A'));
-
-                    // Customer Info
-                    $("#app_name").text(a.fname + ' ' + a.lname || 'No Name');
-                    $("#app_email").text(a.email || 'No Email');
-                    $("#app_contact").text(a.contact || 'No Contact');
-                    // actions
-                    $(".edit-appointment-btn").attr("data-id", a.id);
-                    $(".delete-appointment-btn").attr("data-id", a.id);
-
-                    // Store appointment id for invoice
-                    $("#generateInvoiceBtn").data("id", a.id);
-                    $("#generateInvoiceBtn").attr("href", "invoice?customer_id=" + a.customer_id + "&appointment_id=" + a.id + "&vehicle_id=" + a.vehicle_id);
-                }
-            },
-            error: makeError
-        });
-    },
-
-    // 🔹 Highlight Today
-    dayRender: function (date, cell) {
-        // Use local date for comparison
-        let today = moment().local().startOf('day');
-
-        // FullCalendar's date may be UTC or with time zone offset
-        let cellDate = moment(date).local().startOf('day');
-
-        if (cellDate.isSame(today, 'day')) {
-            cell.css('background-color', '#fff3cd'); // light yellow
-        }
-    },
-});
 
 // delete appointment
 $(document).on("click", ".delete-appointment-btn", function () {
@@ -262,8 +491,15 @@ $(document).on("click", ".edit-appointment-btn", function () {
                 if (res.status === "success") {
                     let a = res.appointment;
 
-                    $('[name="startTime"]').val(moment(a.start_datetime).format('DD-MM-YYYY hh:mm A'));
-                    $('[name="endTime"]').val(moment(a.end_datetime).format('DD-MM-YYYY hh:mm A'));
+                    // $('[name="startTime"]').val(moment(a.start_datetime).format('DD-MM-YYYY hh:mm A'));
+                    // $('[name="endTime"]').val(moment(a.end_datetime).format('DD-MM-YYYY hh:mm A'));
+
+                    let startPicker = flatpickr("#startTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+                    let endPicker = flatpickr("#endTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+
+                    startPicker.setDate(moment(a.start_datetime).format('DD-MM-YYYY hh:mm A'));
+                    endPicker.setDate(moment(a.end_datetime).format('DD-MM-YYYY hh:mm A'));
+
 
                     $(`.customer-selectbox-parent`).find(`.custom-select-dropdown [role="option"][data-id="${a.customer_id}"]`).trigger("click");
                     setTimeout(() => {
@@ -277,19 +513,14 @@ $(document).on("click", ".edit-appointment-btn", function () {
                     $(".add-new-appointment-model .modal-title").text("Edit Appointment");
                     // add input 
                     $(".add-new-appointment-model").find("form").append(`<input type="hidden" name="app_id" value="${a.id}" />`)
+
+
                 }
             },
             error: makeError
         });
     }
 });
-
-$('.fc-right button span.fa').each(function () {
-    var $span = $(this);
-    var $i = $('<i />').attr('class', $span.attr('class')).html($span.html());
-    $span.replaceWith($i);
-});
-
 
 
 // Add new customer callback
@@ -414,4 +645,21 @@ $('.modal').on('hide.bs.modal', function (e) {
     $(".add-new-appointment-model").find(`[action="appointment"]`)[0].reset();
     $(".add-new-appointment-model .modal-title").text("Appointment");
     $(".add-new-appointment-model").find(`form [name="app_id"]`).remove();
+});
+
+// add new appointment 
+$(document).on("click", ".add-appointment-btn", function () {
+    $('.add-new-appointment-model').modal("show");
+
+    // Get the selected day (or today if you want)
+    let selectedDate = moment().format('DD-MM-YYYY'); // e.g., "26-01-2026"
+
+    // Initialize Flatpickr
+    let startPicker = flatpickr("#startTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+    let endPicker = flatpickr("#endTime", { enableTime: true, dateFormat: "d-m-Y h:i K", time_24hr: false });
+
+    // Set start = 00:00, end = 23:59 for all-day
+    startPicker.setDate(selectedDate + " 00:00");
+    endPicker.setDate(selectedDate + " 23:59");
+
 });

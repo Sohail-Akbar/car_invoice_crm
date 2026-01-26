@@ -349,7 +349,9 @@ table.dataTable td {
 .table-custom-design #vehicleHistoryTable_length,
 .table-custom-design #invoiceTable_length,
 .table-custom-design #invoiceTable_filter,
+.table-custom-design #bookingList_length,
 .table-custom-design #reportTable_filter,
+.table-custom-design #bookingList_filter,
 .table-custom-design #reportTable_length,
 .table-custom-design #vehicleTable_filter,
 .table-custom-design #customersTable_filter,
@@ -895,4 +897,8 @@ body.all-hide iframe {
 #carsInfoContainer {
     height: 500px;
     overflow: auto;
+}
+
+.dataTables_scrollHead {
+    overflow: unset !important;
 }

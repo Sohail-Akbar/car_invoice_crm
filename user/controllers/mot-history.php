@@ -288,10 +288,29 @@ if (isset($_POST['fetchRegistrationCar'])) {
         // save vehicle with customer id
         if ($customerId) {
 
-            $firstUsedDate = DateTime::createFromFormat('d-m-Y', $mainDetails['firstUsedDate'])->format('Y-m-d');
-            $registrationDate = DateTime::createFromFormat('d-m-Y', $mainDetails['registrationDate'])->format('Y-m-d');
-            $expiryDate = DateTime::createFromFormat('d-m-Y', $mainDetails['expiryDate'])->format('Y-m-d');
-            $manufactureDate = DateTime::createFromFormat('d-m-Y', $mainDetails['manufactureDate'])->format('Y-m-d');
+            // $firstUsedDate = DateTime::createFromFormat('d-m-Y', $mainDetails['firstUsedDate'])->format('Y-m-d');
+            $firstUsedDate = null;
+            if (!empty($mainDetails['firstUsedDate'])) {
+                $dt = DateTime::createFromFormat('d-m-Y', $mainDetails['firstUsedDate']);
+                $firstUsedDate = $dt ? $dt->format('Y-m-d') : null;
+            }
+            $registrationDate = null;
+            if (!empty($mainDetails['registrationDate'])) {
+                $dt = DateTime::createFromFormat('d-m-Y', $mainDetails['registrationDate']);
+                $registrationDate = $dt ? $dt->format('Y-m-d') : null;
+            }
+
+            $expiryDate = null;
+            if (!empty($mainDetails['expiryDate'])) {
+                $dt = DateTime::createFromFormat('d-m-Y', $mainDetails['expiryDate']);
+                $expiryDate = $dt ? $dt->format('Y-m-d') : null;
+            }
+
+            $manufactureDate = null;
+            if (!empty($mainDetails['manufactureDate'])) {
+                $dt = DateTime::createFromFormat('d-m-Y', $mainDetails['manufactureDate']);
+                $manufactureDate = $dt ? $dt->format('Y-m-d') : null;
+            }
 
             $data = [
                 "company_id" => LOGGED_IN_USER['company_id'],
