@@ -46,6 +46,7 @@ function initCalendar() {
         allDaySlot: false,
         eventOverlap: false,
         slotEventOverlap: false,
+        showNonCurrentDates: true,
 
         header: {
             left: 'title',

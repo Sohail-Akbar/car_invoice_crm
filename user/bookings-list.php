@@ -7,6 +7,7 @@ $CSS_FILES_ = [
     "flatpickr.min.css",
     "calendar.css",
     _DIR_ .  "css/jquery.dataTables.min.css",
+    _DIR_ . "css/bootstrap-datepicker.min.css"
 ];
 $JS_FILES_ = [
     "flatpickr.js",
@@ -14,6 +15,7 @@ $JS_FILES_ = [
     _DIR_ . "js/jquery.dataTables.min.js",
     _DIR_ . "js/bootstrap.bundle.min.js",
     "bookings-vehicle.js",
+    _DIR_ . "js/bootstrap-datepicker.min.js"
 ];
 
 $customers = $db->select("users", "id,title,fname,lname,address,contact", [
@@ -29,39 +31,107 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
 
 <head>
     <?php require_once('./includes/head.php'); ?>
+    <style>
+        .datepicker.dropdown-menu {
+            top: 260px !important;
+        }
+
+        .nav-tabs .nav-item.show .nav-link,
+        .nav-tabs .nav-link.active {
+            color: #fff;
+            background-color: var(--webMainColor);
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+    </style>
 </head>
 
 <body>
     <?php require_once('./includes/header.php'); ?>
     <main class="main-content view-customer-container" id="mainContent">
         <div class="card">
-            <div class="custom-table-header pull-away">
-                <div class="search-container">
-                    <input type="text" class="search-input search-minimal form-control" placeholder="Type to search...">
-                    <div class="search-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                </div>
-                <div class="d-flex content-center">
-                    <div class="btn-group dropleft content-center br-5">
-                        <button type="button" class="btn dropdown-toggle table-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Entries
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 7H20M6.99994 12H16.9999M10.9999 17H12.9999" stroke="#454545" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#searchByDataTable" type="button">
+                        Search by Data Table
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#searchByDate" type="button">
+                        Search by Date
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content mt-4">
+                <div class="tab-pane fade show active" id="searchByDataTable">
+                    <div class="custom-table-header pull-away">
+                        <div class="search-container">
+                            <input type="text" class="search-input search-minimal form-control" placeholder="Type to search...">
+                            <div class="search-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex content-center">
+                            <div class="btn-group dropleft content-center br-5">
+                                <button type="button" class="btn dropdown-toggle table-filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Entries
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 7H20M6.99994 12H16.9999M10.9999 17H12.9999" stroke="#454545" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
 
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">5</a>
-                            <a class="dropdown-item" href="#">25</a>
-                            <a class="dropdown-item" href="#">50</a>
-                            <a class="dropdown-item" href="#">100</a>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">5</a>
+                                    <a class="dropdown-item" href="#">25</a>
+                                    <a class="dropdown-item" href="#">50</a>
+                                    <a class="dropdown-item" href="#">100</a>
+                                </div>
+                            </div>
+                            <a href="booking" class="btn ml-3 add-customer-btn br-5">+ &nbsp;Add New Booking</a>
                         </div>
                     </div>
-                    <a href="booking" class="btn ml-3 add-customer-btn br-5">+ &nbsp;Add New Booking</a>
+                </div>
+
+                <div class="tab-pane fade" id="searchByDate">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label">From Date</label>
+
+                                <div class="input-group date bs-datepicker"
+                                    data-date=""
+                                    data-date-format="dd-mm-yyyy">
+
+                                    <input class="form-control" type="text" name="from_date" readonly />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label">To Date</label>
+
+                                <div class="input-group date bs-datepicker"
+                                    data-date=""
+                                    data-date-format="dd-mm-yyyy">
+
+                                    <input class="form-control" type="text" name="to_date" readonly />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button id="applyFilter" class="btn mr-2 br-5"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
+                            <button id="resetFilter" class="btn br-5 "><i class="fas fa-redo mr-2"></i> Clear</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="table-responsive table-custom-design mt-5">
+
+            <div class="table-responsive table-custom-design mt-4">
                 <table class="table table-striped" id="bookingList" style="width:100%">
                     <thead class="thead-light">
                         <tr>
@@ -342,7 +412,11 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
                     "serverSide": true,
                     "ajax": {
                         "url": "controllers/appointment?fetchBookings=true",
-                        "type": "POST"
+                        "type": "POST",
+                        data: function(d) {
+                            d.from_date = $('input[name="from_date"]').val();
+                            d.to_date = $('input[name="to_date"]').val();
+                        }
                     },
                     "pageLength": 10,
                     "lengthChange": true,
@@ -371,7 +445,7 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
                         { // Time
                             "data": null,
                             "render": function(data, type, row) {
-                                return `${moment(row.start_datetime).format('DD MMM YYYY hh:mm A')} - ${moment(row.end_datetime).format('DD MMM YYYY hh:mm A')}`;
+                                return `${moment(row.start_datetime).format('DD MMM YYYY hh:mm A')} <br/> To <br/> ${moment(row.end_datetime).format('DD MMM YYYY hh:mm A')}`;
                             }
                         },
                         { // Created At
@@ -408,6 +482,18 @@ $customers = $db->select("users", "id,title,fname,lname,address,contact", [
                 $('.dropdown-item').on('click', function() {
                     var length = parseInt($(this).text());
                     bookingTable.page.len(length).draw();
+                });
+
+                // Apply date filter
+                $(document).on("click", "#applyFilter", function(e) {
+                    e.preventDefault();
+                    bookingTable.draw();
+                });
+
+                $(document).on("click", "#resetFilter", function() {
+                    $('input[name="from_date"]').val('');
+                    $('input[name="to_date"]').val('');
+                    bookingTable.search('').draw();
                 });
             }
         });

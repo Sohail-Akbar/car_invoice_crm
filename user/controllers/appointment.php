@@ -215,50 +215,71 @@ if (isset($_GET['fetchBookings'])) {
     $length = intval($_POST['length']);
     $searchValue = $_POST['search']['value'] ?? '';
 
-    $company_id = LOGGED_IN_USER['company_id'];
-    $agency_id = LOGGED_IN_USER['agency_id'];
+    $fromDate = $_POST['from_date'] ?? '';
+    $toDate   = $_POST['to_date'] ?? '';
 
+    $company_id = LOGGED_IN_USER['company_id'];
+    $agency_id  = LOGGED_IN_USER['agency_id'];
+
+    // Convert dates to Y-m-d
+    if (!empty($fromDate)) $fromDate = date('Y-m-d', strtotime($fromDate));
+    if (!empty($toDate)) $toDate     = date('Y-m-d', strtotime($toDate));
+
+    // Base SQL
     $sql = "SELECT a.*, c.fname, c.lname, c.email, c.contact, c.address, c.city 
             FROM appointments a
             JOIN users c ON a.customer_id = c.id
-            WHERE a.company_id = '$company_id' AND a.agency_id = '$agency_id'";
+            WHERE a.company_id = '$company_id' 
+              AND a.agency_id = '$agency_id'";
 
+    // Search
     if (!empty($searchValue)) {
         $sql .= " AND (
-        c.fname LIKE '%$searchValue%' 
-        OR c.lname LIKE '%$searchValue%'
-        OR c.email LIKE '%$searchValue%'
-        OR c.contact LIKE '%$searchValue%'
-        OR c.city LIKE '%$searchValue%'
-        OR a.title LIKE '%$searchValue%'
-        OR a.description LIKE '%$searchValue%'
-    )";
+            c.fname LIKE '%$searchValue%' 
+            OR c.lname LIKE '%$searchValue%'
+            OR c.email LIKE '%$searchValue%'
+            OR c.contact LIKE '%$searchValue%'
+            OR c.city LIKE '%$searchValue%'
+            OR a.title LIKE '%$searchValue%'
+            OR a.description LIKE '%$searchValue%'
+        )";
     }
 
-    // Total records
-    $totalQuery = $db->query("SELECT COUNT(*) as total FROM appointments WHERE company_id = '$company_id' AND agency_id = '$agency_id'", ["select_query" => true]);
+    // Date Filter
+    if (!empty($fromDate) && !empty($toDate)) {
+        $sql .= " AND DATE(a.start_datetime) BETWEEN '$fromDate' AND '$toDate'";
+    }
+
+    // Total records (without filters)
+    $totalQuery = $db->query(
+        "SELECT COUNT(*) as total FROM appointments 
+         WHERE company_id = '$company_id' AND agency_id = '$agency_id'",
+        ["select_query" => true]
+    );
     $totalRecords = $totalQuery[0]['total'];
 
     // Filtered records
     $filteredQuery = $db->query(
-        "SELECT COUNT(*) as total FROM appointments a 
-     JOIN users c ON a.customer_id = c.id 
-     WHERE a.company_id = '$company_id' AND a.agency_id = '$agency_id'" .
-            (!empty($searchValue) ? " AND (
-        c.fname LIKE '%$searchValue%' 
-        OR c.lname LIKE '%$searchValue%' 
-        OR c.email LIKE '%$searchValue%' 
-        OR c.contact LIKE '%$searchValue%' 
-        OR c.city LIKE '%$searchValue%'
-        OR a.title LIKE '%$searchValue%'
-        OR a.description LIKE '%$searchValue%'
-     )" : ""),
+        "SELECT COUNT(*) as total 
+         FROM appointments a 
+         JOIN users c ON a.customer_id = c.id
+         WHERE a.company_id = '$company_id' 
+           AND a.agency_id = '$agency_id'
+           " . (!empty($searchValue) ? " AND (
+            c.fname LIKE '%$searchValue%' 
+            OR c.lname LIKE '%$searchValue%'
+            OR c.email LIKE '%$searchValue%'
+            OR c.contact LIKE '%$searchValue%'
+            OR c.city LIKE '%$searchValue%'
+            OR a.title LIKE '%$searchValue%'
+            OR a.description LIKE '%$searchValue%'
+        )" : "") .
+            (!empty($fromDate) && !empty($toDate) ? " AND DATE(a.start_datetime) BETWEEN '$fromDate' AND '$toDate'" : ""),
         ["select_query" => true]
     );
-
     $filteredRecords = $filteredQuery[0]['total'];
 
-    // Add LIMIT for pagination
+    // Pagination
     $sql .= " ORDER BY a.id DESC LIMIT $start, $length";
 
     $bookingData = $db->query($sql, ["select_query" => true]);
