@@ -56,31 +56,86 @@ if (isset($_POST['getAssignedTask'])) {
 }
 
 // view task 
+// if (isset($_POST['viewTask'])) {
+//     $user =  validateBearerToken("token");
+
+//     $invoice_id = $_POST["invoice_id"];
+//     // Fetch Services for this invoice
+//     $services_data = $db->query("SELECT s.text AS service_name, ii.id AS invoice_item_id, ii.is_completed
+//     FROM invoice_items ii
+//     INNER JOIN services s ON ii.services_id = s.id
+//     WHERE ii.invoice_id = '$invoice_id'
+// ", ["select_query" => true]);
+
+//     if (!$services_data) {
+//         echo json_encode([
+//             "status" => "success",
+//             "message" => "No services found for this invoice.",
+//             "data" => []
+//         ]);
+//         exit;
+//     }
+//     echo json_encode([
+//         "status" => "success",
+//         "message" => "Fetch Services for the invoice successfully",
+//         "data" => $services_data
+//     ]);
+// }
+// view task 
 if (isset($_POST['viewTask'])) {
-    $user =  validateBearerToken("token");
+    $user = validateBearerToken("token");
 
     $invoice_id = $_POST["invoice_id"];
-    // Fetch Services for this invoice
-    $services_data = $db->query("SELECT s.text AS service_name, ii.id AS invoice_item_id, ii.is_completed
-    FROM invoice_items ii
-    INNER JOIN services s ON ii.services_id = s.id
-    WHERE ii.invoice_id = '$invoice_id'
-", ["select_query" => true]);
 
-    if (!$services_data) {
+    $rows = $db->query("
+        SELECT 
+            s.text AS service_name, 
+            ii.id AS invoice_item_id, 
+            ii.is_completed,
+            cs.video_url
+        FROM invoice_items ii
+        INNER JOIN services s 
+            ON ii.services_id = s.id
+        INNER JOIN customer_staff cs
+            ON cs.invoice_id = ii.invoice_id
+        WHERE ii.invoice_id = '$invoice_id'
+    ", [
+        "select_query" => true
+    ]);
+
+    if (!$rows) {
         echo json_encode([
             "status" => "success",
-            "message" => "No services found for this invoice.",
+            "message" => "No services found",
             "data" => []
         ]);
         exit;
     }
+
+    // ✅ video_url sirf pehli row se
+    $video_url = $rows[0]['video_url'];
+
+    // ✅ services array
+    $services = [];
+    foreach ($rows as $row) {
+        $services[] = [
+            "service_name"    => $row['service_name'],
+            "invoice_item_id" => $row['invoice_item_id'],
+            "is_completed"    => $row['is_completed'],
+        ];
+    }
+
     echo json_encode([
         "status" => "success",
-        "message" => "Fetch Services for the invoice successfully",
-        "data" => $services_data
+        "message" => "Fetch Services & Video URL successfully",
+        "data" => [
+            "video_url" => $video_url,
+            "services"  => $services
+        ]
     ]);
 }
+
+
 
 // is completed service
 if (isset($_POST['markServiceCompleted'])) {
